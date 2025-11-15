@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kingdom 105</title>
+  <style>
+    /* STARRY BACKGROUND */
+    .starry-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(ellipse at bottom, #0d1421 0%, #1a1a2e 50%, #16213e 100%);
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+
+    .stars:after {
+      content: " ";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(1px 1px at 50px 20px, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 100px 60px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 150px 10px, #fff, transparent),
+        radial-gradient(1px 1px at 200px 50px, rgba(255,255,255,0.8), transparent);
+      background-repeat: repeat;
+      background-size: 250px 120px;
+      animation: twinkle 3s ease-in-out infinite alternate-reverse;
+    }
+
+    .shooting-star {
+      position: absolute;
+      height: 2px;
+      background: linear-gradient(45deg, #ffffff, transparent);
+      animation: shooting 8s linear infinite;
+      opacity: 0;
+    }
+
+    .shooting-star:nth-child(1) {
+      top: 10%;
+      left: -10px;
+      width: 100px;
+      animation-delay: 0s;
+    }
+
+    .shooting-star:nth-child(2) {
+      top: 25%;
+      left: -10px;
+      width: 80px;
+      animation-delay: 3s;
+    }
+
+    .shooting-star:nth-child(3) {
+      top: 60%;
+      left: -10px;
+      width: 120px;
+      animation-delay: 6s;
+    }
+
+    .nebula {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at 30% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(75, 0, 130, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 60%, rgba(186, 85, 211, 0.06) 0%, transparent 50%);
+      animation: nebula-glow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.3; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.1); }
+    }
+
+    @keyframes shooting {
+      0% { transform: translateX(-100px) translateY(0px); opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { transform: translateX(calc(100vw + 100px)) translateY(-200px); opacity: 0; }
+    }
+
+    @keyframes nebula-glow {
+      0% { opacity: 0.4; }
+      100% { opacity: 0.8; }
+    }
+
+    /* MAIN STYLES */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: transparent;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    /* HEADER STRUCTURE */
+    header {
+      background-color: rgba(155, 89, 182, 0.9);
+      padding: 30px 40px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header-container h1 {
+      font-size: 48px;
+      margin: 0;
+      color: #ffffff;
+      text-align: center;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    /* PROFILE BOX - Fixed positioning */
+    .profile-link {
+      text-decoration: none;
+      color: inherit;
+      cursor: default;
+    }
+
+    .profile-box {
+      display: flex;
+      align-items: center;
+      background-color: rgba(30, 30, 30, 0.9);
+      border: 1px solid #9b59b6;
+      border-radius: 10px;
+      padding: 10px 14px;
+      box-shadow: 0 0 8px rgba(155, 89, 182, 0.4);
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .profile-box:hover {
+      background-color: rgba(42, 42, 42, 0.9);
+      border-color: #b86eff;
+      box-shadow: 0 0 12px rgba(184, 110, 255, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      background: url('https://via.placeholder.com/50') center/cover no-repeat;
+      background-color: #333;
+      border-radius: 50%;
+      border: 2px solid #9b59b6;
+      margin-right: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .profile-box:hover .profile-pic {
+      border-color: #b86eff;
+      box-shadow: 0 0 8px rgba(184, 110, 255, 0.4);
+    }
+
+    .profile-info {
+      text-align: left;
+    }
+
+    .profile-info p {
+      margin: 2px 0;
+      font-size: 13px;
+      color: #ddd;
+      transition: color 0.3s ease;
+    }
+
+    .profile-box:hover .profile-info p {
+      color: #ffffff;
+    }
+
+    .intro-text {
+      font-size: 18px;
+      margin: 40px 0;
+      color: #cccccc;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ENHANCED ASSIGNMENT CARDS */
+    .assignment-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+    }
+
+    .assignment-bar {
+      background: linear-gradient(145deg, rgba(30, 30, 30, 0.9) 0%, rgba(37, 37, 37, 0.9) 100%);
+      border: 2px solid #9b59b6;
+      border-radius: 16px;
+      padding: 24px 20px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(155, 89, 182, 0.2);
+      text-decoration: none;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      min-height: 200px;
+      width: 320px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .assignment-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(145deg, rgba(155, 89, 182, 0.1) 0%, rgba(184, 110, 255, 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 14px;
+    }
+
+    .assignment-bar:hover::before {
+      opacity: 1;
+    }
+
+    .assignment-bar:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(155, 89, 182, 0.3),
+        0 0 0 2px rgba(184, 110, 255, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-color: #b86eff;
+      background: linear-gradient(145deg, rgba(184, 110, 255, 0.2) 0%, rgba(155, 89, 182, 0.2) 100%);
+    }
+
+    .assignment-bar h3 {
+      margin: 0 0 16px 0;
+      color: #b86eff;
+      font-size: 18px;
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(184, 110, 255, 0.3);
+      z-index: 1;
+      position: relative;
+    }
+
+    .assignment-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 16px;
+      z-index: 1;
+      position: relative;
+      align-items: center;
+    }
+
+    .assignment-button {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #9b59b6 0%, #b86eff 100%);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 80%;
+      text-align: center;
+    }
+
+    .assignment-button:hover {
+      background: linear-gradient(135deg, #b86eff 0%, #c084ff 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(155, 89, 182, 0.4);
+    }
+
+    .assignment-status {
+      margin: 0;
+      font-size: 14px;
+      color: #cccccc;
+      font-weight: 500;
+      z-index: 1;
+      position: relative;
+    }
+
+    .assignment-status .status-value {
+      color: #b86eff;
+      font-weight: 600;
+      text-shadow: 0 1px 3px rgba(184, 110, 255, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .assignment-container {
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .assignment-bar {
+        width: calc(50% - 10px);
+        min-width: 280px;
+      }
+      
+      .header-container h1 {
+        font-size: 36px;
+      }
+      
+      .header-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .assignment-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .assignment-bar {
+        width: 100%;
+        max-width: 360px;
+      }
+      
+      .header-container h1 {
+        font-size: 28px;
+      }
+    }
+
+    footer {
+      padding: 20px;
+      background-color: rgba(13, 17, 23, 0.9);
+      color: #c9d1d9;
+      text-align: center;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Starry Background -->
+<div class="starry-background">
+  <div class="stars"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="shooting-star"></div>
+  <div class="nebula"></div>
+</div>
+
+<!-- Header with Profile + Title -->
+<header>
+  <div class="header-container">
+    <div class="profile-link">
+      <div class="profile-box">
+        <div class="profile-pic"></div>
+        <div class="profile-info">
+          <p><strong>Name:</strong> Lord Norman</p>
+          <p><strong>ID:</strong> 21175350</p>
+          <p><strong>Alliance:</strong> [RNX]Royal Nexus</p>
+          <p><strong>Subject:</strong> Analytic</p>
+        </div>
+      </div>
+    </div>
+    
+    <h1>Kingdom<br>105</h1>
+  </div>
+</header>
+
+<!-- Intro Text -->
+<p class="intro-text">Welcome to Kingdom 105 - Strategic Command Center</p>
+
+<!-- Assignments Grid -->
+<div class="assignment-container">
+  <div class="assignment-bar">
+    <h3>Alliances</h3>
+    <div class="assignment-buttons">
+      <a class="assignment-button" href="#">Enter</a>
+    </div>
+    <p class="assignment-status">Status: <span class="status-value">NAP 5</span></p>
+  </div>
+
+  <div class="assignment-bar">
+    <h3>Events</h3>
+    <div class="assignment-buttons">
+      <a class="assignment-button" href="#">Enter</a>
+    </div>
+    <p class="assignment-status">Status: <span class="status-value">SVS Specified</span></p>
+  </div>
+
+  <div class="assignment-bar">
+    <h3>Necessary Links</h3>
+    <div class="assignment-buttons">
+      <a class="assignment-button" href="#">Access Resources</a>
+    </div>
+    <p class="assignment-status">Status: <span class="status-value">Active</span></p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  © 2025 Norman Affleck. All rights reserved.
+</footer>
+
+</body>
+</html>
