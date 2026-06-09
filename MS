@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Management Science Challenge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f;
+      --surface: rgba(255,255,255,0.04);
+      --border: rgba(139,92,246,0.25);
+      --purple: #8b5cf6;
+      --purple-light: #a78bfa;
+      --purple-dim: rgba(139,92,246,0.15);
+      --white: #f8f8ff;
+      --muted: rgba(248,248,255,0.45);
+      --glow: 0 0 40px rgba(139,92,246,0.35);
+      --glow-sm: 0 0 16px rgba(139,92,246,0.45);
+      --radius: 16px;
+      --font-head: 'Space Grotesk', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--white); font-family: var(--font-head); overflow-x: hidden; }
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    #app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem 3rem; }
+    .badge { display: inline-flex; align-items: center; gap: .5rem; background: var(--purple-dim); border: 1px solid var(--border); border-radius: 999px; padding: .35rem 1rem; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; color: var(--purple-light); text-transform: uppercase; margin-bottom: 1.6rem; }
+    .badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--purple-light); animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+    h1 { font-size: clamp(1.8rem,5vw,3rem); font-weight:700; text-align:center; line-height:1.1; letter-spacing:-.02em; margin-bottom:.6rem; text-shadow:var(--glow); }
+    h1 span { color: var(--purple-light); }
+    .subtitle { font-size:.85rem; color:var(--muted); text-align:center; font-family:var(--font-mono); letter-spacing:.06em; margin-bottom:2.4rem; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); padding:2rem; width:100%; max-width:560px; box-shadow:var(--glow),inset 0 1px 0 rgba(255,255,255,.06); }
+    .stat-card { max-width:560px; width:100%; margin-bottom:1.4rem; display:flex; align-items:center; gap:1.4rem; padding:1.2rem 1.6rem; }
+    .stat-icon { font-size:2rem; flex-shrink:0; filter:drop-shadow(0 0 8px rgba(139,92,246,.7)); }
+    .stat-body { flex:1; }
+    .stat-label { font-family:var(--font-mono); font-size:.65rem; letter-spacing:.1em; color:var(--muted); text-transform:uppercase; margin-bottom:.25rem; }
+    .stat-value { font-size:1.5rem; font-weight:700; color:var(--purple-light); text-shadow:var(--glow-sm); }
+    .stat-note { font-size:.75rem; color:var(--muted); margin-top:.2rem; }
+    .progress-track { width:100%; height:4px; background:rgba(255,255,255,.07); border-radius:2px; margin-top:.6rem; overflow:hidden; }
+    .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--purple),var(--purple-light)); border-radius:2px; animation:fill-bar 2.4s cubic-bezier(.22,1,.36,1) forwards .4s; }
+    @keyframes fill-bar { to { width:99.999999%; } }
+    .question-text { font-size:clamp(1rem,2.5vw,1.22rem); font-weight:500; line-height:1.55; text-align:center; margin-bottom:1.6rem; color:var(--white); }
+    .attempts-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; }
+    .attempts-label { font-family:var(--font-mono); font-size:.7rem; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; }
+    .attempts-pips { display:flex; gap:6px; }
+    .pip { width:10px; height:10px; border-radius:50%; background:var(--purple); box-shadow:0 0 8px var(--purple); transition:background .3s,box-shadow .3s; }
+    .pip.used { background:rgba(255,255,255,.12); box-shadow:none; }
+    .input-row { display:flex; gap:.6rem; }
+    #guess-input { flex:1; background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:10px; padding:.75rem 1rem; color:var(--white); font-family:var(--font-mono); font-size:1rem; outline:none; transition:border-color .25s,box-shadow .25s; caret-color:var(--purple-light); }
+    #guess-input::placeholder { color:rgba(255,255,255,.2); }
+    #guess-input:focus { border-color:var(--purple-light); box-shadow:var(--glow-sm),inset 0 0 0 1px rgba(139,92,246,.25); }
+    .submit-btn { background:var(--purple); color:#fff; border:none; border-radius:10px; padding:.75rem 1.4rem; font-family:var(--font-head); font-weight:600; font-size:.95rem; cursor:pointer; transition:background .2s,transform .15s,box-shadow .2s; box-shadow:0 0 18px rgba(139,92,246,.4); white-space:nowrap; }
+    .submit-btn:hover { background:var(--purple-light); box-shadow:var(--glow); transform:translateY(-1px); }
+    .submit-btn:active { transform:translateY(0); }
+    #feedback { min-height:1.4rem; margin-top:1rem; text-align:center; font-size:.82rem; font-family:var(--font-mono); color:var(--purple-light); letter-spacing:.05em; opacity:0; transition:opacity .3s; }
+    #feedback.visible { opacity:1; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)} 45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
+    .shake { animation:shake .55s ease-in-out; }
+    #success-screen { display:none; flex-direction:column; align-items:center; text-align:center; width:100%; max-width:560px; }
+    #success-screen.visible { display:flex; }
+    .win-emoji { font-size:5rem; line-height:1; margin-bottom:1.2rem; animation:bounce-in .7s cubic-bezier(.34,1.56,.64,1) forwards, float-emoji 3s ease-in-out .7s infinite; }
+    @keyframes bounce-in { from{transform:scale(0) rotate(-15deg);opacity:0} to{transform:scale(1) rotate(0deg);opacity:1} }
+    @keyframes float-emoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .win-headline { font-size:2.2rem; font-weight:700; color:var(--purple-light); text-shadow:var(--glow); margin-bottom:.8rem; animation:fade-up .6s ease .5s both; }
+    .win-answer { font-family:var(--font-mono); font-size:.9rem; color:var(--muted); margin-bottom:1.6rem; animation:fade-up .6s ease .7s both; }
+    .win-punchline { font-size:1.05rem; line-height:1.7; color:var(--white); background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.4rem 1.8rem; backdrop-filter:blur(18px); max-width:480px; animation:fade-up .6s ease .9s both; box-shadow:var(--glow); }
+    .win-punchline em { display:block; margin-top:.7rem; font-style:normal; font-size:.85rem; color:var(--purple-light); font-family:var(--font-mono); }
+    @keyframes fade-up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    #failure-screen { display:none; flex-direction:column; align-items:center; text-align:center; width:100%; max-width:560px; animation:fade-up .5s ease; }
+    #failure-screen.visible { display:flex; }
+    .fail-icon { font-size:3.5rem; margin-bottom:1rem; }
+    .fail-headline { font-size:1.6rem; font-weight:700; color:var(--white); margin-bottom:.6rem; }
+    .fail-reveal { font-family:var(--font-mono); font-size:.85rem; color:var(--muted); margin-bottom:.5rem; }
+    .fail-note { font-size:.9rem; color:var(--muted); margin-bottom:1.6rem; }
+    .reset-btn { margin-top:1.6rem; background:transparent; border:1px solid var(--purple); color:var(--purple-light); border-radius:10px; padding:.7rem 1.8rem; font-family:var(--font-head); font-weight:600; font-size:.9rem; cursor:pointer; transition:background .2s,box-shadow .2s,transform .15s; }
+    .reset-btn:hover { background:var(--purple-dim); box-shadow:var(--glow-sm); transform:translateY(-1px); }
+    #confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:999; display:none; }
+    .divider { width:40px; height:2px; background:linear-gradient(90deg,transparent,var(--purple),transparent); margin:1.2rem auto; }
+    .footer { margin-top:2.4rem; font-family:var(--font-mono); font-size:.65rem; color:rgba(255,255,255,.15); letter-spacing:.08em; text-align:center; }
+    @media(max-width:480px) { .card{padding:1.4rem 1.2rem} .input-row{flex-direction:column} .submit-btn{width:100%} }
+  </style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<canvas id="confetti-canvas"></canvas>
+
+<div id="app">
+  <div class="badge">Management Science · Analytical Challenge</div>
+  <h1>The <span>Google Maps</span><br>Nation Problem</h1>
+  <p class="subtitle">MGMT SCI CHALLENGE · SEMESTER PROJECT</p>
+
+  <div class="card stat-card" id="stat-card">
+    <div class="stat-icon">🌍</div>
+    <div class="stat-body">
+      <div class="stat-label">Google Maps Global Coverage Rate</div>
+      <div class="stat-value">99.999999%</div>
+      <div class="stat-note">One nation remains unverified.</div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="card" id="game-card">
+    <p class="question-text">
+      According to all available Google Maps data,<br>
+      <strong>which nation has never been observed?</strong>
+    </p>
+    <div class="divider"></div>
+    <div class="attempts-row">
+      <span class="attempts-label">Attempts remaining</span>
+      <div class="attempts-pips" id="pips">
+        <div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
+      </div>
+    </div>
+    <div class="input-row">
+      <input type="text" id="guess-input" placeholder="Enter nation name…" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="80" />
+      <button class="submit-btn" id="submit-btn">Analyse →</button>
+    </div>
+    <div id="feedback"></div>
+  </div>
+
+  <div id="success-screen">
+    <div class="win-emoji">😄</div>
+    <div class="win-headline">I GOT YOU!</div>
+    <div class="win-answer">The answer was: <strong>Imagination</strong></div>
+    <div class="win-punchline">
+      Google Maps can search the world.
+      <em>It just can't search your imagination.</em>
+    </div>
+    <button class="reset-btn" id="win-restart">↩ Play Again</button>
+  </div>
+
+  <div id="failure-screen">
+    <div class="fail-icon">🔭</div>
+    <div class="fail-headline">Search Terminated.</div>
+    <div class="fail-reveal">The answer was: <strong>Imagination</strong></div>
+    <div class="fail-note">Even Google Maps couldn't find it.</div>
+    <button class="reset-btn" id="fail-restart">↩ Restart</button>
+  </div>
+
+  <div class="footer">© MGMT SCI PROJECT · ALL DATA SOURCED FROM HYPOTHETICAL DATASETS</div>
+</div>
+
+<script>
+  /* particles */
+  (function(){
+    const c=document.getElementById("particles"),ctx=c.getContext("2d");
+    let W,H,pts;
+    function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
+    function mkp(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,a:Math.random()*.5+.1,purple:Math.random()>.4};}
+    function init(){resize();pts=Array.from({length:90},mkp);}
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      pts.forEach(p=>{
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=p.purple?`rgba(139,92,246,${p.a})`:`rgba(220,215,255,${p.a*.5})`;
+        ctx.fill();
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      });
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener("resize",resize);
+    init();draw();
+  })();
+
+  /* game */
+  const MAX=5;
+  let used=0,over=false;
+
+  // answer split so it's not a single obvious string in source
+  const _a = ["ima","gin","ati","on"].join("");
+
+  const msgs=[
+    "Google Maps is still processing satellite data.",
+    "No confirmed observations found.",
+    "Analysis inconclusive.",
+    "Search area expanded.",
+    "Try a different hypothesis.",
+  ];
+
+  const $=id=>document.getElementById(id);
+  const gameCard=$("game-card"),statCard=$("stat-card"),input=$("guess-input"),
+        btn=$("submit-btn"),fb=$("feedback"),pips=document.querySelectorAll(".pip"),
+        winScr=$("success-screen"),failScr=$("failure-screen"),confCanvas=$("confetti-canvas");
+
+  function updatePips(){pips.forEach((p,i)=>p.classList.toggle("used",i>=MAX-used));}
+
+  function showFb(msg){fb.textContent=msg;fb.classList.add("visible");setTimeout(()=>fb.classList.remove("visible"),3800);}
+
+  function shake(){gameCard.classList.remove("shake");void gameCard.offsetWidth;gameCard.classList.add("shake");}
+
+  function check(g){return g.trim().toLowerCase()===_a;}
+
+  function hide(el){el.style.transition="opacity .5s,transform .5s";el.style.opacity="0";el.style.transform="translateY(16px)";setTimeout(()=>el.style.display="none",500);}
+
+  async function submit(){
+    if(over)return;
+    const g=input.value.trim();
+    if(!g){shake();showFb("Please enter a nation name to analyse.");return;}
+    used++;updatePips();
+    if(check(g)){
+      over=true;hide(gameCard);hide(statCard);
+      setTimeout(()=>{winScr.classList.add("visible");launchConfetti();},520);
+    } else {
+      input.value="";
+      if(used>=MAX){
+        over=true;hide(gameCard);hide(statCard);
+        setTimeout(()=>failScr.classList.add("visible"),520);
+      } else {
+        shake();
+        showFb(`[${used}/${MAX}] ${msgs[Math.floor(Math.random()*msgs.length)]}`);
+      }
+    }
+  }
+
+  function reset(){
+    used=0;over=false;input.value="";fb.classList.remove("visible");
+    updatePips();
+    winScr.classList.remove("visible");failScr.classList.remove("visible");
+    [gameCard,statCard].forEach(el=>{el.style.display="";el.style.opacity="1";el.style.transform="none";});
+    stopConfetti();input.focus();
+  }
+
+  btn.addEventListener("click",submit);
+  input.addEventListener("keydown",e=>e.key==="Enter"&&submit());
+  $("win-restart").addEventListener("click",reset);
+  $("fail-restart").addEventListener("click",reset);
+  updatePips();
+
+  /* confetti */
+  const CC=["#8b5cf6","#a78bfa","#c4b5fd","#ffffff","#ddd6fe","#7c3aed","#ede9fe"];
+  let rafId=null;
+  function launchConfetti(){
+    confCanvas.style.display="block";
+    confCanvas.width=innerWidth;confCanvas.height=innerHeight;
+    const ctx=confCanvas.getContext("2d");
+    const p=Array.from({length:160},()=>({x:Math.random()*innerWidth,y:-20-Math.random()*80,w:6+Math.random()*8,h:4+Math.random()*5,vx:(Math.random()-.5)*3.5,vy:3+Math.random()*4,angle:Math.random()*Math.PI*2,spin:(Math.random()-.5)*.18,color:CC[Math.floor(Math.random()*CC.length)],alpha:1}));
+    function draw(){
+      ctx.clearRect(0,0,confCanvas.width,confCanvas.height);
+      let alive=0;
+      p.forEach(q=>{q.y+=q.vy;q.x+=q.vx;q.angle+=q.spin;q.vy+=.06;if(q.y>confCanvas.height*.7)q.alpha-=.018;if(q.alpha<=0)return;alive++;ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.angle);ctx.globalAlpha=Math.max(0,q.alpha);ctx.fillStyle=q.color;ctx.fillRect(-q.w/2,-q.h/2,q.w,q.h);ctx.restore();});
+      if(alive>0)rafId=requestAnimationFrame(draw);else confCanvas.style.display="none";
+    }
+    rafId=requestAnimationFrame(draw);
+  }
+  function stopConfetti(){if(rafId){cancelAnimationFrame(rafId);rafId=null;}confCanvas.style.display="none";}
+</script>
+</body>
+</html>
