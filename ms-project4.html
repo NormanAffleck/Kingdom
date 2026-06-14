@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 4: Branch & Bound — MS Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root{--bg:#080f0a;--surface:#0e1a10;--surface2:#162019;--green:#2ecc71;--green-light:#5dde8f;--green-dim:rgba(46,204,113,0.13);--white:#edfff3;--muted:#7aaa88;--border:rgba(46,204,113,0.28);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(46,204,113,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,113,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--green);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(8,15,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--green);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--green-light);}
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero h1 span{color:var(--green-light);}
+  .hero p{color:var(--muted);font-size:1rem;max-width:560px;}
+  .content{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin:1.25rem 0 0.6rem;color:var(--green-light);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  strong{color:var(--white);}
+  ul{color:var(--muted);padding-left:1.25rem;margin-bottom:1rem;}
+  ul li{margin-bottom:0.3rem;font-size:0.91rem;}
+
+  /* EXCALIDRAW EMBEDS */
+  .board-section{margin:1.5rem 0;}
+  .board-label{font-size:0.7rem;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:0.5rem;}
+  .board-frame{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .board-topbar{background:var(--surface2);border-bottom:1px solid var(--border);padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem;}
+  .dot{width:8px;height:8px;border-radius:50%;}
+  .board-url{font-size:0.75rem;color:var(--muted);margin-left:0.5rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .board-url a{color:var(--green-light);text-decoration:none;}
+  .board-url a:hover{text-decoration:underline;}
+  iframe{display:block;width:100%;border:none;}
+  .board-note{font-size:0.8rem;color:var(--muted);margin-top:0.5rem;text-align:center;}
+  .board-note a{color:var(--green-light);}
+
+  /* ALGORITHM STEPS */
+  .steps{counter-reset:step;}
+  .step{display:flex;gap:1rem;margin-bottom:1rem;align-items:flex-start;}
+  .step-num{background:var(--green-dim);border:1px solid var(--green);color:var(--green-light);width:28px;height:28px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;flex-shrink:0;margin-top:0.1rem;}
+  .step-content h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:0.25rem;}
+  .step-content p{font-size:0.86rem;color:var(--muted);margin:0;}
+
+  .formula{background:#020f05;border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem;margin:1rem 0;font-family:monospace;font-size:0.88rem;color:var(--green-light);line-height:2;}
+  .formula .comment{color:var(--muted);font-size:0.78rem;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--green);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--green-light);text-decoration:none;}
+  @media(max-width:600px){.learn-grid{grid-template-columns:1fr;}iframe{height:320px;}.corner{display:none;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">MS<span>·</span>PORTFOLIO</div><a href="index2.html">← Back</a></nav>
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 04 · Group Work</div>
+  <h1>Branch <span>&</span> Bound</h1>
+  <p>Integer programming's most powerful algorithm — systematically searching a solution space by branching on decision variables and pruning branches that can't beat the current best solution.</p>
+</div></div>
+
+<div class="content">
+  <h2>Project Overview</h2>
+  <p>Branch & Bound is a technique for solving integer programming problems — where decision variables must be whole numbers (like binary 0/1). Rather than checking every possible solution, it builds a tree of subproblems, uses LP relaxation to compute upper bounds, and prunes any branch where the bound cannot beat the best known feasible solution.</p>
+  <p>This project involved group whiteboard work on two problems: a general group B&B problem and a B&B application to the pizza toppings problem from Project 2.</p>
+
+  <h2>How Branch & Bound Works</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Solve LP Relaxation</h4><p>Remove integrality constraints. Solve the continuous version — this gives an upper bound on the optimal integer solution.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Check for Integrality</h4><p>If all decision variables in the LP solution are already integers — done! It's the optimal integer solution. If not, pick a fractional variable to branch on.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Branch</h4><p>Create two subproblems: one with the variable forced to ⌊value⌋ and one forced to ⌈value⌉. Each subproblem adds one constraint.</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Bound & Prune</h4><p>Solve each subproblem's LP relaxation. If the bound ≤ best known integer solution, prune that branch — it cannot yield an improvement.</p></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Update Best Solution</h4><p>When a node yields an all-integer feasible solution, update the best known solution. Continue until all branches are pruned or explored.</p></div></div>
+  </div>
+
+  <div class="formula">
+    <span class="comment">// Key idea: LP relaxation provides UPPER BOUND for maximization</span><br>
+    z* (integer) ≤ z_LP (relaxed)<br><br>
+    <span class="comment">// Pruning conditions</span><br>
+    Prune if: z_LP_bound ≤ z_best_integer &nbsp;&nbsp;(can't improve)<br>
+    Prune if: LP is infeasible &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(no feasible solution in this branch)
+  </div>
+
+  <h2>Group Work — Decision Trees</h2>
+  <div class="board-section">
+    <div class="board-label">// Board 1 — Group B&B Problem</div>
+    <div class="board-frame">
+      <div class="board-topbar">
+        <div class="dot" style="background:#ff5f56"></div>
+        <div class="dot" style="background:#febc2e"></div>
+        <div class="dot" style="background:#28c840"></div>
+        <div class="board-url"><a href="https://excalidraw.com/#json=kqOFdunNJIsxotRh0hmZ5,nlgNTcTmRv3XLW2LY_mV0w" target="_blank">excalidraw.com — Group Branch & Bound Trees</a></div>
+      </div>
+      <iframe src="https://excalidraw.com/#json=kqOFdunNJIsxotRh0hmZ5,nlgNTcTmRv3XLW2LY_mV0w" height="480" title="Group B&B Whiteboard" loading="lazy"></iframe>
+    </div>
+    <p class="board-note"><a href="https://excalidraw.com/#json=kqOFdunNJIsxotRh0hmZ5,nlgNTcTmRv3XLW2LY_mV0w" target="_blank" rel="noopener">Open in Excalidraw →</a></p>
+  </div>
+
+  <h2>Pizza Toppings — B&B Application</h2>
+  <p>The same Branch & Bound logic from the group work applies directly to the pizza optimizer from Project 2. Instead of LP relaxation, we use the fractional knapsack as our upper bound and branch on whether each topping is included (xᵢ = 1) or excluded (xᵢ = 0).</p>
+  <div class="board-section">
+    <div class="board-label">// Board 2 — Pizza Toppings B&B</div>
+    <div class="board-frame">
+      <div class="board-topbar">
+        <div class="dot" style="background:#ff5f56"></div>
+        <div class="dot" style="background:#febc2e"></div>
+        <div class="dot" style="background:#28c840"></div>
+        <div class="board-url"><a href="https://excalidraw.com/#json=g2lLP27Xbr8ED99Vcn5Zv,C2XbKhcA3ZGpo49k23gh2Q" target="_blank">excalidraw.com — Pizza Toppings B&B</a></div>
+      </div>
+      <iframe src="https://excalidraw.com/#json=g2lLP27Xbr8ED99Vcn5Zv,C2XbKhcA3ZGpo49k23gh2Q" height="480" title="Pizza B&B Whiteboard" loading="lazy"></iframe>
+    </div>
+    <p class="board-note"><a href="https://excalidraw.com/#json=g2lLP27Xbr8ED99Vcn5Zv,C2XbKhcA3ZGpo49k23gh2Q" target="_blank" rel="noopener">Open in Excalidraw →</a></p>
+  </div>
+
+  <h2>Why B&B is More Efficient Than Brute Force</h2>
+  <div class="card">
+    <h3>The Pizza Problem has 2¹⁰ = 1,024 possible combinations</h3>
+    <p>Brute force checks all 1,024. Branch & Bound typically explores a small fraction — often under 50 nodes — by pruning branches early. For larger problems (100 variables), this difference is the gap between computing in milliseconds and computing for longer than the age of the universe.</p>
+    <p>The key insight: <strong>you don't need to find the best solution — you need to prove no other solution can be better.</strong> Pruning does the proving.</p>
+  </div>
+
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Bounding as proof</h4><p>The bound isn't just an estimate — it's a proof that an entire subtree cannot contain the optimum. That's what makes B&B exact rather than heuristic. You get the right answer, not just a good one.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Group whiteboarding</h4><p>Working through decision trees on Excalidraw as a group made the branching logic visual. Seeing how one bad bound can prune half the tree immediately was much clearer on a whiteboard than in algebra.</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>LP relaxation's role</h4><p>I originally didn't understand why we "relax" integer constraints first. Now I see it: the relaxed solution is an optimistic estimate — a ceiling. If even that ceiling isn't good enough, you can safely ignore the whole branch.</p></div>
+  </div>
+</div>
+<footer><a href="ms-project3.html">← Project 3</a> &nbsp;·&nbsp; <a href="ms-project5.html">Project 5 →</a></footer>
+</body></html>
