@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 5: Linear Equation Solver — MS Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root{--bg:#080f0a;--surface:#0e1a10;--surface2:#162019;--green:#2ecc71;--green-light:#5dde8f;--green-dim:rgba(46,204,113,0.13);--white:#edfff3;--muted:#7aaa88;--border:rgba(46,204,113,0.28);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(46,204,113,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,113,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--green);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(8,15,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--green);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--green-light);}
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero h1 span{color:var(--green-light);}
+  .hero p{color:var(--muted);font-size:1rem;max-width:560px;}
+  .content{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  strong{color:var(--white);}
+
+  /* WORKFLOW STEPS */
+  .workflow{margin:2rem 0;}
+  .wf-step{display:grid;grid-template-columns:auto 1fr;gap:1.25rem;margin-bottom:1.5rem;align-items:start;}
+  .wf-num{background:var(--green-dim);border:1px solid var(--green);color:var(--green-light);width:40px;height:40px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;flex-shrink:0;}
+  .wf-body{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;}
+  .wf-body h3{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:0.5rem;}
+  .wf-body p{font-size:0.88rem;color:var(--muted);margin:0;}
+  .wf-body .wf-detail{margin-top:0.75rem;font-size:0.84rem;color:var(--muted);}
+
+  /* PROMPT BOX */
+  .prompt-box{background:#020f05;border:1px solid var(--green);border-radius:6px;padding:1.25rem 1.5rem;margin:0.75rem 0;font-family:monospace;font-size:0.85rem;color:var(--green-light);line-height:1.7;white-space:pre-wrap;}
+
+  /* LIVE SOLVER */
+  .solver-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:2rem 0;}
+  .solver-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+  .solver-header h3{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;}
+  .solver-badge{font-size:0.7rem;background:var(--green-dim);border:1px solid rgba(46,204,113,0.22);color:var(--green-light);padding:0.2rem 0.6rem;border-radius:3px;font-weight:500;}
+  .solver-body{padding:1.5rem;}
+  .tabs{display:flex;gap:0.5rem;margin-bottom:1.25rem;}
+  .tab-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.9rem;border-radius:4px;cursor:pointer;font-size:0.82rem;font-weight:500;transition:all 0.15s;font-family:'Inter',sans-serif;}
+  .tab-btn.active{background:var(--green-dim);border-color:var(--green);color:var(--green-light);}
+  .tab-pane{display:none;}.tab-pane.active{display:block;}
+  .eq-inputs{display:flex;flex-direction:column;gap:0.75rem;}
+  .eq-row{display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;flex-wrap:wrap;}
+  .eq-row input{background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.4rem 0.6rem;border-radius:4px;font-size:0.9rem;width:55px;text-align:center;}
+  .eq-row span{color:var(--muted);}
+  .solve-area{margin-top:1rem;}
+  .solve-btn{background:var(--green-dim);border:1px solid var(--green);color:var(--green-light);padding:0.6rem 1.5rem;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.88rem;letter-spacing:0.04em;transition:all 0.2s;font-family:'Inter',sans-serif;width:100%;}
+  .solve-btn:hover{background:var(--green);color:#020f05;}
+  .result-area{margin-top:1rem;background:#020f05;border:1px solid var(--border);border-radius:6px;padding:1.1rem;display:none;font-family:monospace;font-size:0.88rem;color:var(--green-light);line-height:1.8;}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+  .card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--white);}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--green);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--green-light);text-decoration:none;}
+  @media(max-width:600px){.wf-step{grid-template-columns:1fr;}.learn-grid{grid-template-columns:1fr;}.corner{display:none;}
+    .eq-row{font-size:0.82rem;}.eq-row input{width:44px;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">MS<span>·</span>PORTFOLIO</div><a href="index2.html">← Back</a></nav>
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 05 · Activity</div>
+  <h1>Linear Equation<br><span>Solver</span></h1>
+  <p>From requirements to prompt engineering to AI-generated code to GitHub Pages deployment — building a working math tool using the complete development workflow.</p>
+</div></div>
+
+<div class="content">
+  <h2>Project Overview</h2>
+  <p>This activity had us build a general linear equation solver by working through a five-step process: understand requirements, write a prompt, generate with AI, test the output, and host it live on GitHub Pages. The goal wasn't just to get a working tool — it was to learn how to <strong>specify</strong> what you want precisely enough for AI to build it.</p>
+
+  <h2>The Five-Step Workflow</h2>
+  <div class="workflow">
+    <div class="wf-step">
+      <div class="wf-num">1</div>
+      <div class="wf-body">
+        <h3>Understanding the Requirements</h3>
+        <p>Before writing a single line of prompt, we had to answer: what does a "general linear equation solver" actually need to do?</p>
+        <div class="wf-detail">Inputs: coefficients of a system of linear equations · Output: solution values for each variable · Edge cases: no solution (inconsistent), infinite solutions (dependent), single equation, 2×2, 3×3 systems · Format: web-based, static HTML/CSS/JS, no backend required.</div>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">2</div>
+      <div class="wf-body">
+        <h3>Build Your Prompt</h3>
+        <p>A well-structured prompt is the entire skill of AI-assisted development. Vague prompts produce vague code.</p>
+        <div class="wf-detail">
+          <div class="prompt-box">I am a student building a web tool for a Management Science course.
+
+Build a general linear equation solver as a single HTML file (no backend, no dependencies).
+
+Requirements:
+- Support 2×2 and 3×3 systems of linear equations
+- Allow user to input coefficients and constants
+- Use Gaussian elimination or Cramer's Rule
+- Show step-by-step solution process
+- Handle no-solution and infinite-solutions cases gracefully
+- Clean, minimal UI — white background, clear typography
+- Must work offline, hosted on GitHub Pages
+
+Output: single .html file only, no explanations needed.</div>
+        </div>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">3</div>
+      <div class="wf-body">
+        <h3>Generate with AI</h3>
+        <p>The AI (Claude / ChatGPT) produced a single HTML file implementing Gaussian elimination with partial pivoting. First output worked for standard cases but had issues with singular matrices. We iterated the prompt twice to fix edge case handling.</p>
+        <div class="wf-detail">Key lesson: AI generation is iterative, not one-shot. The first result is a starting point, not the end point. Being specific about edge cases upfront saves iteration cycles.</div>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">4</div>
+      <div class="wf-body">
+        <h3>Test</h3>
+        <p>Test cases used to verify the solver:</p>
+        <div class="wf-detail">
+          ✅ 2x + y = 5, x − y = 1 → x=2, y=1<br>
+          ✅ 3×3 system with unique solution<br>
+          ✅ Parallel lines (no solution) → correct error message<br>
+          ✅ Same line (infinite solutions) → correct message<br>
+          ✅ Single variable: 3x = 9 → x=3
+        </div>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">5</div>
+      <div class="wf-body">
+        <h3>Host on GitHub Pages</h3>
+        <p>Deploy process: create GitHub repo → upload HTML file → Settings → Pages → set branch to main → site goes live at <code style="color:var(--green-light)">username.github.io/repo-name</code></p>
+        <div class="wf-detail">GitHub Pages serves static files for free with a public URL. No server, no database, no cost. Perfect for tools built with HTML/CSS/JS.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>The Solver — Live Demo</h2>
+  <p>A recreation of the solver built during this activity. Enter your coefficients and solve:</p>
+
+  <div class="solver-section">
+    <div class="solver-header">
+      <h3>// General Linear Equation Solver</h3>
+      <span class="solver-badge">Gaussian Elimination</span>
+    </div>
+    <div class="solver-body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('2x2',this)">2×2 System</button>
+        <button class="tab-btn" onclick="switchTab('3x3',this)">3×3 System</button>
+        <button class="tab-btn" onclick="switchTab('1x1',this)">Single Equation</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-2x2">
+        <div class="eq-inputs">
+          <div class="eq-row">
+            <input id="a11" value="2" type="number"> x +
+            <input id="a12" value="1" type="number"> y =
+            <input id="b1" value="5" type="number">
+          </div>
+          <div class="eq-row">
+            <input id="a21" value="1" type="number"> x +
+            <input id="a22" value="-1" type="number"> y =
+            <input id="b2" value="1" type="number">
+          </div>
+        </div>
+        <div class="solve-area">
+          <button class="solve-btn" onclick="solve2x2()">→ Solve 2×2 System</button>
+          <div class="result-area" id="res-2x2"></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-3x3">
+        <div class="eq-inputs">
+          <div class="eq-row"><input id="c11" value="2" type="number"> x + <input id="c12" value="1" type="number"> y + <input id="c13" value="-1" type="number"> z = <input id="d1" value="8" type="number"></div>
+          <div class="eq-row"><input id="c21" value="-3" type="number"> x + <input id="c22" value="-1" type="number"> y + <input id="c23" value="2" type="number"> z = <input id="d2" value="-11" type="number"></div>
+          <div class="eq-row"><input id="c31" value="-2" type="number"> x + <input id="c32" value="1" type="number"> y + <input id="c33" value="2" type="number"> z = <input id="d3" value="-3" type="number"></div>
+        </div>
+        <div class="solve-area">
+          <button class="solve-btn" onclick="solve3x3()">→ Solve 3×3 System</button>
+          <div class="result-area" id="res-3x3"></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-1x1">
+        <div class="eq-inputs">
+          <div class="eq-row"><input id="e1" value="3" type="number"> x = <input id="e2" value="9" type="number"></div>
+        </div>
+        <div class="solve-area">
+          <button class="solve-btn" onclick="solve1x1()">→ Solve</button>
+          <div class="result-area" id="res-1x1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Gaussian Elimination</h4><p>Row reduction to upper triangular form, then back-substitution. Works for any n×n system. With partial pivoting, it handles near-singular matrices stably. The same algorithm runs in every computer algebra system.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Prompt engineering</h4><p>The quality of AI output is directly proportional to the quality of the prompt. Specifying edge cases, output format, constraints, and purpose upfront produces dramatically better code than "build me a solver."</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>Specification is design</h4><p>Writing the requirements document was 80% of the work. Once requirements were clear, the AI implementation was fast. This mirrors professional software development: design before code, always.</p></div>
+  </div>
+</div>
+<footer><a href="ms-project4.html">← Project 4</a> &nbsp;·&nbsp; <a href="index.html">↑ Home</a></footer>
+
+<script>
+function switchTab(id, btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function showResult(id, html){
+  const el=document.getElementById(id);
+  el.innerHTML=html; el.style.display='block';
+}
+function fmt(n){ return Math.abs(n)<1e-10?'0':parseFloat(n.toFixed(6)).toString(); }
+
+function solve1x1(){
+  const a=parseFloat(document.getElementById('e1').value);
+  const b=parseFloat(document.getElementById('e2').value);
+  if(a===0){
+    if(b===0) showResult('res-1x1','⚠️ Infinite solutions: 0 = 0 (dependent equation)');
+    else showResult('res-1x1','❌ No solution: 0 ≠ '+b+' (inconsistent)');
+    return;
+  }
+  showResult('res-1x1',`Solving: ${a}x = ${b}\n→ x = ${b}/${a}\n✅ x = ${fmt(b/a)}`);
+}
+
+function solve2x2(){
+  const a=[[parseFloat(document.getElementById('a11').value),parseFloat(document.getElementById('a12').value),parseFloat(document.getElementById('b1').value)],
+            [parseFloat(document.getElementById('a21').value),parseFloat(document.getElementById('a22').value),parseFloat(document.getElementById('b2').value)]];
+  const det=a[0][0]*a[1][1]-a[0][1]*a[1][0];
+  let log=`// Gaussian Elimination — 2×2\n`;
+  log+=`Original:\n  ${a[0][0]}x + ${a[0][1]}y = ${a[0][2]}\n  ${a[1][0]}x + ${a[1][1]}y = ${a[1][2]}\n\n`;
+  log+=`Determinant = ${fmt(det)}\n\n`;
+  if(Math.abs(det)<1e-10){
+    showResult('res-2x2',log+'⚠️ det = 0 — system is either inconsistent (no solution) or dependent (infinite solutions).');
+    return;
+  }
+  const x=(a[0][2]*a[1][1]-a[0][1]*a[1][2])/det;
+  const y=(a[0][0]*a[1][2]-a[0][2]*a[1][0])/det;
+  showResult('res-2x2',log+`✅ x = ${fmt(x)}\n✅ y = ${fmt(y)}`);
+}
+
+function solve3x3(){
+  const g=id=>parseFloat(document.getElementById(id).value);
+  let A=[[g('c11'),g('c12'),g('c13'),g('d1')],[g('c21'),g('c22'),g('c23'),g('d2')],[g('c31'),g('c32'),g('c33'),g('d3')]];
+  let log='// Gaussian Elimination — 3×3\n\n';
+  for(let col=0;col<3;col++){
+    let maxR=col;
+    for(let r=col+1;r<3;r++) if(Math.abs(A[r][col])>Math.abs(A[maxR][col])) maxR=r;
+    [A[col],A[maxR]]=[A[maxR],A[col]];
+    if(Math.abs(A[col][col])<1e-10){ showResult('res-3x3',log+'⚠️ No unique solution (singular matrix).'); return; }
+    for(let r=col+1;r<3;r++){
+      const factor=A[r][col]/A[col][col];
+      log+=`R${r+1} ← R${r+1} − (${fmt(factor)}) × R${col+1}\n`;
+      for(let c=col;c<=3;c++) A[r][c]-=factor*A[col][c];
+    }
+    log+='\n';
+  }
+  const z=A[2][3]/A[2][2];
+  const y=(A[1][3]-A[1][2]*z)/A[1][1];
+  const x=(A[0][3]-A[0][2]*z-A[0][1]*y)/A[0][0];
+  showResult('res-3x3',log+`✅ x = ${fmt(x)}\n✅ y = ${fmt(y)}\n✅ z = ${fmt(z)}`);
+}
+</script>
+</body></html>
