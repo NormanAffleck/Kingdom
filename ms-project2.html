@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 2: Pizza Optimizer — MS Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root{--bg:#080f0a;--surface:#0e1a10;--surface2:#162019;--green:#2ecc71;--green-light:#5dde8f;--green-dim:rgba(46,204,113,0.13);--white:#edfff3;--muted:#7aaa88;--border:rgba(46,204,113,0.28);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(46,204,113,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,113,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--green);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(8,15,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--green);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--green-light);}
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero h1 span{color:var(--green-light);}
+  .hero p{color:var(--muted);font-size:1rem;max-width:560px;}
+  .content{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  strong{color:var(--white);}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+  .card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--white);}
+
+  /* WHY BOX */
+  .why-box{background:#020f05;border-left:3px solid var(--green);padding:1.25rem 1.5rem;border-radius:0 6px 6px 0;margin:1.5rem 0;}
+  .why-box h3{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;color:var(--green-light);margin-bottom:0.5rem;}
+  .why-box p{font-size:0.88rem;color:var(--muted);margin:0;}
+
+  /* NOTATION */
+  .notation-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+  .notation-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;}
+  .notation-sym{font-family:monospace;font-size:1.1rem;color:var(--green-light);margin-bottom:0.3rem;}
+  .notation-name{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;color:var(--white);margin-bottom:0.25rem;}
+  .notation-desc{font-size:0.8rem;color:var(--muted);}
+
+  /* INTERACTIVE OPTIMIZER */
+  .optimizer{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1.5rem 0;}
+  .opt-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:0.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+  .opt-header h3{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;}
+  .budget-control{display:flex;align-items:center;gap:0.75rem;font-size:0.82rem;color:var(--muted);}
+  .budget-control input{background:var(--surface);border:1px solid var(--border);color:var(--white);padding:0.3rem 0.6rem;border-radius:4px;font-size:0.82rem;width:70px;}
+  .opt-table{width:100%;border-collapse:collapse;}
+  .opt-table th{background:var(--surface2);color:var(--green-light);padding:0.65rem 1rem;text-align:left;font-size:0.76rem;font-weight:500;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
+  .opt-table td{padding:0.55rem 1rem;border-bottom:1px solid rgba(46,204,113,0.07);font-size:0.86rem;color:var(--muted);}
+  .opt-table td:first-child{color:var(--white);}
+  .opt-table tr.selected td{background:rgba(46,204,113,0.07);color:var(--white);}
+  .opt-table tr.selected td:first-child{color:var(--green-light);}
+  .toggle-btn{background:none;border:1px solid var(--border);color:var(--muted);width:26px;height:26px;border-radius:3px;cursor:pointer;font-size:0.8rem;transition:all 0.15s;}
+  .toggle-btn.on{background:var(--green-dim);border-color:var(--green);color:var(--green-light);font-weight:700;}
+  .opt-footer{background:var(--surface2);border-top:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;}
+  .opt-stat{text-align:center;}
+  .opt-stat-val{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;}
+  .opt-stat-val.green{color:var(--green-light);}
+  .opt-stat-val.warn{color:#fbbf24;}
+  .opt-stat-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+  .opt-status{font-size:0.82rem;padding:0.35rem 0.75rem;border-radius:3px;font-weight:600;}
+  .opt-status.ok{background:var(--green-dim);border:1px solid var(--green);color:var(--green-light);}
+  .opt-status.over{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);color:#f87171;}
+  .solve-btn{background:var(--green-dim);border:1px solid var(--green);color:var(--green-light);padding:0.5rem 1.25rem;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.84rem;letter-spacing:0.04em;transition:all 0.2s;font-family:'Inter',sans-serif;}
+  .solve-btn:hover{background:var(--green);color:#020f05;}
+
+  /* SOLUTION RESULT */
+  .solution-box{background:#020f05;border:1px solid var(--green);border-radius:8px;padding:1.5rem;margin:1.5rem 0;display:none;}
+  .solution-box h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--green-light);margin-bottom:1rem;}
+  .sol-toppings{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;}
+  .sol-topping{background:var(--green-dim);border:1px solid var(--green);color:var(--green-light);padding:0.3rem 0.75rem;border-radius:3px;font-size:0.82rem;font-weight:600;}
+  .sol-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;}
+  .sol-stat{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:0.65rem;text-align:center;}
+  .sol-stat-val{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--green-light);}
+  .sol-stat-lbl{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+
+  /* MODEL NOTATION */
+  .formula{background:#020f05;border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem;margin:0.75rem 0;font-family:monospace;font-size:0.9rem;color:var(--green-light);line-height:2;}
+  .formula .comment{color:var(--muted);font-size:0.8rem;}
+
+  table{width:100%;border-collapse:collapse;font-size:0.88rem;margin:1.25rem 0;}
+  th{background:var(--surface2);color:var(--green-light);padding:0.7rem 1rem;text-align:left;font-weight:500;font-size:0.78rem;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
+  td{padding:0.65rem 1rem;border-bottom:1px solid rgba(46,204,113,0.08);color:var(--muted);}
+  td:first-child{color:var(--white);}
+  .hl-row td{color:var(--green-light);font-weight:600;}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--green);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--green-light);text-decoration:none;}
+  @media(max-width:600px){.notation-grid,.learn-grid,.sol-stats{grid-template-columns:1fr;}.corner{display:none;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">MS<span>·</span>PORTFOLIO</div><a href="index2.html">← Back</a></nav>
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 02 · Activity</div>
+  <h1>🍕 The <span>Pizza Optimizer</span></h1>
+  <p>A binary integer programming problem: choose pizza toppings to maximize satisfaction within a 7ww budget. The classic "knapsack problem" in disguise.</p>
+</div></div>
+
+<div class="content">
+  <div class="why-box">
+    <h3>Why did we solve this problem first?</h3>
+    <p>The pizza optimizer is a hands-on introduction to mathematical modeling. Before you can optimize a supply chain or allocate a hospital's resources, you need to understand the structure: a set of choices, parameters describing each choice, decision variables, an objective function to maximize, and a constraint that limits you. Pizza makes these abstract concepts concrete and tangible.</p>
+  </div>
+
+  <h2>Part 5 — Model Components with Notation</h2>
+  <p>Using Chapter 4 notation, here is the formal definition of the pizza optimization model:</p>
+
+  <div class="notation-grid">
+    <div class="notation-item">
+      <div class="notation-sym">𝒯 = {t₁, t₂, ..., t₁₀}</div>
+      <div class="notation-name">Set</div>
+      <div class="notation-desc">The collection of all 10 available pizza toppings from which we may select.</div>
+    </div>
+    <div class="notation-item">
+      <div class="notation-sym">cᵢ, sᵢ</div>
+      <div class="notation-name">Parameters</div>
+      <div class="notation-desc">Known values: cᵢ = cost of topping i (in ww) · sᵢ = satisfaction score of topping i</div>
+    </div>
+    <div class="notation-item">
+      <div class="notation-sym">xᵢ ∈ {0, 1}</div>
+      <div class="notation-name">Decision Variables</div>
+      <div class="notation-desc">Binary choice: xᵢ = 1 if topping i is selected, xᵢ = 0 if not selected.</div>
+    </div>
+    <div class="notation-item">
+      <div class="notation-sym">B = 7.00 ww</div>
+      <div class="notation-name">Constraint</div>
+      <div class="notation-desc">Total cost of selected toppings must not exceed the budget B: Σ(cᵢ · xᵢ) ≤ B</div>
+    </div>
+  </div>
+
+  <div class="formula">
+    <span class="comment">// Objective Function — Maximize total satisfaction</span><br>
+    max Z = Σ sᵢ · xᵢ &nbsp;&nbsp;for all i ∈ 𝒯<br><br>
+    <span class="comment">// Subject to budget constraint</span><br>
+    Σ cᵢ · xᵢ ≤ 7.00 &nbsp;&nbsp;(budget in ww)<br><br>
+    <span class="comment">// Binary requirement</span><br>
+    xᵢ ∈ {0, 1} &nbsp;&nbsp;for all i ∈ 𝒯
+  </div>
+
+  <h2>Interactive Optimizer</h2>
+  <p>Toggle toppings on/off to build your combination. Hit "Solve Optimally" to let the algorithm find the true best solution via exhaustive search.</p>
+
+  <div class="optimizer">
+    <div class="opt-header">
+      <h3>// Pizza Topping Selector</h3>
+      <div class="budget-control">
+        Budget: <input type="number" id="budget" value="7.00" step="0.25" min="0.5" max="20" onchange="updateTotals()"> ww
+        <button class="solve-btn" onclick="solveOptimal()">⚡ Solve Optimally</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="opt-table" id="toppingTable">
+      <thead><tr><th>Topping</th><th>Cost (ww)</th><th>Satisfaction</th><th>Ratio</th><th>Select</th><th>Cost if chosen</th><th>Satisfaction if chosen</th></tr></thead>
+      <tbody id="toppingBody"></tbody>
+    </table>
+    </div>
+    <div class="opt-footer">
+      <div class="opt-stat"><div class="opt-stat-val green" id="totalCost">0.0</div><div class="opt-stat-label">Total Cost (ww)</div></div>
+      <div class="opt-stat"><div class="opt-stat-val green" id="totalSat">0.0</div><div class="opt-stat-label">Total Satisfaction</div></div>
+      <div class="opt-stat"><div class="opt-stat-val" id="toppingCount">0</div><div class="opt-stat-label">Toppings Selected</div></div>
+      <div id="statusBadge" class="opt-status ok">✅ Within Budget</div>
+    </div>
+  </div>
+
+  <div class="solution-box" id="solutionBox">
+    <h3>⚡ Optimal Solution Found</h3>
+    <div class="sol-toppings" id="solToppings"></div>
+    <div class="sol-stats">
+      <div class="sol-stat"><div class="sol-stat-val" id="solCost">—</div><div class="sol-stat-lbl">Total Cost (ww)</div></div>
+      <div class="sol-stat"><div class="sol-stat-val" id="solSat">—</div><div class="sol-stat-lbl">Total Satisfaction</div></div>
+      <div class="sol-stat"><div class="sol-stat-val" id="solRemain">—</div><div class="sol-stat-lbl">Budget Remaining</div></div>
+    </div>
+  </div>
+
+  <h2>Solution Summary</h2>
+  <p>The optimal solution found by hand testing and verified by exhaustive search:</p>
+  <table>
+    <thead><tr><th>Topping</th><th>Cost (ww)</th><th>Satisfaction</th><th>Chosen?</th></tr></thead>
+    <tbody>
+      <tr><td>Buffalo mozzarella</td><td>2.0</td><td>5.0</td><td style="color:var(--muted)">0 — No</td></tr>
+      <tr><td>Gorgonzola</td><td>1.5</td><td>3.1</td><td style="color:var(--muted)">0 — No</td></tr>
+      <tr class="hl-row"><td>Ricotta</td><td>1.0</td><td>4.2</td><td>1 — Yes ✓</td></tr>
+      <tr><td>Burrata</td><td>3.0</td><td>4.7</td><td style="color:var(--muted)">0 — No</td></tr>
+      <tr><td>Parma ham</td><td>3.0</td><td>7.2</td><td style="color:var(--muted)">0 — No</td></tr>
+      <tr><td>Pancetta</td><td>2.0</td><td>4.2</td><td style="color:var(--muted)">0 — No</td></tr>
+      <tr class="hl-row"><td>Salame</td><td>2.0</td><td>8.3</td><td>1 — Yes ✓</td></tr>
+      <tr class="hl-row"><td>'Nduja</td><td>0.5</td><td>4.8</td><td>1 — Yes ✓</td></tr>
+      <tr class="hl-row"><td>Zucchini</td><td>1.0</td><td>3.5</td><td>1 — Yes ✓</td></tr>
+      <tr class="hl-row"><td>Fried eggplant</td><td>2.0</td><td>5.2</td><td>1 — Yes ✓</td></tr>
+      <tr style="border-top:2px solid var(--border)"><td><strong>TOTALS</strong></td><td><strong style="color:var(--green-light)">6.5 ww</strong></td><td><strong style="color:var(--green-light)">26.0</strong></td><td><strong style="color:var(--green-light)">✅ Within Budget</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Sensitivity Analysis</h2>
+  <div class="card">
+    <h3>Price Creep — At what price does Salame stop being worth it?</h3>
+    <p>Salame has the highest satisfaction score (8.3) at 2.0ww. Testing price increments of 0.25ww: at <strong>2.25ww</strong> Salame still enters the solution. At <strong>2.50ww</strong>, the budget gets tight and Zucchini must be dropped to compensate — satisfaction falls. At <strong>3.00ww</strong>, Parma ham (7.2 score) at the same price becomes a serious competitor. Salame stays worth it until roughly <strong>3.50ww</strong>, where the opportunity cost of including it causes a net satisfaction loss versus alternative combinations.</p>
+  </div>
+  <div class="card">
+    <h3>Satisfaction Score Tipping Points</h3>
+    <p><strong>Fried eggplant</strong> (in optimal, score = 5.2 at 2.0ww): Its satisfaction/cost ratio is 2.6. It stays in the solution until its score drops below ~4.0, at which point Pancetta (4.2 at same cost) would replace it.</p>
+    <p><strong>Burrata</strong> (not in optimal, score = 4.7 at 3.0ww): Its ratio is only 1.57 — too low. For Burrata to enter, its score would need to rise above ~6.0, giving it a ratio competitive with current selections.</p>
+  </div>
+
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Binary LP structure</h4><p>The pizza problem is a classic 0-1 knapsack problem. The structure — binary variables, single budget constraint, maximize sum of values — appears in portfolio selection, project selection, and facility location problems.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Why greedy fails</h4><p>Sorting by satisfaction/cost ratio (greedy) and picking top items can fail. Parma ham has a ratio of 2.4 but at 3.0ww it crowds out two cheaper items with a combined score of 8.0+. Greedy isn't optimal for binary problems.</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>Models vs. intuition</h4><p>I wouldn't have picked Zucchini (score 3.5) intuitively — it seems mediocre. But at 1.0ww it fills budget gaps efficiently. The model caught what intuition missed. That's the whole point of quantitative analysis.</p></div>
+  </div>
+</div>
+<footer><a href="ms-project1.html">← Project 1</a> &nbsp;·&nbsp; <a href="ms-project3.html">Project 3 →</a></footer>
+
+<script>
+const toppings = [
+  {name:'Buffalo mozzarella', cost:2.0, sat:5.0},
+  {name:'Gorgonzola', cost:1.5, sat:3.1},
+  {name:'Ricotta', cost:1.0, sat:4.2},
+  {name:'Burrata', cost:3.0, sat:4.7},
+  {name:'Parma ham', cost:3.0, sat:7.2},
+  {name:'Pancetta', cost:2.0, sat:4.2},
+  {name:'Salame', cost:2.0, sat:8.3},
+  {name:"'Nduja", cost:0.5, sat:4.8},
+  {name:'Zucchini', cost:1.0, sat:3.5},
+  {name:'Fried eggplant', cost:2.0, sat:5.2}
+];
+let selected = new Array(10).fill(false);
+
+function renderTable(){
+  const tbody = document.getElementById('toppingBody');
+  tbody.innerHTML = '';
+  toppings.forEach((t,i)=>{
+    const on = selected[i];
+    const ratio = (t.sat/t.cost).toFixed(1);
+    const tr = document.createElement('tr');
+    if(on) tr.classList.add('selected');
+    tr.innerHTML = `<td>${t.name}</td><td>${t.cost.toFixed(1)}</td><td>${t.sat.toFixed(1)}</td><td>${ratio}</td>
+      <td><button class="toggle-btn ${on?'on':''}" onclick="toggle(${i})">${on?'1':'0'}</button></td>
+      <td>${on?t.cost.toFixed(1):'0.0'}</td><td>${on?t.sat.toFixed(1):'0.0'}</td>`;
+    tbody.appendChild(tr);
+  });
+  updateTotals();
+}
+function toggle(i){ selected[i]=!selected[i]; renderTable(); }
+function updateTotals(){
+  const budget = parseFloat(document.getElementById('budget').value)||7;
+  let cost=0, sat=0, count=0;
+  toppings.forEach((t,i)=>{ if(selected[i]){cost+=t.cost;sat+=t.sat;count++;} });
+  document.getElementById('totalCost').textContent=cost.toFixed(1);
+  document.getElementById('totalSat').textContent=sat.toFixed(1);
+  document.getElementById('toppingCount').textContent=count;
+  const badge=document.getElementById('statusBadge');
+  if(cost>budget){badge.className='opt-status over';badge.textContent='⚠️ Over Budget';}
+  else{badge.className='opt-status ok';badge.textContent='✅ Within Budget';}
+}
+function solveOptimal(){
+  const budget=parseFloat(document.getElementById('budget').value)||7;
+  let bestSat=0, bestMask=0;
+  for(let mask=0;mask<(1<<toppings.length);mask++){
+    let cost=0,sat=0;
+    for(let i=0;i<toppings.length;i++){if(mask&(1<<i)){cost+=toppings[i].cost;sat+=toppings[i].sat;}}
+    if(cost<=budget&&sat>bestSat){bestSat=sat;bestMask=mask;}
+  }
+  selected=toppings.map((_,i)=>!!(bestMask&(1<<i)));
+  renderTable();
+  let totalCost=0;
+  toppings.forEach((t,i)=>{if(selected[i])totalCost+=t.cost;});
+  const box=document.getElementById('solutionBox');
+  box.style.display='block';
+  document.getElementById('solToppings').innerHTML=toppings.filter((_,i)=>selected[i]).map(t=>`<span class="sol-topping">${t.name}</span>`).join('');
+  document.getElementById('solCost').textContent=totalCost.toFixed(1)+' ww';
+  document.getElementById('solSat').textContent=bestSat.toFixed(1);
+  document.getElementById('solRemain').textContent=(budget-totalCost).toFixed(2)+' ww';
+}
+renderTable();
+</script>
+</body></html>
