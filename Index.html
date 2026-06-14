@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBM Portfolio — Norman </title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a28;
+    --purple: #9b59d0;
+    --purple-light: #c084fc;
+    --purple-dim: rgba(155,89,208,0.15);
+    --white: #f0eeff;
+    --muted: #8888aa;
+    --border: rgba(155,89,208,0.3);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--white); line-height:1.6; }
+
+  /* FUTURISTIC LINES */
+  body::before {
+    content:''; position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:0;
+    background:
+      linear-gradient(rgba(155,89,208,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(155,89,208,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* CORNER DECO */
+  .corner { position:fixed; width:60px; height:60px; pointer-events:none; z-index:10; }
+  .corner::before, .corner::after { content:''; position:absolute; background:var(--purple); }
+  .corner::before { width:2px; height:30px; }
+  .corner::after { width:30px; height:2px; }
+  .corner.tl { top:16px; left:16px; }
+  .corner.tr { top:16px; right:16px; transform:scaleX(-1); }
+  .corner.bl { bottom:16px; left:16px; transform:scaleY(-1); }
+  .corner.br { bottom:16px; right:16px; transform:scale(-1); }
+
+  nav {
+    position:sticky; top:0; z-index:100;
+    background:rgba(10,10,15,0.92); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:60px;
+  }
+  nav .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; letter-spacing:0.08em; }
+  nav .logo span { color:var(--purple); }
+  nav ul { list-style:none; display:flex; gap:2rem; }
+  nav ul a { text-decoration:none; color:var(--muted); font-size:0.82rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; }
+  nav ul a:hover { color:var(--purple-light); }
+  .nav-toggle { display:none; background:none; border:none; cursor:pointer; color:var(--white); font-size:1.4rem; }
+
+  /* HERO */
+  .hero { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:5rem 2rem 3rem; display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:start; }
+  .hero-label { font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--purple); margin-bottom:1rem; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(2.2rem,5vw,3.8rem); font-weight:800; line-height:1.05; letter-spacing:-0.02em; }
+  .hero h1 .hl { color:var(--purple-light); }
+  .hero-sub { margin-top:1.25rem; color:var(--muted); font-size:1rem; max-width:420px; }
+  .hero-cta {
+    display:inline-block; margin-top:2rem;
+    background:transparent; color:var(--purple-light);
+    border:1px solid var(--purple); padding:0.7rem 1.8rem; border-radius:3px;
+    text-decoration:none; font-weight:500; font-size:0.88rem; letter-spacing:0.06em;
+    text-transform:uppercase; transition:all 0.2s; position:relative;
+  }
+  .hero-cta:hover { background:var(--purple-dim); color:var(--white); box-shadow:0 0 20px rgba(155,89,208,0.3); }
+
+  /* PROFILE CARD */
+  .profile-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:1.5rem; width:260px; flex-shrink:0;
+    position:relative; overflow:hidden;
+  }
+  .profile-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--purple),var(--purple-light));
+  }
+  .profile-card::after {
+    content:''; position:absolute; bottom:0; right:0;
+    width:80px; height:80px;
+    border-right:2px solid rgba(155,89,208,0.4);
+    border-bottom:2px solid rgba(155,89,208,0.4);
+    border-radius:0 0 8px 0;
+  }
+  .profile-avatar {
+    width:64px; height:64px; border-radius:50%;
+    border:2px solid var(--purple); margin:0 auto 1rem;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.6rem; background:var(--surface2);
+    box-shadow:0 0 20px rgba(155,89,208,0.3);
+  }
+  .profile-name { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin-bottom:1rem; text-align:center; }
+  .profile-row { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0; border-bottom:1px solid rgba(155,89,208,0.12); }
+  .profile-row:last-child { border-bottom:none; }
+  .pr-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--purple); font-weight:600; }
+  .pr-val { font-size:0.82rem; color:var(--muted); }
+  .status-dot { width:7px; height:7px; border-radius:50%; background:#4ade80; display:inline-block; margin-right:5px; box-shadow:0 0 6px #4ade80; }
+
+  /* INTRO BAND */
+  .intro-band {
+    position:relative; z-index:1;
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    padding:2.5rem 2rem; background:var(--surface);
+    margin-bottom:4rem;
+  }
+  .intro-band-inner { max-width:800px; margin:0 auto; text-align:center; }
+  .intro-band h2 { font-family:'Syne',sans-serif; font-size:clamp(1.3rem,2.5vw,1.8rem); font-weight:700; color:var(--white); }
+  .intro-band p { color:var(--muted); font-size:0.95rem; margin-top:0.5rem; }
+
+  /* PROJECTS */
+  #portfolio { position:relative; z-index:1; padding:0 2rem 5rem; max-width:1100px; margin:0 auto; }
+  .section-eyebrow { font-size:0.7rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--purple); margin-bottom:0.5rem; }
+  .section-header h2 { font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; letter-spacing:-0.02em; margin-bottom:2.5rem; }
+
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.25rem; }
+  .project-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:8px; overflow:hidden; text-decoration:none; color:inherit;
+    transition:transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    display:flex; flex-direction:column; position:relative;
+  }
+  .project-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none;
+    border-radius:8px; border:1px solid transparent;
+    transition:border-color 0.2s;
+  }
+  .project-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(155,89,208,0.2); border-color:var(--purple); }
+  .card-top { height:4px; background:linear-gradient(90deg,var(--purple),var(--purple-light)); }
+  .card-body { padding:1.5rem; flex:1; display:flex; flex-direction:column; }
+  .card-num { font-size:0.68rem; color:var(--purple); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.6rem; font-weight:600; }
+  .card-title { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
+  .card-desc { font-size:0.88rem; color:var(--muted); flex:1; margin-bottom:1.25rem; line-height:1.6; }
+  .card-footer { display:flex; align-items:center; justify-content:space-between; }
+  .card-tag { font-size:0.7rem; background:var(--purple-dim); color:var(--purple-light); padding:0.2rem 0.6rem; border-radius:3px; font-weight:500; letter-spacing:0.04em; border:1px solid rgba(155,89,208,0.25); }
+  .card-arrow { color:var(--purple); font-size:1rem; }
+
+  /* REFLECTION */
+  #reflection { position:relative; z-index:1; background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:5rem 2rem; }
+  .reflection-inner { max-width:900px; margin:0 auto; }
+  .reflection-inner .section-eyebrow { color:var(--purple-light); }
+  .reflection-inner h2 { font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; margin-bottom:2.5rem; }
+  .ref-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .ref-item { border:1px solid var(--border); border-radius:8px; padding:1.25rem 1.5rem; background:var(--surface2); position:relative; overflow:hidden; }
+  .ref-item::before { content:''; position:absolute; top:0; left:0; bottom:0; width:3px; background:var(--purple); }
+  .ref-label { font-size:0.68rem; color:var(--purple-light); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.4rem; font-weight:600; }
+  .ref-item h3 { font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem; }
+  .ref-item p { font-size:0.86rem; color:var(--muted); line-height:1.6; }
+
+  /* SKILLS */
+  .skills-section { position:relative; z-index:1; padding:4rem 2rem; max-width:1100px; margin:0 auto; }
+  .skills-list { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.25rem; }
+  .skill-pill { background:var(--surface2); border:1px solid var(--border); border-radius:3px; padding:0.35rem 0.9rem; font-size:0.82rem; font-weight:500; color:var(--muted); letter-spacing:0.02em; }
+
+  footer { border-top:1px solid var(--border); padding:2rem; text-align:center; color:var(--muted); font-size:0.82rem; position:relative; z-index:1; }
+
+  @media(max-width:768px){
+    .hero { grid-template-columns:1fr; }
+    .profile-card { width:100%; }
+    nav ul { display:none; }
+    .nav-toggle { display:block; }
+    nav ul.open { display:flex; flex-direction:column; position:absolute; top:60px; left:0; right:0; background:var(--bg); border-bottom:1px solid var(--border); padding:1rem 2rem; gap:1rem; }
+    .ref-grid { grid-template-columns:1fr; }
+    .corner { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<nav>
+  <div class="logo">IBM<span>·</span>PORTFOLIO</div>
+  <ul id="navMenu">
+    <li><a href="#portfolio">Projects</a></li>
+    <li><a href="#reflection">Reflection</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="document.getElementById('navMenu').classList.toggle('open')">☰</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-label">International Business Management · 2025</div>
+    <h1>Understanding<br><span class="hl">Global Trade</span><br>Through Doing</h1>
+    <p class="hero-sub">Five projects exploring how trade shapes economies, societies, and everyday choices — from gravity equations to muddy trenches.</p>
+    <a href="#portfolio" class="hero-cta">Explore Projects →</a>
+  </div>
+  <div class="profile-card">
+    <div class="profile-avatar">👤</div>
+    <div class="profile-name">Norman Majidov</div>
+    <div class="profile-row"><span class="pr-label">ID</span><span class="pr-val">2417563</span></div>
+    <div class="profile-row"><span class="pr-label">Faculty</span><span class="pr-val">IBM</span></div>
+    <div class="profile-row"><span class="pr-label">Subject</span><span class="pr-val">International Trade</span></div>
+    <div class="profile-row"><span class="pr-label">Status</span><span class="pr-val"><span class="status-dot"></span>Active</span></div>
+  </div>
+</section>
+
+<div class="intro-band">
+  <div class="intro-band-inner">
+    <h2>Trade is not just policy — it's the story of how the world solves problems together.</h2>
+    <p>This portfolio traces that story across five lenses: mathematical models, economic debate, everyday philosophy, personal narrative, and ecological reality.</p>
+  </div>
+</div>
+
+<section id="portfolio">
+  <div class="section-header">
+    <div class="section-eyebrow">Portfolio</div>
+    <h2>Five Projects</h2>
+  </div>
+  <div class="projects-grid">
+    <a class="project-card" href="project1.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 01 — Model</div>
+        <div class="card-title">The Gravity Model of Trade</div>
+        <div class="card-desc">Why do neighboring countries trade more? Explore the equation that predicts trade volumes using GDP and distance — and test it yourself.</div>
+        <div class="card-footer"><span class="card-tag">Interactive Calculator</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="project2.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 02 — Debate</div>
+        <div class="card-title">DAH Snarky: Trade vs. Autarky</div>
+        <div class="card-desc">A real debate with AI where I had to defend free trade against economic isolation. Read the original conversation and the key arguments.</div>
+        <div class="card-footer"><span class="card-tag">AI Debate</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="project3.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 03 — Philosophy</div>
+        <div class="card-title">Boots Theory</div>
+        <div class="card-desc">Terry Pratchett's insight that poverty is expensive — and how it scales from cheap boots to fast fashion to global supply chains.</div>
+        <div class="card-footer"><span class="card-tag">Presentation</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="project4.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 04 — Story</div>
+        <div class="card-title">Trade in the Trenches</div>
+        <div class="card-desc">A soldier, a chocolate, an apple, and an American ally. A personal story that reveals the first and most human lesson about trade.</div>
+        <div class="card-footer"><span class="card-tag">Narrative</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="project5.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 05 — Reading</div>
+        <div class="card-title">Degrowth, GVCs & the Carrier Bag</div>
+        <div class="card-desc">Three provocative readings that challenge the growth-is-good assumption: Ursula Le Guin, ecological economics, and the environmental cost of globalization.</div>
+        <div class="card-footer"><span class="card-tag">Visualization</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section id="reflection">
+  <div class="reflection-inner">
+    <div class="section-eyebrow">Final Reflection</div>
+    <h2>What this course changed</h2>
+    <div class="ref-grid">
+      <div class="ref-item">
+        <div class="ref-label">Most Interesting</div>
+        <h3>The Gravity Model</h3>
+        <p>I didn't expect a physics equation to work so cleanly for trade. The idea that geography still dominates even in the internet age was genuinely surprising — and it made me rethink how "global" our economy really is.</p>
+      </div>
+      <div class="ref-item">
+        <div class="ref-label">Most Challenging</div>
+        <h3>Defending Free Trade</h3>
+        <p>The DAH Snarky debate forced me to argue a position under pressure. Autarky made more sense than I expected at first — finding the right counter-arguments pushed me to actually understand the theory, not just repeat it.</p>
+      </div>
+      <div class="ref-item">
+        <div class="ref-label">Most Valuable</div>
+        <h3>Boots Theory</h3>
+        <p>This concept left the classroom. I now use it constantly: when buying a bag, choosing a laptop, evaluating suppliers. The idea that cheap can be expensive is simple but powerful, and it connects microeconomics to real-world inequality.</p>
+      </div>
+      <div class="ref-item">
+        <div class="ref-label">How My Understanding Changed</div>
+        <h3>Trade has a human face</h3>
+        <p>From the story of a trench trade to the degrowth critique, I learned that trade theory isn't abstract. It's what happens when a dying soldier trades chocolate for an apple — and both feel richer afterward.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="skills-section">
+  <div class="section-eyebrow">Skills Developed</div>
+  <div class="skills-list">
+    <span class="skill-pill">Comparative advantage analysis</span>
+    <span class="skill-pill">Trade modeling (Gravity Model)</span>
+    <span class="skill-pill">Policy evaluation</span>
+    <span class="skill-pill">Economic debate</span>
+    <span class="skill-pill">Critical reading</span>
+    <span class="skill-pill">Long-run cost thinking</span>
+    <span class="skill-pill">GVC analysis</span>
+    <span class="skill-pill">Environmental economics</span>
+    <span class="skill-pill">Data interpretation</span>
+  </div>
+</section>
+
+<footer>International Business Management · Norman Majidov · 2417563 · 2025</footer>
+
+</body>
+</html>
