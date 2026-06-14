@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS Portfolio — Norman</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root {
+    --bg:#080f0a; --surface:#0e1a10; --surface2:#162019;
+    --green:#2ecc71; --green-light:#5dde8f; --green-dim:rgba(46,204,113,0.13);
+    --white:#edfff3; --muted:#7aaa88; --border:rgba(46,204,113,0.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;
+    background:linear-gradient(rgba(46,204,113,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,113,0.04) 1px,transparent 1px);
+    background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--green);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(8,15,10,0.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--green);}
+  nav ul{list-style:none;display:flex;gap:2rem;}
+  nav ul a{text-decoration:none;color:var(--muted);font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.2s;}
+  nav ul a:hover{color:var(--green-light);}
+  .nav-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--white);font-size:1.4rem;}
+
+  .hero{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:5rem 2rem 3rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+  .hero-label{font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:1rem;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-0.02em;}
+  .hero h1 .hl{color:var(--green-light);}
+  .hero-sub{margin-top:1.25rem;color:var(--muted);font-size:1rem;max-width:420px;}
+  .hero-cta{display:inline-block;margin-top:2rem;background:transparent;color:var(--green-light);
+    border:1px solid var(--green);padding:0.7rem 1.8rem;border-radius:3px;text-decoration:none;
+    font-weight:500;font-size:0.88rem;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s;}
+  .hero-cta:hover{background:var(--green-dim);color:var(--white);box-shadow:0 0 20px rgba(46,204,113,0.25);}
+
+  /* PROFILE CARD */
+  .profile-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;width:260px;flex-shrink:0;position:relative;overflow:hidden;}
+  .profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--green-light));}
+  .profile-card::after{content:'';position:absolute;bottom:0;right:0;width:80px;height:80px;border-right:2px solid rgba(46,204,113,0.35);border-bottom:2px solid rgba(46,204,113,0.35);border-radius:0 0 8px 0;}
+  .profile-avatar{width:64px;height:64px;border-radius:50%;border:2px solid var(--green);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.6rem;background:var(--surface2);box-shadow:0 0 20px rgba(46,204,113,0.25);}
+  .profile-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1rem;text-align:center;}
+  .profile-row{display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;border-bottom:1px solid rgba(46,204,113,0.1);}
+  .profile-row:last-child{border-bottom:none;}
+  .pr-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--green);font-weight:600;}
+  .pr-val{font-size:0.82rem;color:var(--muted);}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;margin-right:5px;box-shadow:0 0 6px #4ade80;}
+
+  .intro-band{position:relative;z-index:1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 2rem;background:var(--surface);margin-bottom:4rem;}
+  .intro-band-inner{max-width:800px;margin:0 auto;text-align:center;}
+  .intro-band h2{font-family:'Syne',sans-serif;font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:700;}
+  .intro-band p{color:var(--muted);font-size:0.95rem;margin-top:0.5rem;}
+
+  #portfolio{position:relative;z-index:1;padding:0 2rem 5rem;max-width:1100px;margin:0 auto;}
+  .section-eyebrow{font-size:0.7rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:0.5rem;}
+  .section-header h2{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:2.5rem;}
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;}
+  .project-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;text-decoration:none;color:inherit;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;display:flex;flex-direction:column;}
+  .project-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(46,204,113,0.15);border-color:var(--green);}
+  .card-top{height:4px;background:linear-gradient(90deg,var(--green),var(--green-light));}
+  .card-body{padding:1.5rem;flex:1;display:flex;flex-direction:column;}
+  .card-num{font-size:0.68rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;font-weight:600;}
+  .card-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;}
+  .card-desc{font-size:0.88rem;color:var(--muted);flex:1;margin-bottom:1.25rem;line-height:1.6;}
+  .card-footer{display:flex;align-items:center;justify-content:space-between;}
+  .card-tag{font-size:0.7rem;background:var(--green-dim);color:var(--green-light);padding:0.2rem 0.6rem;border-radius:3px;font-weight:500;letter-spacing:0.04em;border:1px solid rgba(46,204,113,0.22);}
+  .card-arrow{color:var(--green);font-size:1rem;}
+
+  #reflection{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 2rem;}
+  .reflection-inner{max-width:900px;margin:0 auto;}
+  .reflection-inner h2{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:2.5rem;}
+  .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+  .ref-item{border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;background:var(--surface2);position:relative;overflow:hidden;}
+  .ref-item::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--green);}
+  .ref-label{font-size:0.68rem;color:var(--green-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem;font-weight:600;}
+  .ref-item h3{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:0.5rem;}
+  .ref-item p{font-size:0.86rem;color:var(--muted);line-height:1.6;}
+
+  .skills-section{position:relative;z-index:1;padding:4rem 2rem;max-width:1100px;margin:0 auto;}
+  .skills-list{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1.25rem;}
+  .skill-pill{background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:0.35rem 0.9rem;font-size:0.82rem;font-weight:500;color:var(--muted);}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  @media(max-width:768px){
+    .hero{grid-template-columns:1fr;}.profile-card{width:100%;}
+    nav ul{display:none;}.nav-toggle{display:block;}
+    nav ul.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:1rem 2rem;gap:1rem;}
+    .ref-grid{grid-template-columns:1fr;}.corner{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav>
+  <div class="logo">MS<span>·</span>PORTFOLIO</div>
+  <ul id="navMenu">
+    <li><a href="#portfolio">Projects</a></li>
+    <li><a href="#reflection">Reflection</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="document.getElementById('navMenu').classList.toggle('open')">☰</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-label">Management Science · 2025</div>
+    <h1>Solving Problems<br><span class="hl">Quantitatively</span></h1>
+    <p class="hero-sub">Five projects exploring how mathematical models, optimization, and systems thinking help make better decisions — from pizza toppings to galaxy-wide supply chains.</p>
+    <a href="#portfolio" class="hero-cta">Explore Projects →</a>
+  </div>
+  <div class="profile-card">
+    <div class="profile-avatar">👤</div>
+    <div class="profile-name">Norman</div>
+    <div class="profile-row"><span class="pr-label">ID</span><span class="pr-val">2417563</span></div>
+    <div class="profile-row"><span class="pr-label">Faculty</span><span class="pr-val">IBM</span></div>
+    <div class="profile-row"><span class="pr-label">Subject</span><span class="pr-val">Management Science</span></div>
+    <div class="profile-row"><span class="pr-label">Status</span><span class="pr-val"><span class="status-dot"></span>Active</span></div>
+  </div>
+</section>
+
+<div class="intro-band">
+  <div class="intro-band-inner">
+    <h2>Every decision is an optimization problem in disguise.</h2>
+    <p>Management Science gives us the tools to find it — and solve it rigorously.</p>
+  </div>
+</div>
+
+<section id="portfolio">
+  <div class="section-header">
+    <div class="section-eyebrow">Portfolio</div>
+    <h2>Five Projects</h2>
+  </div>
+  <div class="projects-grid">
+    <a class="project-card" href="ms-project1.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 01 — Case Study</div>
+        <div class="card-title">Student Satisfaction & Resource Allocation</div>
+        <div class="card-desc">How should a university allocate limited resources to maximize student satisfaction? A real management science problem solved with objectives, constraints, and tradeoffs.</div>
+        <div class="card-footer"><span class="card-tag">Optimization Analysis</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="ms-project2.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 02 — Activity</div>
+        <div class="card-title">The Pizza Optimizer</div>
+        <div class="card-desc">Budget optimization with binary decision variables — choosing the best pizza toppings under a 7ww constraint to maximize satisfaction. Hands-on mathematical modeling.</div>
+        <div class="card-footer"><span class="card-tag">Binary LP · Interactive</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="ms-project3.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 03 — Systems Thinking</div>
+        <div class="card-title">May the Force be with You!</div>
+        <div class="card-desc">What does Star Wars reveal about supply chains, logistics, and management systems? Systems thinking applied to a galaxy far, far away.</div>
+        <div class="card-footer"><span class="card-tag">Systems Thinking</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="ms-project4.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 04 — Group Work</div>
+        <div class="card-title">Branch & Bound</div>
+        <div class="card-desc">Collaborative whiteboard exploration of Branch & Bound optimization — from group decision trees to pizza topping problems solved with integer programming logic.</div>
+        <div class="card-footer"><span class="card-tag">Integer Programming</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+    <a class="project-card" href="ms-project5.html">
+      <div class="card-top"></div>
+      <div class="card-body">
+        <div class="card-num">Project 05 — Activity</div>
+        <div class="card-title">Linear Equation Solver</div>
+        <div class="card-desc">From requirements to prompt engineering to AI generation to GitHub Pages hosting — building a working math tool using the full development workflow.</div>
+        <div class="card-footer"><span class="card-tag">AI-Assisted Build</span><span class="card-arrow">→</span></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section id="reflection">
+  <div class="reflection-inner">
+    <div class="section-eyebrow">Final Reflection</div>
+    <h2>What this course changed</h2>
+    <div class="ref-grid">
+      <div class="ref-item">
+        <div class="ref-label">Most Interesting</div>
+        <h3>Branch & Bound</h3>
+        <p>The idea that you can systematically prune an entire solution space by proving certain branches can't beat your best answer — without testing every possibility — felt like a superpower once it clicked.</p>
+      </div>
+      <div class="ref-item">
+        <div class="ref-label">Most Challenging</div>
+        <h3>The Pizza Optimizer</h3>
+        <p>Binary variables sound simple — 0 or 1 — but formulating the model correctly, running sensitivity analysis, and understanding why the greedy approach fails taught me more than any lecture.</p>
+      </div>
+      <div class="ref-item">
+        <div class="ref-label">Most Valuable</div>
+        <h3>Thinking in Models</h3>
+        <p>The real skill isn't solving the math — it's translating a messy real-world problem into a clean model with sets, parameters, decision variables, and constraints. That framing works everywhere.</p>
+      </div>
+      <div class="ref-item">
+        <div class="ref-label">How My Understanding Changed</div>
+        <h3>Everything is an optimization</h3>
+        <p>Before: I made decisions intuitively. After: I catch myself identifying objectives, constraints, and tradeoffs automatically. Star Wars, pizza, university budgets — they're all the same structure underneath.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="skills-section">
+  <div class="section-eyebrow">Skills Developed</div>
+  <div class="skills-list">
+    <span class="skill-pill">Linear programming</span>
+    <span class="skill-pill">Binary optimization</span>
+    <span class="skill-pill">Branch & Bound</span>
+    <span class="skill-pill">Sensitivity analysis</span>
+    <span class="skill-pill">Systems thinking</span>
+    <span class="skill-pill">Mathematical modeling</span>
+    <span class="skill-pill">Spreadsheet modeling</span>
+    <span class="skill-pill">Constraint formulation</span>
+    <span class="skill-pill">Prompt engineering</span>
+    <span class="skill-pill">GitHub Pages deployment</span>
+  </div>
+</section>
+
+<footer>Management Science · Norman Majidov · 2417563 · 2025</footer>
+<script>
+</script>
+</body>
+</html>
