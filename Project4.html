@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 4: Trade in the Trenches — IBM Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+  :root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a28;--purple:#9b59d0;--purple-light:#c084fc;--purple-dim:rgba(155,89,208,0.15);--white:#f0eeff;--muted:#8888aa;--border:rgba(155,89,208,0.3);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(155,89,208,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(155,89,208,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--purple);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--purple);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--purple-light);}
+
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem 5rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero h1 span{color:var(--purple-light);}
+  .hero .lead{font-family:'Lora',serif;font-style:italic;font-size:1.05rem;color:var(--muted);max-width:540px;line-height:1.7;}
+
+  .content{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+  .card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--white);}
+
+  /* STORY */
+  .story{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1.5rem 0;}
+  .story-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+  .story-header h3{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;}
+  .story-header .meta{font-size:0.72rem;color:var(--purple);letter-spacing:0.06em;font-weight:600;}
+  .story-body{padding:2rem;}
+  .story-body p{font-family:'Lora',serif;font-size:1rem;line-height:1.85;color:#ccc8e0;margin-bottom:1.25rem;}
+  .story-body strong{color:var(--white);font-weight:600;}
+  .scene-break{
+    background:var(--surface2);border:1px solid var(--border);border-radius:4px;
+    padding:0.6rem 1rem;margin:1.5rem 0;
+    font-size:0.78rem;color:var(--purple-light);
+    font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+    display:flex;align-items:center;gap:0.5rem;
+  }
+  .pull-quote{
+    border-left:3px solid var(--purple);margin:1.75rem 0;padding:0.5rem 1.5rem;
+    font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--purple-light);
+  }
+  .story-divider{text-align:center;color:var(--muted);margin:1.5rem 0;letter-spacing:0.3em;font-size:0.8rem;}
+
+  /* CONNECTIONS */
+  .conn-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+  .conn-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.1rem;display:flex;gap:0.75rem;align-items:flex-start;}
+  .conn-icon{font-size:1.4rem;flex-shrink:0;}
+  .conn-text h4{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:0.25rem;color:var(--white);}
+  .conn-text p{font-size:0.82rem;color:var(--muted);margin:0;}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--purple);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--purple-light);text-decoration:none;}
+  @media(max-width:600px){.conn-grid,.learn-grid{grid-template-columns:1fr;}.corner{display:none;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">IBM<span>·</span>PORTFOLIO</div><a href="index.html">← Back</a></nav>
+
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 04 · Personal Narrative</div>
+  <h1>Trade in the <span>Trenches</span></h1>
+  <p class="lead">Trade leaves everyone better off. I didn't learn that in a lecture. I learned it in a muddy trench in Germany, March 1945 — with a chocolate and an apple.</p>
+</div></div>
+
+<div class="content">
+  <h2>Project Overview</h2>
+  <div class="card"><h3>Why this story?</h3>
+    <p>This project is based on a written assignment where I was asked to connect personal experience to course concepts. The story below is a first-person narrative set in World War II — a soldier lying wounded in a trench who trades a Russian kartoshka chocolate for an American apple.</p>
+    <p>What seems like a trivial exchange in extreme circumstances turns out to be the purest illustration of trade theory: value is not intrinsic to an object, it is determined by who wants what more. Both sides feel richer. Both are right.</p>
+  </div>
+
+  <h2>The Story</h2>
+  <div class="story">
+    <div class="story-header">
+      <h3>// Trading — A Personal Narrative</h3>
+      <span class="meta">International Business Management · Written Assignment</span>
+    </div>
+    <div class="story-body">
+      <p><strong>Trade leaves everyone better off.</strong></p>
+      <p>What an amazing morning. My mother had woken up early and prepared fresh bread with a juicy steak. The smell filled the house. I lay under the softest wool blanket, unwilling to leave its warmth, but eventually I forced myself to rise. Everyone was already gathered at the table. "Anatoly, come join us. Your tea will get cold," my mother said. I looked at them — my family, smiling, alive, beautiful. For a moment I simply stared. My chest tightened. Because I had not seen them for…yeah, four years. Then I woke up.</p>
+
+      <div class="scene-break">📍 March, 1945 · Germany · Week two — in the trench</div>
+
+      <p>A bullet had passed through my foot and another through my shoulder. When I lost consciousness, my comrades thought I was dead and left me behind. The cold rain had not stopped since. The weather did not seem to care whether men lived or died.</p>
+      <p>The funny thing is that during such a crisis, the only thing I could think about…was biting into a fresh apple.</p>
+      <p>Strange, isn't it? Even now, lying half-buried in mud and blood, I still wanted that apple more than anything. The home grown apple would go just fine. I know, I thought it was crazy, too.</p>
+      <p>The rain finally stopped. My foot seemed to be healing after I managed to pull the bullet out myself. The shoulder wound was another story. The pain would not allow me to do the same there.</p>
+
+      <div class="pull-quote">Two weeks without food. Four years without a proper meal. Damn Nazis.</div>
+
+      <p>While staring across the trench, something strange caught my eye. A small round shape inside my friend's half-open pocket. A <strong>kartoshka chocolate</strong> — the Russian potato-shaped sweet that was distributed to the army at least to keep us somewhat able to walk. It was lying on the body of my comrade about ten meters away. Noticing it at all felt like a miracle. I began to crawl. Slowly. Every movement felt like someone was pushing a knife deeper into my shoulder, but hunger is stronger than pain.</p>
+      <p>When I finally reached him, I carefully reached into his jacket pocket and took the chocolate. For a moment I simply stared at it. <em>Food…The real food.</em></p>
+      <p>Just as I was about to eat it, I saw a rifle barrel pointing directly at my face. A soldier stood above the trench. My heart nearly stopped. "Don't shoot!" I shouted. "I'm not the enemy!" I pointed weakly at my wounded leg and shoulder.</p>
+      <p>The soldier hesitated. Then I noticed his uniform. Although he was from the United States, he was still our ally. Relief flooded my chest. But then he said something in his language. <em>"I'll take that chocolate"</em> — pointing at my Kartoshka.</p>
+      <p>My reaction changed instantly. A second ago I was a dying beggar. Now I was a merchant protecting his treasure.</p>
+      <p>The soldier lifted his other hand very slowly, just to keep it calm. Inside it was an apple. Covered in mud, but unmistakably perfect. My heart exploded with joy. <em>An apple…</em></p>
+      <p>Without thinking, I agreed. I shook my head like an idiot. He jumped down into the trench and handed me the apple. I gave him the chocolate. We looked at each other with satisfaction.</p>
+
+      <div class="story-divider">· · ·</div>
+
+      <p>Later I realized something funny about that moment. I thought he was foolish for giving me the thing I had dreamed about for years in exchange for chocolate taken from a dead soldier. But he probably thought I was foolish for trading well-preserved chocolate for an apple he could pick from a garden just one kilometer away.</p>
+      <p>And yet…Both of us felt richer and satisfied with the transaction.</p>
+
+      <div class="pull-quote">That was the day I learned my first lesson about trade. Value is not decided by the object. Value is decided by who wants what more.</div>
+
+      <p>Years later I would learn something else. Chocolate comes from the Americas to our country, and Apples grow in Russian villages. Somehow, in a muddy trench between dying soldiers, we had traded exactly what the other side had in abundance.</p>
+      <p>Even in the strangest places, trade finds a way. Cheers.</p>
+    </div>
+  </div>
+
+  <h2>Connections to Course Concepts</h2>
+  <div class="conn-grid">
+    <div class="conn-item"><div class="conn-icon">🍫</div><div class="conn-text"><h4>Subjective Value Theory</h4><p>The apple and chocolate had equal "market" value — but radically different personal value to each soldier. Trade doesn't transfer equal things. It transfers things that each side values differently.</p></div></div>
+    <div class="conn-item"><div class="conn-icon">📊</div><div class="conn-text"><h4>Comparative Advantage</h4><p>Chocolate came from the Americas via Russia. Apples grew nearby in Germany. Each soldier held what the other's supply chain couldn't easily provide. Specialization created gains from exchange.</p></div></div>
+    <div class="conn-item"><div class="conn-icon">🌐</div><div class="conn-text"><h4>Mutual Gains from Trade</h4><p>Ricardo's insight: both sides feel richer after a voluntary exchange. The American wasn't foolish. The Russian wasn't foolish. Both were rational — because they valued different things.</p></div></div>
+    <div class="conn-item"><div class="conn-icon">🏭</div><div class="conn-text"><h4>Global Value Chains (GVCs)</h4><p>Even in a wartime trench, the traded goods had traveled global supply chains. Kartoshka chocolate: cacao from Americas, manufactured in Russia. The apple: grown locally but only accessible because of German agriculture.</p></div></div>
+  </div>
+
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Trade is lived experience</h4><p>Abstract models become real when connected to human moments. Mutual gains from trade isn't a theorem — it's what happens when two wounded men in a trench both walk away satisfied.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Theory through narrative</h4><p>Writing this story forced me to find the economic logic hidden inside a human moment. That translation — from feeling to theory and back — is a skill I'll keep long after this course.</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>Value is subjective</h4><p>The deepest lesson: value lives in the mind, not the object. Two people can make a trade that looks irrational to every observer and still both be right. That's the heart of all trade theory.</p></div>
+  </div>
+</div>
+
+<footer><a href="project3.html">← Project 3</a> &nbsp;·&nbsp; <a href="project5.html">Project 5 →</a></footer>
+</body></html>
