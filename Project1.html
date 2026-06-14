@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 1: The Gravity Model — IBM Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root { --bg:#0a0a0f; --surface:#12121a; --surface2:#1a1a28; --purple:#9b59d0; --purple-light:#c084fc; --purple-dim:rgba(155,89,208,0.15); --white:#f0eeff; --muted:#8888aa; --border:rgba(155,89,208,0.3); }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(155,89,208,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(155,89,208,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--purple);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--purple);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--purple-light);}
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero p{color:var(--muted);font-size:1rem;max-width:560px;}
+  .content{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+  .card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--white);}
+  .formula-box{background:#0d0820;border:1px solid var(--border);border-radius:8px;padding:2rem;margin:1.5rem 0;text-align:center;}
+  .formula-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:1rem;font-weight:600;}
+  .formula{font-family:'Syne',sans-serif;font-size:clamp(1rem,3vw,1.4rem);font-weight:700;color:var(--purple-light);}
+  .formula .var{color:#fbbf24;}
+  .formula-desc{margin-top:1.25rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;}
+  .formula-desc span{font-size:0.8rem;color:var(--muted);}
+  .formula-desc span b{color:#fbbf24;}
+  .calc-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem;margin:1.5rem 0;}
+  .calc-section h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1.5rem;}
+  .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .input-group label{display:block;font-size:0.76rem;font-weight:600;color:var(--purple-light);margin-bottom:0.4rem;letter-spacing:0.06em;text-transform:uppercase;}
+  .input-group input{width:100%;padding:0.6rem 0.9rem;border:1px solid var(--border);border-radius:4px;font-size:0.95rem;font-family:'Inter',sans-serif;background:var(--surface2);color:var(--white);transition:border-color 0.2s;}
+  .input-group input:focus{outline:none;border-color:var(--purple);}
+  .calc-btn{grid-column:1/-1;margin-top:0.5rem;background:var(--purple-dim);color:var(--purple-light);border:1px solid var(--purple);padding:0.7rem 2rem;border-radius:4px;font-size:0.9rem;font-weight:600;cursor:pointer;width:100%;transition:all 0.2s;letter-spacing:0.04em;}
+  .calc-btn:hover{background:var(--purple);color:var(--white);}
+  .calc-result{grid-column:1/-1;margin-top:1rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1.25rem;display:none;text-align:center;}
+  .result-val{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--purple-light);}
+  .result-label{font-size:0.8rem;color:var(--muted);margin-top:0.25rem;}
+  .result-context{font-size:0.86rem;color:var(--muted);margin-top:0.75rem;}
+  .table-wrap{overflow-x:auto;margin:1.5rem 0;}
+  table{width:100%;border-collapse:collapse;font-size:0.87rem;}
+  th{background:var(--surface2);color:var(--purple-light);padding:0.7rem 1rem;text-align:left;font-weight:500;font-size:0.78rem;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
+  td{padding:0.65rem 1rem;border-bottom:1px solid rgba(155,89,208,0.1);color:var(--muted);}
+  tr:hover td{background:var(--surface2);}
+  .hl-row td{color:var(--purple-light);font-weight:600;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+  .ev-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.1rem;}
+  .ev-card h4{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .ev-card p{font-size:0.82rem;color:var(--muted);margin:0;}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--purple);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--purple-light);text-decoration:none;}
+  @media(max-width:600px){.calc-grid,.grid2,.learn-grid{grid-template-columns:1fr;}.corner{display:none;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">IBM<span>·</span>PORTFOLIO</div><a href="index.html">← Back</a></nav>
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 01 · Model</div>
+  <h1>The Gravity Model of Trade</h1>
+  <p>A physics-inspired equation that predicts how much two countries will trade — using only their size and the distance between them.</p>
+</div></div>
+<div class="content">
+  <h2>Project Overview</h2>
+  <div class="card"><h3>What is this about?</h3>
+    <p>Inspired by Cornell Notes on introductory international economics, this project demonstrates the <strong style="color:var(--white)">Gravity Model of Trade</strong> — one of the most robust empirical findings in economics.</p>
+    <p>The model borrows from Newton's law of gravitation: two bodies attract in proportion to their masses and inversely to distance. In trade: two countries exchange goods in proportion to their GDP and inversely to the geographic distance between them.</p>
+    <p>What makes this remarkable: despite all our technology, trade volume is still heavily shaped by where you are on the map.</p>
+  </div>
+  <div class="formula-box">
+    <div class="formula-label">The Gravity Equation</div>
+    <div class="formula">Trade<sub style="font-size:0.7em">ij</sub> = <span class="var">G</span> × (<span class="var">GDP<sub style="font-size:0.7em">i</sub></span> × <span class="var">GDP<sub style="font-size:0.7em">j</sub></span>) / <span class="var">Distance<sub style="font-size:0.7em">ij</sub></span></div>
+    <div class="formula-desc">
+      <span><b>G</b> = gravitational constant</span>
+      <span><b>GDP<sub>i</sub>, GDP<sub>j</sub></b> = economic sizes</span>
+      <span><b>Distance</b> = km between capitals</span>
+    </div>
+  </div>
+  <h2>Interactive Calculator</h2>
+  <p>Enter GDP of two countries and distance between them to estimate predicted trade volume.</p>
+  <div class="calc-section"><h3>// Gravity Model Calculator</h3>
+    <div class="calc-grid">
+      <div class="input-group"><label>Country A — Name</label><input type="text" id="nameA" value="South Korea"></div>
+      <div class="input-group"><label>Country B — Name</label><input type="text" id="nameB" value="China"></div>
+      <div class="input-group"><label>GDP Country A ($ billion)</label><input type="number" id="gdpA" value="1709"></div>
+      <div class="input-group"><label>GDP Country B ($ billion)</label><input type="number" id="gdpB" value="17900"></div>
+      <div class="input-group" style="grid-column:1/-1"><label>Distance between capitals (km)</label><input type="number" id="dist" value="951"></div>
+      <button class="calc-btn" onclick="calcGravity()">→ Calculate Trade Potential</button>
+      <div class="calc-result" id="result">
+        <div class="result-val" id="resultVal"></div>
+        <div class="result-label">Gravity Index (relative trade potential)</div>
+        <div class="result-context" id="resultCtx"></div>
+      </div>
+    </div>
+  </div>
+  <h2>Evidence — Real-World Trade Data</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Country Pair</th><th>GDP Product</th><th>Distance (km)</th><th>Gravity Index</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr class="hl-row"><td>🇰🇷 Korea – 🇨🇳 China</td><td>High</td><td>951</td><td>Very High</td><td>Top trading partner</td></tr>
+      <tr><td>🇺🇸 US – 🇨🇦 Canada</td><td>High</td><td>733</td><td>Very High</td><td>NAFTA proximity</td></tr>
+      <tr><td>🇺🇸 US – 🇩🇪 Germany</td><td>High</td><td>7,930</td><td>Lower</td><td>Distance dampens GDP</td></tr>
+      <tr><td>🇮🇪 Ireland – 🇺🇸 US</td><td>Medium</td><td>6,349</td><td>Above expected</td><td>Cultural affinity anomaly</td></tr>
+      <tr><td>🇳🇱 Netherlands – 🇩🇪 Germany</td><td>Medium</td><td>592</td><td>Very High</td><td>Rotterdam EU entry port</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2">
+    <div class="ev-card"><h4>📝 From Cornell Notes</h4><p>Large economies import more due to high incomes and attract more because they produce diverse goods. Distance increases transport costs and reduces personal contact.</p></div>
+    <div class="ev-card"><h4>🌐 The Distance Paradox</h4><p>Despite the internet, a 1% increase in distance is still associated with a 0.7–1% fall in trade. Technology has softened geography — but not eliminated it.</p></div>
+    <div class="ev-card"><h4>🏴 Border Effects</h4><p>Canadian provinces trade far more with each other than nearby US states at the same distance. A border acts like 1,500–2,500 extra km.</p></div>
+    <div class="ev-card"><h4>📱 iPhone: GVC in Action</h4><p>Design in USA → components from Korea/Taiwan → assembly in China → sold worldwide. Complex trade flows the basic gravity model must adapt for.</p></div>
+  </div>
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Physics meets economics</h4><p>GDP drives purchasing power and variety; distance drives costs and friction. Together they explain most global trade flows.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Empirical modeling</h4><p>I learned to read and apply a model — not just memorize it. The calculator let me test whether intuitions about trade partners match the formula.</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>Surprised by geography</h4><p>I assumed globalization meant distance didn't matter. The gravity model proved me wrong. Even today, where you are shapes who you trade with more than any other factor.</p></div>
+  </div>
+</div>
+<footer><a href="index.html">← Portfolio Home</a> &nbsp;·&nbsp; <a href="project2.html">Project 2 →</a></footer>
+<script>
+function calcGravity(){
+  const gdpA=parseFloat(document.getElementById('gdpA').value);
+  const gdpB=parseFloat(document.getElementById('gdpB').value);
+  const dist=parseFloat(document.getElementById('dist').value);
+  const nameA=document.getElementById('nameA').value||'Country A';
+  const nameB=document.getElementById('nameB').value||'Country B';
+  if(!gdpA||!gdpB||!dist||dist===0){alert('Please fill all fields.');return;}
+  const index=(gdpA*gdpB)/dist;
+  const formatted=index>=1e6?(index/1e6).toFixed(1)+'M':index>=1e3?(index/1e3).toFixed(1)+'K':index.toFixed(1);
+  const ref=(1709*17900)/951;
+  const ratio=index/ref;
+  let label='';
+  if(ratio>1.5)label='🔥 Exceptionally high — stronger than Korea–China.';
+  else if(ratio>0.5)label='📈 Strong — comparable to major East Asian trade corridors.';
+  else if(ratio>0.1)label='📊 Moderate — significant but constrained by size or distance.';
+  else label='📉 Lower potential — distance or small GDP limits predicted volume.';
+  document.getElementById('resultVal').textContent=formatted;
+  document.getElementById('resultCtx').textContent=nameA+' ↔ '+nameB+': '+label;
+  document.getElementById('result').style.display='block';
+}
+</script>
+</body></html>
