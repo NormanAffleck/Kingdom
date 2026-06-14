@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 3: May the Force Be With You! — MS Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root{--bg:#080f0a;--surface:#0e1a10;--surface2:#162019;--green:#2ecc71;--green-light:#5dde8f;--green-dim:rgba(46,204,113,0.13);--white:#edfff3;--muted:#7aaa88;--border:rgba(46,204,113,0.28);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(46,204,113,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,113,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--green);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(8,15,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--green);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--green-light);}
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero h1 span{color:var(--green-light);}
+  .hero p{color:var(--muted);font-size:1rem;max-width:560px;}
+  .content{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  strong{color:var(--white);}
+  ul{color:var(--muted);padding-left:1.25rem;margin-bottom:1rem;}
+  ul li{margin-bottom:0.3rem;font-size:0.91rem;}
+
+  /* SCENE CARDS */
+  .scene{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:2rem 0;}
+  .scene-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+  .scene-icon{font-size:2rem;}
+  .scene-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;}
+  .scene-sub{font-size:0.8rem;color:var(--muted);}
+  .scene-body{padding:1.5rem;}
+
+  .tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin:0.75rem 0;}
+  .tag{font-size:0.72rem;background:var(--green-dim);border:1px solid rgba(46,204,113,0.22);color:var(--green-light);padding:0.2rem 0.6rem;border-radius:3px;font-weight:500;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0;}
+  .mini-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1rem;}
+  .mini-card h4{font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;color:var(--white);margin-bottom:0.4rem;}
+  .mini-card ul{margin:0;}
+
+  .insight{background:#020f05;border-left:3px solid var(--green);padding:1rem 1.25rem;border-radius:0 6px 6px 0;margin:1rem 0;}
+  .insight-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);font-weight:600;margin-bottom:0.3rem;}
+  .insight p{font-size:0.88rem;color:var(--muted);margin:0;}
+
+  /* CONCEPTS TABLE */
+  table{width:100%;border-collapse:collapse;font-size:0.88rem;margin:1.25rem 0;}
+  th{background:var(--surface2);color:var(--green-light);padding:0.65rem 1rem;text-align:left;font-weight:500;font-size:0.78rem;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
+  td{padding:0.6rem 1rem;border-bottom:1px solid rgba(46,204,113,0.08);color:var(--muted);}
+  td:first-child{color:var(--white);font-weight:500;}
+
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--green);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--green-light);text-decoration:none;}
+  @media(max-width:600px){.two-col,.learn-grid{grid-template-columns:1fr;}.corner{display:none;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">MS<span>·</span>PORTFOLIO</div><a href="index2.html">← Back</a></nav>
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 03 · Systems Thinking</div>
+  <h1>⭐ May the <span>Force</span> Be With You!</h1>
+  <p>What does Star Wars actually reveal about supply chains, manufacturing standards, logistics, and management systems? Systems thinking applied to a galaxy far, far away.</p>
+</div></div>
+
+<div class="content">
+  <h2>Project Overview</h2>
+  <p>This assignment asked us to look <em style="color:var(--white)">beyond the main story</em> of Star Wars and identify the hidden management systems that make the galaxy function. The observation: both the Empire and the Rebels rely on enormous, complex, invisible systems — logistics, trade, manufacturing standards, and information networks — without which no starfighter would ever fly.</p>
+  <p>The professor's comment on our work: <em style="color:var(--green-light)">"Your observations are actually very good for a systems-thinking assignment because you're looking beyond the main story and asking how the galaxy functions behind the scenes."</em></p>
+
+  <h2>Scene 1: Starfighters Used by Both Sides</h2>
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-icon">🚀</div>
+      <div><div class="scene-title">Starfighters — Empire & Rebels</div><div class="scene-sub">Manufacturing, Supply Chain, Trade, Logistics</div></div>
+    </div>
+    <div class="scene-body">
+      <p>Both the Galactic Empire and the Rebel Alliance use advanced starfighters and support vehicles. Despite different designs, they use similar underlying technology: hyperdrives, lasers, navigation systems, fuel systems, and communication equipment.</p>
+      <p><strong>What this reveals:</strong> These technologies didn't emerge independently. They imply a shared galaxy-wide manufacturing ecosystem — common technical standards, shared supply chains, or technology that spread through trade and capture.</p>
+
+      <div class="tags">
+        <span class="tag">Manufacturing System</span><span class="tag">Supply Chain</span><span class="tag">Logistics</span><span class="tag">Military Procurement</span><span class="tag">Technology Distribution</span>
+      </div>
+
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>Related Concepts</h4>
+          <ul>
+            <li><strong>Logistics:</strong> Production and distribution of spacecraft parts across the galaxy</li>
+            <li><strong>Trade:</strong> Exchange of materials and technology between planets</li>
+            <li><strong>Management Science:</strong> Coordinating factories, suppliers, military demand</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>Technologies Required</h4>
+          <ul>
+            <li>Advanced manufacturing facilities</li>
+            <li>Interplanetary transport networks</li>
+            <li>Hyperdrive shipping systems</li>
+            <li>Galaxy-wide communication networks</li>
+            <li>Inventory tracking systems</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="insight-label">Interesting Observation</div>
+        <p>The Rebels often use or modify existing technology rather than building everything from scratch. This suggests they obtain equipment through captured supplies, black markets, sympathetic manufacturers, or stolen technology — demonstrating that supply chains can support both governments and resistance movements simultaneously.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Scene 2: R2-D2 and Astromech Droids</h2>
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-icon">🤖</div>
+      <div><div class="scene-title">R2-D2 — Universal Compatibility</div><div class="scene-sub">Standardization, Information Systems, Maintenance Networks</div></div>
+    </div>
+    <div class="scene-body">
+      <p>R2-D2 appears throughout the trilogy performing navigation, repair, communication, data storage, and technical support. Crucially, he connects directly to many different ships and systems — across multiple generations of spacecraft.</p>
+      <p><strong>The management science insight:</strong> This is only possible with standardized interfaces and common engineering specifications — suggesting the galaxy operates on something like a universal technical standard, similar to USB or industrial ISO standards today.</p>
+
+      <div class="tags">
+        <span class="tag">Standardization</span><span class="tag">Robotics Manufacturing</span><span class="tag">Information Management</span><span class="tag">Maintenance Networks</span>
+      </div>
+
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>Challenges Revealed</h4>
+          <ul>
+            <li>Compatibility between different spacecraft generations</li>
+            <li>Software and security system updates</li>
+            <li>Repairing damaged droids in the field</li>
+            <li>Protecting sensitive information stored inside droids</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>Efficiency Implication</h4>
+          <ul>
+            <li>Universal design standards lower training costs</li>
+            <li>Simplify maintenance across the fleet</li>
+            <li>Improve operational flexibility</li>
+            <li>Allow easy capture and reuse of equipment</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="insight-label">Interesting Observation</div>
+        <p>R2-D2 fitting into many different starfighters suggests common engineering standards — like modern USB devices. This also means many ships may be produced by related manufacturers or follow industry-wide technical standards. For the Rebels, this makes it easier to capture, reuse, or reprogram equipment originally designed for the Empire.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Concept Map — Hidden Systems</h2>
+  <table>
+    <thead><tr><th>Star Wars Element</th><th>Hidden System</th><th>Management Concept</th><th>Real-World Parallel</th></tr></thead>
+    <tbody>
+      <tr><td>Both sides use hyperdrives</td><td>Galaxy-wide supply chain</td><td>Logistics / Trade</td><td>Automotive parts standards</td></tr>
+      <tr><td>R2-D2 fits every ship</td><td>Universal technical standards</td><td>Standardization / ISO</td><td>USB · rail gauge · shipping containers</td></tr>
+      <tr><td>Rebels modify captured ships</td><td>Gray market supply chains</td><td>Procurement / Risk</td><td>Dual-use technology in conflict zones</td></tr>
+      <tr><td>Empire-wide fleet maintenance</td><td>Military logistics network</td><td>Inventory management</td><td>Modern military supply chains</td></tr>
+      <tr><td>Droids store sensitive data</td><td>Information security system</td><td>Data management</td><td>Encrypted corporate devices</td></tr>
+    </tbody>
+  </table>
+
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Systems thinking</h4><p>Every visible system depends on invisible systems. Behind every X-wing dogfight is a manufacturing plant, a supply ship, a logistics coordinator, and a spare parts inventory. The story hides the infrastructure.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Looking beneath the surface</h4><p>The skill this assignment built: asking "what would have to be true for this to work?" Applied to business: every product hides a supply chain, every service hides a workforce, every efficiency hides a management system.</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>Standardization is power</h4><p>R2-D2's universal compatibility is the most commercially important insight. Standardization isn't just technical — it determines who wins market share, who can maintain equipment in the field, and how quickly new entrants can join a supply chain.</p></div>
+  </div>
+</div>
+<footer><a href="ms-project2.html">← Project 2</a> &nbsp;·&nbsp; <a href="ms-project4.html">Project 4 →</a></footer>
+</body></html>
