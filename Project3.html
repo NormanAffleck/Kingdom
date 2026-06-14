@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 3: Boots Theory — IBM Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a28;--purple:#9b59d0;--purple-light:#c084fc;--purple-dim:rgba(155,89,208,0.15);--white:#f0eeff;--muted:#8888aa;--border:rgba(155,89,208,0.3);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(155,89,208,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(155,89,208,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--purple);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--purple);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--purple-light);}
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero blockquote{border-left:3px solid var(--purple);padding-left:1.25rem;font-style:italic;color:var(--muted);font-size:0.95rem;max-width:520px;}
+  .hero blockquote cite{display:block;font-style:normal;font-size:0.78rem;color:var(--purple);margin-top:0.4rem;letter-spacing:0.04em;}
+  .content{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+  .card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--white);}
+
+  /* PRESENTATION EMBED */
+  .pres-wrapper{position:relative;z-index:1;margin:1.5rem 0;}
+  .pres-label{font-size:0.7rem;color:var(--purple);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:0.5rem;}
+  .pres-frame{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .pres-topbar{background:var(--surface2);border-bottom:1px solid var(--border);padding:0.6rem 1rem;display:flex;align-items:center;gap:0.5rem;}
+  .dot{width:8px;height:8px;border-radius:50%;}
+  .pres-url{font-size:0.75rem;color:var(--muted);margin-left:0.5rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .pres-url a{color:var(--purple-light);text-decoration:none;}
+  iframe{display:block;width:100%;border:none;height:500px;}
+  .pres-note{font-size:0.8rem;color:var(--muted);margin-top:0.5rem;text-align:center;}
+  .pres-note a{color:var(--purple-light);}
+
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--purple);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--purple-light);text-decoration:none;}
+  @media(max-width:600px){.learn-grid{grid-template-columns:1fr;}iframe{height:320px;}.corner{display:none;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">IBM<span>·</span>PORTFOLIO</div><a href="index.html">← Back</a></nav>
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 03 · Philosophy → Economics</div>
+  <h1>🥾 Boots Theory</h1>
+  <blockquote>
+    "The reason that the rich were so rich was because they managed to spend less money."
+    <cite>— Terry Pratchett, Men at Arms (1993)</cite>
+  </blockquote>
+</div></div>
+
+<div class="content">
+  <h2>Project Overview</h2>
+  <div class="card"><h3>What is Boots Theory?</h3>
+    <p>This project features a class presentation on <strong style="color:var(--white)">Boots Theory</strong> — a concept from Terry Pratchett's novel that reveals a profound economic truth: it is expensive to be poor.</p>
+    <p>A poor person buys $10 boots that last one year. Over 10 years: $100 spent. A wealthy person buys $50 boots that last 10 years. After the same period: $50 spent. The poor person spent <em style="color:var(--white)">twice as much</em> — because they couldn't afford to buy cheap.</p>
+    <p>The presentation below explores how this scales from boots to fast fashion, housing, healthcare, and global supply chains.</p>
+  </div>
+
+  <h2>The Presentation</h2>
+  <div class="pres-label">// Class Presentation — Embedded</div>
+  <div class="pres-wrapper">
+    <div class="pres-frame">
+      <div class="pres-topbar">
+        <div class="dot" style="background:#ff5f56"></div>
+        <div class="dot" style="background:#febc2e"></div>
+        <div class="dot" style="background:#28c840"></div>
+        <div class="pres-url"><a href="https://normanaffleck.github.io/Kingdom/PPT.html" target="_blank">normanaffleck.github.io/Kingdom/PPT.html</a></div>
+      </div>
+      <iframe src="https://normanaffleck.github.io/Kingdom/PPT.html" title="Boots Theory Presentation" loading="lazy"></iframe>
+    </div>
+    <p class="pres-note">Use ← → arrow keys or click to navigate. <a href="https://normanaffleck.github.io/Kingdom/PPT.html" target="_blank" rel="noopener">Open in full screen →</a></p>
+  </div>
+
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Long-run vs. short-run costs</h4><p>Economics distinguishes short-run and long-run thinking. Boots Theory is a lived illustration of why optimizing for today can be irrational tomorrow — especially for people with budget constraints.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Communicating economics</h4><p>Presenting this concept required translating dry economic logic into something a general audience could feel. Terry Pratchett did it better than any textbook.</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>Poverty is structural</h4><p>Boots Theory shifts blame away from individuals. It's not that poor people make worse decisions — it's that financial barriers make the rational long-run choice inaccessible. That has deep policy implications.</p></div>
+  </div>
+</div>
+
+<footer><a href="project2.html">← Project 2</a> &nbsp;·&nbsp; <a href="project4.html">Project 4 →</a></footer>
+</body></html>
