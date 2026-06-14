@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 5: Degrowth, GVCs & Carrier Bag — IBM Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+  :root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a28;--purple:#9b59d0;--purple-light:#c084fc;--purple-dim:rgba(155,89,208,0.15);--white:#f0eeff;--muted:#8888aa;--border:rgba(155,89,208,0.3);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);line-height:1.6;}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(155,89,208,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(155,89,208,0.04) 1px,transparent 1px);background-size:60px 60px;}
+  .corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:10;}
+  .corner::before,.corner::after{content:'';position:absolute;background:var(--purple);}
+  .corner::before{width:2px;height:30px;}.corner::after{width:30px;height:2px;}
+  .corner.tl{top:16px;left:16px;}.corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}.corner.br{bottom:16px;right:16px;transform:scale(-1);}
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  nav .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.08em;}
+  nav .logo span{color:var(--purple);}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  nav a:hover{color:var(--purple-light);}
+  .hero{position:relative;z-index:1;background:var(--surface);border-bottom:1px solid var(--border);padding:4rem 2rem;}
+  .hero-inner{max-width:800px;margin:0 auto;}
+  .project-num{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);margin-bottom:0.75rem;font-weight:600;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+  .hero h1 span{color:var(--purple-light);}
+  .hero p{color:var(--muted);font-size:1rem;max-width:560px;}
+  .content{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:3rem 2rem;}
+  h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--white);}
+  p{color:var(--muted);margin-bottom:1rem;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+  .card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--white);}
+
+  .ideas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .idea-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;text-align:center;transition:border-color 0.2s;}
+  .idea-card:hover{border-color:var(--purple);}
+  .idea-icon{font-size:2rem;margin-bottom:0.75rem;}
+  .idea-card h3{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.5rem;color:var(--white);}
+  .idea-card p{font-size:0.82rem;color:var(--muted);margin:0;}
+
+  .viz-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem;margin:1.5rem 0;}
+  .viz-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1.25rem;color:var(--white);}
+  .flow{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin:1.5rem 0;}
+  .flow-step{text-align:center;padding:1rem 1.25rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;min-width:90px;}
+  .flow-step .fi{font-size:1.8rem;margin-bottom:0.4rem;}
+  .flow-step .fl{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--purple-light);}
+  .flow-arrow{font-size:1.3rem;color:var(--purple);padding:0 0.5rem;}
+  .flow-note{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;margin-top:1rem;text-align:center;color:var(--muted);font-size:0.86rem;}
+  .flow-note strong{color:var(--purple-light);}
+
+  table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:1.5rem 0;}
+  th{background:var(--surface2);color:var(--purple-light);padding:0.7rem 1rem;text-align:left;font-weight:500;font-size:0.78rem;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
+  td{padding:0.65rem 1rem;border-bottom:1px solid rgba(155,89,208,0.1);color:var(--muted);}
+  td:first-child{color:var(--white);font-weight:500;}
+  tr:hover td{background:var(--surface2);}
+  .good{color:#4ade80;font-weight:600;}
+  .bad{color:#f87171;font-weight:600;}
+
+  .quiz-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem;margin:1.5rem 0;}
+  .quiz-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem;color:var(--white);}
+  .quiz-card > p{font-size:0.9rem;color:var(--muted);margin-bottom:1.25rem;}
+  .quiz-q{margin-bottom:1.75rem;}
+  .quiz-q h4{font-size:0.92rem;font-weight:600;color:var(--white);margin-bottom:0.75rem;}
+  .quiz-opts{display:flex;flex-direction:column;gap:0.5rem;}
+  .quiz-opt{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:0.65rem 1rem;cursor:pointer;font-size:0.86rem;transition:all 0.15s;text-align:left;font-family:'Inter',sans-serif;color:var(--muted);width:100%;}
+  .quiz-opt:hover{border-color:var(--purple);color:var(--white);}
+  .quiz-opt.correct{background:rgba(74,222,128,0.1);border-color:#4ade80;color:#4ade80;}
+  .quiz-opt.wrong{background:rgba(248,113,113,0.1);border-color:#f87171;color:#f87171;}
+  .quiz-feedback{margin-top:0.5rem;font-size:0.83rem;color:var(--muted);display:none;}
+
+  .vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin:1.5rem 0;}
+  .vocab-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;}
+  .vocab-term{font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;color:var(--purple-light);margin-bottom:0.25rem;}
+  .vocab-def{font-size:0.8rem;color:var(--muted);}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;}
+  .learn-item{border-top:2px solid var(--purple);padding-top:0.75rem;}
+  .learn-item .lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);margin-bottom:0.4rem;font-weight:600;}
+  .learn-item h4{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:0.4rem;color:var(--white);}
+  .learn-item p{font-size:0.82rem;color:var(--muted);margin:0;}
+  footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;position:relative;z-index:1;}
+  footer a{color:var(--purple-light);text-decoration:none;}
+  @media(max-width:600px){.ideas-grid,.vocab-grid,.learn-grid{grid-template-columns:1fr;}.flow{flex-direction:column;}.flow-arrow{transform:rotate(90deg);}.corner{display:none;}}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<nav><div class="logo">IBM<span>·</span>PORTFOLIO</div><a href="index.html">← Back</a></nav>
+<div class="hero"><div class="hero-inner">
+  <div class="project-num">Project 05 · Reading</div>
+  <h1>Degrowth, GVCs<br>& the <span>Carrier Bag</span></h1>
+  <p>Three readings that challenge the core assumptions behind globalization — about who builds civilization, whether growth can be endless, and what global production really costs the planet.</p>
+</div></div>
+
+<div class="content">
+  <h2>Project Overview</h2>
+  <div class="card"><h3>What are these readings about?</h3>
+    <p>Reading 5 brought together three texts with a common thread: they all challenge dominant assumptions. Ursula Le Guin's <strong style="color:var(--white)">Carrier Bag Theory</strong> challenges who built civilization. The <strong style="color:var(--white)">Degrowth</strong> reading challenges whether growth is always desirable. The <strong style="color:var(--white)">GVC</strong> reading challenges whether globalization automatically benefits everyone without environmental cost.</p>
+    <p>One-sentence summary for the exam: <em style="color:var(--purple-light)">Sustainable development requires rethinking assumptions about human progress, economic growth, and global production by emphasizing cooperation, ecological limits, and environmentally responsible value chains.</em></p>
+  </div>
+
+  <h2>Three Ideas That Challenge the Default</h2>
+  <div class="ideas-grid">
+    <div class="idea-card"><div class="idea-icon">🛍️</div><h3>Carrier Bag Theory</h3><p>Civilization wasn't built by heroes with weapons — it was built by people who gathered, stored, and shared. The bag, not the spear.</p></div>
+    <div class="idea-card"><div class="idea-icon">🌱</div><h3>Degrowth</h3><p>Planned reduction of material throughput — not recession, not crisis, but a deliberate choice to consume less while improving wellbeing and equality.</p></div>
+    <div class="idea-card"><div class="idea-icon">🌐</div><h3>Global Value Chains</h3><p>Production spread across countries creates efficiency — and environmental costs, carbon leakage, and inequality that markets don't automatically fix.</p></div>
+  </div>
+
+  <h2>Understanding Throughput</h2>
+  <p>Degrowth targets <strong style="color:var(--white)">throughput</strong> — the flow of resources through the economy — not GDP itself.</p>
+  <div class="viz-card"><h3>// The Throughput Cycle</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="fi">🌍</div><div class="fl">Nature</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="fi">🏭</div><div class="fl">Production</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="fi">🛒</div><div class="fl">Consumption</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="fi">🗑️</div><div class="fl">Waste</div></div>
+    </div>
+    <div class="flow-note">Degrowth targets this <strong>entire cycle</strong> — not just GDP, but the volume of resources extracted and waste generated at every stage. <strong>Green Growth</strong> keeps the cycle but tries to clean it. <strong>Degrowth</strong> says the cycle itself must shrink.</div>
+  </div>
+
+  <h2>Degrowth vs. Recession</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Degrowth</th><th>Recession</th></tr></thead>
+    <tbody>
+      <tr><td>Nature</td><td class="good">Planned, deliberate</td><td class="bad">Unplanned, crisis-driven</td></tr>
+      <tr><td>Goal</td><td class="good">Reduce ecological damage</td><td class="bad">No goal — market failure</td></tr>
+      <tr><td>Employment</td><td class="good">Protect livelihoods</td><td class="bad">Increases unemployment</td></tr>
+      <tr><td>Inequality</td><td class="good">Focus on justice</td><td class="bad">Often increases inequality</td></tr>
+      <tr><td>Who it applies to</td><td class="good">High-income countries first</td><td class="bad">Everyone, indiscriminately</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Concept Check</h2>
+  <div class="quiz-card"><h3>// Reading 5 Quiz</h3><p>Test your understanding of the three readings:</p>
+    <div class="quiz-q"><h4>1. What does "carbon leakage" mean?</h4>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(this,false,'Carbon leakage is about production moving, not forests.')">CO₂ leaking from deforested areas into the atmosphere</button>
+        <button class="quiz-opt" onclick="answer(this,true,'Correct! One country tightens policy → companies move to looser-rules countries → global emissions don\'t actually fall.')">Pollution moves to another country instead of being reduced</button>
+        <button class="quiz-opt" onclick="answer(this,false,'That\'s carbon sequestration, not leakage.')">Carbon being captured and stored underground</button>
+      </div><div class="quiz-feedback"></div>
+    </div>
+    <div class="quiz-q"><h4>2. What does the "carrier bag" symbolize in Le Guin's theory?</h4>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(this,false,'The theory challenges the dominance of the hunter/hero narrative.')">The weapons that hunters used to build civilization</button>
+        <button class="quiz-opt" onclick="answer(this,true,'Correct! The carrier bag represents gathering, cooperation, and everyday survival — the unglamorous work that actually sustains civilization.')">Cooperation, gathering, and everyday survival tools</button>
+        <button class="quiz-opt" onclick="answer(this,false,'Trade networks are important but not what Le Guin\'s symbol represents.')">International trade networks connecting civilizations</button>
+      </div><div class="quiz-feedback"></div>
+    </div>
+    <div class="quiz-q"><h4>3. Why might degrowth apply differently to rich vs. poor countries?</h4>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(this,false,'This is the opposite of what the reading argues.')">Poor countries consume more and should cut first</button>
+        <button class="quiz-opt" onclick="answer(this,true,'Correct! High-income countries consume most resources. Poorer countries still need economic expansion to meet basic human needs — demanding degrowth from them would be unjust.')">Rich countries consume most resources; poor countries still need growth to meet basic needs</button>
+        <button class="quiz-opt" onclick="answer(this,false,'The reading does distinguish between Global North and South.')">Degrowth should apply equally to all countries at once</button>
+      </div><div class="quiz-feedback"></div>
+    </div>
+  </div>
+
+  <h2>Key Vocabulary</h2>
+  <div class="vocab-grid">
+    <div class="vocab-item"><div class="vocab-term">Carrier Bag Theory</div><div class="vocab-def">Civilization depends on cooperation and gathering, not only on heroes and conquest</div></div>
+    <div class="vocab-item"><div class="vocab-term">Throughput</div><div class="vocab-def">Flow of resources through the economy: Nature → Production → Consumption → Waste</div></div>
+    <div class="vocab-item"><div class="vocab-term">Degrowth</div><div class="vocab-def">Planned reduction of material and energy use to reduce ecological damage</div></div>
+    <div class="vocab-item"><div class="vocab-term">Carbon Leakage</div><div class="vocab-def">When strict environmental policy causes production to move to looser-rules countries</div></div>
+    <div class="vocab-item"><div class="vocab-term">CBAM</div><div class="vocab-def">Carbon Border Adjustment Mechanism — tariff on imports based on carbon intensity</div></div>
+    <div class="vocab-item"><div class="vocab-term">ETS</div><div class="vocab-def">Emissions Trading System — cap-and-trade policy for carbon emissions</div></div>
+    <div class="vocab-item"><div class="vocab-term">GVC</div><div class="vocab-def">Global Value Chain — production process spread across multiple countries</div></div>
+    <div class="vocab-item"><div class="vocab-term">Green Growth</div><div class="vocab-def">Keeping economic growth while reducing environmental impact — degrowth's rival idea</div></div>
+  </div>
+
+  <h2>What Did I Learn?</h2>
+  <div class="learn-grid">
+    <div class="learn-item"><div class="lbl">Knowledge</div><h4>Growth has limits</h4><p>I understood environmentalism before this course. I didn't understand it connects directly to trade theory — that carbon leakage is a market failure and GVCs are part of the emissions problem.</p></div>
+    <div class="learn-item"><div class="lbl">Skills</div><h4>Reading critically</h4><p>These texts required asking "what assumption is this challenging?" That critical stance toward dominant ideas is a skill I'll use well beyond this course.</p></div>
+    <div class="learn-item"><div class="lbl">Reflection</div><h4>The Le Guin surprise</h4><p>I didn't expect a science fiction author in a business course. But Carrier Bag Theory was one of the most useful reframings of the semester — who gets credited, and whose work goes unnoticed?</p></div>
+  </div>
+</div>
+
+<footer><a href="project4.html">← Project 4</a> &nbsp;·&nbsp; <a href="index.html">↑ Home</a></footer>
+
+<script>
+function answer(btn,correct,feedback){
+  const parent=btn.closest('.quiz-q');
+  parent.querySelectorAll('.quiz-opt').forEach(b=>{b.disabled=true;});
+  btn.classList.add(correct?'correct':'wrong');
+  if(!correct){parent.querySelectorAll('.quiz-opt').forEach(b=>{if(b.onclick.toString().includes('true'))b.classList.add('correct');});}
+  const fb=parent.querySelector('.quiz-feedback');
+  fb.textContent=(correct?'✅ ':'❌ ')+feedback;
+  fb.style.display='block';
+  fb.style.color=correct?'#4ade80':'#f87171';
+}
+</script>
+</body></html>
