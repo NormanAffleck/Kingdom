@@ -6,964 +6,678 @@
 <title>Busan Odyssey: Summer 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 
-/* ── CONFIG ─────────────────────────────────────────────── */
+/* ─── THEME TOKENS ─────────────────────────────────────────────── */
 :root {
-  --ocean:     #0B3B6B;
-  --ocean-mid: #1A5FA8;
-  --sky:       #4A9FD4;
-  --sky-light: #A8D4EE;
-  --sand:      #E8C87A;
-  --sand-light:#F5E4B0;
-  --white:     #FFFFFF;
-  --accent:    #F4A429;
+  --bg0:       #04080F;
+  --bg1:       #080F1C;
+  --bg2:       #0C1525;
+  --bg3:       #111D30;
+  --surface:   rgba(255,255,255,0.035);
+  --surface-hi:rgba(255,255,255,0.07);
+  --border:    rgba(255,255,255,0.07);
+  --border-hi: rgba(255,255,255,0.18);
 
-  --bg:        #08111F;
-  --bg-card:   #0E1E33;
-  --bg-glass:  rgba(14, 30, 51, 0.7);
-  --border:    rgba(74, 159, 212, 0.18);
-  --border-hi: rgba(74, 159, 212, 0.4);
-  --text:      #E8F4FC;
-  --text-muted:#7AAFC8;
-  --text-dim:  #4A7090;
+  --c-blue:    #3B82F6;
+  --c-cyan:    #06B6D4;
+  --c-amber:   #F59E0B;
+  --c-teal:    #14B8A6;
+  --c-rose:    #F43F5E;
+  --c-violet:  #8B5CF6;
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --text:      #F0F4FF;
+  --text-2:    #8B9FC0;
+  --text-3:    #4A5A78;
 
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-mono:    'DM Mono', monospace;
+  --r-sm:  6px;
+  --r-md:  12px;
+  --r-lg:  18px;
+  --r-xl:  26px;
 
-  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --f-display: 'Syne', sans-serif;
+  --f-body:    'Inter', sans-serif;
+  --f-mono:    'JetBrains Mono', monospace;
+
+  --ease: cubic-bezier(.4,0,.2,1);
 }
 
 [data-theme="light"] {
-  --bg:        #EEF6FD;
-  --bg-card:   #FFFFFF;
-  --bg-glass:  rgba(255,255,255,0.75);
-  --border:    rgba(11, 59, 107, 0.12);
-  --border-hi: rgba(11, 59, 107, 0.3);
-  --text:      #0B1E30;
-  --text-muted:#2E6A9A;
-  --text-dim:  #7AAFC8;
+  --bg0:       #F2F5FB;
+  --bg1:       #E8EDF8;
+  --bg2:       #FFFFFF;
+  --bg3:       #F8FAFF;
+  --surface:   rgba(0,0,0,0.03);
+  --surface-hi:rgba(0,0,0,0.06);
+  --border:    rgba(0,0,0,0.08);
+  --border-hi: rgba(0,0,0,0.18);
+  --text:      #0A1020;
+  --text-2:    #3D5070;
+  --text-3:    #8EA0BF;
+}
+
+/* ─── RESET ─────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--f-body);
+  background:var(--bg0);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+  transition:background .3s var(--ease),color .3s var(--ease);
+}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+
+/* ─── NOISE OVERLAY ─────────────────────────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-size:200px;
+  pointer-events:none;z-index:0;opacity:.6;
+}
+
+/* ─── NAV ────────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 2.5rem;
+  background:rgba(4,8,15,.7);
+  backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+[data-theme="light"] nav{background:rgba(242,245,251,.8);}
+.nav-logo{
+  font-family:var(--f-display);font-size:13px;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;
+  background:linear-gradient(90deg,var(--c-cyan),var(--c-blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{font-size:12.5px;font-weight:500;color:var(--text-2);text-decoration:none;letter-spacing:.03em;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.theme-btn{
+  display:flex;align-items:center;gap:7px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:99px;padding:5px 14px;
+  font-size:12px;font-weight:500;color:var(--text-2);
+  transition:all .2s;
+}
+.theme-btn:hover{border-color:var(--border-hi);color:var(--text)}
+
+/* ─── PAGE WRAPPER ──────────────────────────────────────────────── */
+.page{position:relative;z-index:1}
+.wrap{max-width:1120px;margin:0 auto;padding:0 1.5rem}
+
+/* ─── HERO ───────────────────────────────────────────────────────── */
+#hero{
+  padding:7rem 1.5rem 0;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+/* glow orb behind the card */
+#hero::before{
+  content:'';
+  position:absolute;top:60px;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(59,130,246,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.hero-card{
+  position:relative;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r-xl);
+  padding:2.25rem 2rem 1.75rem;
+  width:100%;max-width:440px;
+  text-align:center;
+  overflow:hidden;
+}
+/* top shimmer line */
+.hero-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--c-cyan),var(--c-blue),var(--c-violet),transparent);
+}
+
+.avatar{
+  width:96px;height:96px;border-radius:50%;
+  background:linear-gradient(135deg,var(--bg3) 0%,var(--bg2) 100%);
+  border:1px solid var(--border-hi);
+  margin:0 auto 1.25rem;
+  display:flex;align-items:center;justify-content:center;
+  font-size:38px;
+  box-shadow:0 0 0 4px var(--bg2), 0 0 0 5px var(--border);
+}
+
+.quest-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(6,182,212,.12),rgba(59,130,246,.1));
+  border:1px solid rgba(6,182,212,.3);
+  color:var(--c-cyan);
+  font-size:11px;font-weight:600;letter-spacing:.06em;
+  padding:4px 14px;border-radius:99px;
+  margin-bottom:1rem;text-transform:uppercase;
+}
+
+.hero-name{
+  font-family:var(--f-display);font-size:28px;font-weight:800;
+  color:var(--text);letter-spacing:-.01em;margin-bottom:.2rem;
+}
+.hero-sub{
+  font-family:var(--f-mono);font-size:11.5px;color:var(--text-3);
+  margin-bottom:1.5rem;
+}
+
+.hero-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid var(--border);border-radius:var(--r-md);
+  overflow:hidden;margin-bottom:1.5rem;
+}
+.hm-item{padding:.75rem .5rem;text-align:center}
+.hm-item + .hm-item{border-left:1px solid var(--border)}
+.hm-label{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:3px}
+.hm-val{font-family:var(--f-mono);font-size:13px;font-weight:500;color:var(--c-cyan)}
+
+.xp-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:6px}
+.xp-track{height:4px;background:var(--surface-hi);border-radius:99px;overflow:hidden}
+.xp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--c-cyan),var(--c-blue));border-radius:99px;transition:width 1.4s var(--ease)}
+
+/* ─── SECTION CHROME ─────────────────────────────────────────────── */
+.s-label{
+  font-family:var(--f-mono);font-size:10px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:.6rem;
+}
+.s-title{
+  font-family:var(--f-display);
+  font-size:clamp(22px,3.5vw,36px);
+  font-weight:800;letter-spacing:-.02em;
+  color:var(--text);line-height:1.1;
+  margin-bottom:2rem;
+}
+.s-title em{
+  font-style:normal;
+  background:linear-gradient(90deg,var(--c-cyan),var(--c-blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* divider between hero + challenges */
+.page-divider{
+  width:100%;max-width:1120px;margin:2.5rem auto 0;
+  padding:0 1.5rem;
+}
+.divider-line{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-hi),transparent);
+}
+
+/* ─── ABOUT ──────────────────────────────────────────────────────── */
+#about{padding:4rem 1.5rem}
+.about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:2.5rem;align-items:start}
+.about-sidebar{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+}
+.sidebar-header{
+  padding:.9rem 1.25rem;
+  border-bottom:1px solid var(--border);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-3);
+}
+.sidebar-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.7rem 1.25rem;border-bottom:1px solid var(--border);
+}
+.sidebar-row:last-child{border-bottom:none}
+.sr-key{font-size:12px;color:var(--text-2)}
+.sr-val{font-family:var(--f-mono);font-size:12px;color:var(--c-cyan)}
+.sr-val.green{color:var(--c-teal)}
+
+.about-body p{font-size:15px;line-height:1.85;color:var(--text-2);margin-bottom:1rem}
+.about-body p:last-child{margin-bottom:0}
+.about-body strong{color:var(--text);font-weight:500}
+
+/* ─── CHALLENGES ─────────────────────────────────────────────────── */
+#challenges{padding:4rem 1.5rem}
+.ch-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+  gap:.85rem;
+}
+.ch-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.4rem 1.3rem;
+  transition:border-color .22s, transform .22s, box-shadow .22s;
+  cursor:default;position:relative;overflow:hidden;
+}
+.ch-card:hover{
+  border-color:var(--border-hi);
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(0,0,0,.25);
+}
+/* side accent line */
+.ch-card::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  border-radius:2px 0 0 2px;
+  background:var(--accent-color,var(--c-blue));
+  opacity:0;transition:opacity .22s;
+}
+.ch-card:hover::after{opacity:1}
+.ch-card[data-color="cyan"]   {--accent-color:var(--c-cyan)}
+.ch-card[data-color="amber"]  {--accent-color:var(--c-amber)}
+.ch-card[data-color="teal"]   {--accent-color:var(--c-teal)}
+.ch-card[data-color="rose"]   {--accent-color:var(--c-rose)}
+.ch-card[data-color="violet"] {--accent-color:var(--c-violet)}
+.ch-card[data-color="blue"]   {--accent-color:var(--c-blue)}
+
+.ch-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.9rem}
+.ch-icon{font-size:26px;line-height:1}
+.ch-chip{
+  font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 9px;border-radius:99px;font-weight:500;
+}
+.chip-ns {background:var(--surface);color:var(--text-3)}
+.chip-ip {background:rgba(59,130,246,.12);color:var(--c-blue)}
+.chip-done{background:rgba(20,184,166,.12);color:var(--c-teal)}
+
+.ch-title{font-family:var(--f-display);font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:3px}
+.ch-sub{font-size:12px;color:var(--text-3);margin-bottom:1rem}
+
+.bar-track{height:3px;background:var(--surface-hi);border-radius:99px;overflow:hidden;margin-bottom:6px}
+.bar-fill{height:100%;width:0%;border-radius:99px;background:var(--accent-color,var(--c-blue));transition:width 1.4s var(--ease)}
+
+.bar-meta{display:flex;justify-content:space-between;align-items:center}
+.bar-pct{font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+
+/* editable stepper */
+.stepper{display:flex;align-items:center;gap:6px}
+.step-btn{
+  width:24px;height:24px;border-radius:6px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-2);font-size:14px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.step-btn:hover{background:var(--surface-hi);border-color:var(--border-hi);color:var(--text)}
+.step-val{
+  font-family:var(--f-mono);font-size:12px;font-weight:500;
+  color:var(--text);min-width:36px;text-align:center;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;padding:3px 6px;
+  cursor:text;transition:border-color .15s;
+}
+.step-val:focus{outline:none;border-color:var(--c-cyan)}
+
+/* ─── DASHBOARD ──────────────────────────────────────────────────── */
+#dashboard{padding:4rem 1.5rem}
+
+.dash-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;
+  margin-bottom:2rem;
+}
+.ds-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.25rem;
+  transition:border-color .2s;
+}
+.ds-card:hover{border-color:var(--border-hi)}
+.ds-num{
+  font-family:var(--f-display);font-size:36px;font-weight:800;
+  line-height:1;margin-bottom:4px;
+  background:linear-gradient(135deg,var(--c-cyan),var(--c-blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.ds-lbl{font-size:11.5px;color:var(--text-3);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+
+.dash-bars{
+  display:grid;grid-template-columns:1fr 1fr;gap:.85rem;
+}
+.db-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:1rem 1.2rem;
+  transition:border-color .2s;
+}
+.db-card:hover{border-color:var(--border-hi)}
+.db-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.db-name{font-size:13px;font-weight:500;color:var(--text)}
+.db-count{font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+.db-track{height:4px;background:var(--surface-hi);border-radius:99px;overflow:hidden}
+.db-fill{height:100%;border-radius:99px;width:0%;transition:width 1.4s var(--ease) .2s}
+.db-blue  {background:linear-gradient(90deg,rgba(59,130,246,.6),var(--c-blue))}
+.db-amber {background:linear-gradient(90deg,rgba(245,158,11,.6),var(--c-amber))}
+.db-teal  {background:linear-gradient(90deg,rgba(20,184,166,.6),var(--c-teal))}
+.db-violet{background:linear-gradient(90deg,rgba(139,92,246,.6),var(--c-violet))}
+
+/* ─── FOOTER ─────────────────────────────────────────────────────── */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  padding:2.5rem 1.5rem;text-align:center;
+}
+.footer-icons{display:flex;justify-content:center;gap:.85rem;font-size:18px;margin-bottom:.75rem;opacity:.3}
+.footer-text{font-family:var(--f-mono);font-size:11.5px;color:var(--text-3);letter-spacing:.04em}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0}
+.visible{animation:fadeUp .55s var(--ease) forwards}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────── */
+@media(max-width:768px){
+  nav{padding:.75rem 1.25rem}
+  .nav-links{display:none}
+  #hero{padding:6rem 1rem 0}
+  .about-grid{grid-template-columns:1fr}
+  .dash-summary{grid-template-columns:1fr 1fr}
+  .dash-bars{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .dash-summary{grid-template-columns:1fr 1fr}
+  .ds-num{font-size:28px}
+  .hero-card{padding:1.75rem 1.25rem 1.5rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
-
-/* ── RESET ──────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font-display);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.65;
-  min-height: 100vh;
-  overflow-x: hidden;
-  transition: background var(--transition), color var(--transition);
-}
-
-/* ── BACKGROUND TEXTURE ─────────────────────────────────── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(26,95,168,0.22) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(11,59,107,0.3) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── NAV ────────────────────────────────────────────────── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.85rem 2rem;
-  background: var(--bg-glass);
-  backdrop-filter: blur(16px);
-  border-bottom: 0.5px solid var(--border);
-}
-
-.nav-logo {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--sky);
-  font-family: var(--font-mono);
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.75rem;
-  list-style: none;
-}
-
-.nav-links a {
-  font-size: 13px;
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color var(--transition);
-}
-
-.nav-links a:hover { color: var(--text); }
-
-.theme-toggle {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
-  border-radius: 99px;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: border-color var(--transition), color var(--transition);
-}
-
-.theme-toggle:hover {
-  border-color: var(--border-hi);
-  color: var(--text);
-}
-
-/* ── MAIN ───────────────────────────────────────────────── */
-main { position: relative; z-index: 1; }
-
-section { padding: 5rem 1.5rem; }
-
-.container {
-  max-width: 1080px;
-  margin: 0 auto;
-}
-
-/* ── HERO ───────────────────────────────────────────────── */
-#hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 6rem;
-  text-align: center;
-}
-
-.profile-card {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  border: 0.5px solid var(--border-hi);
-  border-radius: var(--radius-xl);
-  padding: 2.5rem 2rem 2rem;
-  max-width: 400px;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.profile-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--ocean-mid), var(--sky), var(--sand));
-}
-
-.avatar-ring {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--ocean-mid), var(--sky));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.25rem;
-  position: relative;
-  box-shadow: 0 0 0 4px var(--bg-card), 0 0 0 5px var(--border-hi);
-}
-
-.avatar-ring span {
-  font-size: 40px;
-  line-height: 1;
-}
-
-.profile-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(74, 159, 212, 0.15);
-  border: 0.5px solid rgba(74, 159, 212, 0.4);
-  color: var(--sky-light);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 4px 12px;
-  border-radius: 99px;
-  margin-bottom: 1rem;
-}
-
-.profile-name {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.2rem;
-}
-
-.profile-handle {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-dim);
-  margin-bottom: 1rem;
-}
-
-.profile-meta {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.25rem;
-}
-
-.meta-item { text-align: center; }
-
-.meta-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 2px;
-}
-
-.meta-value {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--sky);
-}
-
-.lp-section { margin-top: 0.25rem; }
-
-.lp-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-bottom: 6px;
-}
-
-.lp-bar-track {
-  height: 6px;
-  background: rgba(74,159,212,0.12);
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.lp-bar-fill {
-  height: 100%;
-  width: 5%;
-  background: linear-gradient(90deg, var(--ocean-mid), var(--sky));
-  border-radius: 99px;
-  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
-}
-
-.deco-icons {
-  position: absolute;
-  font-size: 22px;
-  opacity: 0.08;
-  pointer-events: none;
-}
-.deco-tl { top: 14px; left: 14px; }
-.deco-tr { top: 14px; right: 14px; }
-
-/* ── SECTION HEADER ─────────────────────────────────────── */
-.section-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--sky);
-  margin-bottom: 0.5rem;
-}
-
-.section-title {
-  font-size: clamp(24px, 4vw, 34px);
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
-}
-
-/* ── ABOUT ──────────────────────────────────────────────── */
-#about { padding-top: 5rem; }
-
-.about-inner {
-  display: grid;
-  grid-template-columns: 1fr 1.6fr;
-  gap: 3rem;
-  align-items: start;
-}
-
-.about-card {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-}
-
-.about-stat {
-  padding: 0.85rem 0;
-  border-bottom: 0.5px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.about-stat:last-child { border-bottom: none; }
-
-.stat-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.stat-val {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--sky);
-  font-weight: 500;
-}
-
-.about-text {
-  color: var(--text-muted);
-  font-size: 15px;
-  line-height: 1.8;
-}
-
-.about-text p + p { margin-top: 1rem; }
-
-.about-text em {
-  color: var(--sand);
-  font-style: normal;
-  font-weight: 500;
-}
-
-/* ── CHALLENGES ─────────────────────────────────────────── */
-.challenges-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-}
-
-.challenge-card {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.4rem;
-  cursor: default;
-  transition: border-color var(--transition), transform var(--transition);
-  position: relative;
-  overflow: hidden;
-}
-
-.challenge-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--ocean-mid), var(--sky));
-  opacity: 0;
-  transition: opacity var(--transition);
-}
-
-.challenge-card:hover {
-  border-color: var(--border-hi);
-  transform: translateY(-3px);
-}
-
-.challenge-card:hover::after { opacity: 1; }
-
-.ch-icon {
-  font-size: 28px;
-  margin-bottom: 0.75rem;
-  display: block;
-}
-
-.ch-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 3px;
-}
-
-.ch-sub {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-}
-
-.ch-progress-track {
-  height: 4px;
-  background: rgba(74,159,212,0.1);
-  border-radius: 99px;
-  overflow: hidden;
-  margin-bottom: 6px;
-}
-
-.ch-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--ocean-mid), var(--sky));
-  border-radius: 99px;
-  width: 0%;
-  transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
-}
-
-.ch-progress-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-dim);
-}
-
-.ch-status {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 99px;
-  margin-top: 0.6rem;
-}
-
-.status-not-started {
-  background: rgba(74,112,144,0.15);
-  color: var(--text-dim);
-}
-
-.status-in-progress {
-  background: rgba(74,159,212,0.15);
-  color: var(--sky);
-}
-
-.status-done {
-  background: rgba(74,200,120,0.15);
-  color: #5DCAA5;
-}
-
-/* ── DASHBOARD ──────────────────────────────────────────── */
-#dashboard { background: transparent; }
-
-.dashboard-top {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.dash-stat-card {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 1.1rem 1.25rem;
-  text-align: center;
-  transition: border-color var(--transition);
-}
-
-.dash-stat-card:hover { border-color: var(--border-hi); }
-
-.ds-value {
-  font-family: var(--font-mono);
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--sky);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.ds-label {
-  font-size: 11px;
-  color: var(--text-dim);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.dashboard-bars {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.db-row {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
-}
-
-.db-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.db-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.db-count {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.db-track {
-  height: 5px;
-  background: rgba(74,159,212,0.1);
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.db-fill {
-  height: 100%;
-  border-radius: 99px;
-  width: 0%;
-  transition: width 1.4s cubic-bezier(0.4,0,0.2,1) 0.3s;
-}
-
-.db-fill-blue { background: linear-gradient(90deg, var(--ocean-mid), var(--sky)); }
-.db-fill-sand { background: linear-gradient(90deg, #C17A20, var(--sand)); }
-.db-fill-teal { background: linear-gradient(90deg, #085041, #1D9E75); }
-
-/* ── FOOTER ─────────────────────────────────────────────── */
-footer {
-  position: relative;
-  z-index: 1;
-  border-top: 0.5px solid var(--border);
-  padding: 2rem 1.5rem;
-  text-align: center;
-}
-
-.footer-icons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  font-size: 20px;
-  margin-bottom: 0.75rem;
-  opacity: 0.45;
-}
-
-.footer-text {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
-}
-
-/* ── ANIMATIONS ─────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.fade-up {
-  opacity: 0;
-  animation: fadeUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
-
-/* ── RESPONSIVE ─────────────────────────────────────────── */
-@media (max-width: 768px) {
-  nav { padding: 0.75rem 1rem; }
-  .nav-links { display: none; }
-
-  .about-inner {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .dashboard-top { grid-template-columns: 1fr 1fr; }
-  .dashboard-bars { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-  section { padding: 3.5rem 1rem; }
-  .dashboard-top { grid-template-columns: 1fr 1fr; }
-  .profile-card { padding: 2rem 1.25rem 1.5rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
-
 </style>
 </head>
 <body>
 
-<!-- ── NAV ────────────────────────────────────────── -->
 <nav aria-label="Site navigation">
-  <span class="nav-logo">BUSAN ODYSSEY '26</span>
-  <ul class="nav-links">
-    <li><a href="#hero">Profile</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#challenges">Challenges</a></li>
-    <li><a href="#dashboard">Dashboard</a></li>
-  </ul>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-    <span id="themeIcon">☀️</span> <span id="themeLabel">Light</span>
-  </button>
+  <span class="nav-logo">Busan Odyssey '26</span>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#hero">Profile</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+    </ul>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle colour theme">
+      <span id="themeIco">☀️</span><span id="themeTxt">Light</span>
+    </button>
+  </div>
 </nav>
 
-<main>
+<div class="page">
 
-<!-- ── HERO ───────────────────────────────────────── -->
+<!-- ── HERO ─────────────────────────────────────────── -->
 <section id="hero">
-  <div class="profile-card fade-up">
-    <span class="deco-icons deco-tl">🌊</span>
-    <span class="deco-icons deco-tr">⛰️</span>
+  <article class="hero-card fade-up" aria-label="Profile card">
+    <div class="avatar" aria-label="Profile picture placeholder">🧑</div>
 
-    <div class="avatar-ring" aria-label="Profile picture placeholder">
-      <span>🧑</span>
-    </div>
+    <div class="quest-badge">🌞 Summer Quest Active</div>
 
-    <div class="profile-badge">🌞 Summer Quest Active</div>
+    <h1 class="hero-name">Norman</h1>
+    <p class="hero-sub">Majidov Nusratulloh · ID #2417563</p>
 
-    <h1 class="profile-name">Norman</h1>
-    <p class="profile-handle">Majidov Nusratulloh · #2417563</p>
-
-    <div class="profile-meta">
-      <div class="meta-item">
-        <div class="meta-label">ID</div>
-        <div class="meta-value">2417563</div>
+    <div class="hero-meta">
+      <div class="hm-item">
+        <div class="hm-label">ID</div>
+        <div class="hm-val">2417563</div>
       </div>
-      <div class="meta-item">
-        <div class="meta-label">Subject</div>
-        <div class="meta-value">Life Points</div>
+      <div class="hm-item">
+        <div class="hm-label">Subject</div>
+        <div class="hm-val">Life XP</div>
       </div>
-      <div class="meta-item">
-        <div class="meta-label">Season</div>
-        <div class="meta-value">Summer '26</div>
+      <div class="hm-item">
+        <div class="hm-label">Season</div>
+        <div class="hm-val">S '26</div>
       </div>
     </div>
 
-    <div class="lp-section">
-      <div class="lp-header">
-        <span>Life Points</span>
-        <span id="lpLabel">0 / 100 XP</span>
-      </div>
-      <div class="lp-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Life Points progress">
-        <div class="lp-bar-fill" id="lpBar"></div>
-      </div>
+    <div class="xp-row">
+      <span>Life Points</span>
+      <span id="xpLabel">0 / 100 XP</span>
     </div>
-  </div>
+    <div class="xp-track" role="progressbar" aria-label="Life XP" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <div class="xp-fill" id="xpFill"></div>
+    </div>
+  </article>
 </section>
 
-<!-- ── ABOUT ──────────────────────────────────────── -->
+<div class="page-divider"><div class="divider-line"></div></div>
+
+<!-- ── ABOUT ─────────────────────────────────────────── -->
 <section id="about">
-  <div class="container">
-    <p class="section-eyebrow">01 — Origin Story</p>
-    <h2 class="section-title">About This Journey</h2>
-    <div class="about-inner">
-      <div class="about-card" aria-label="Profile stats">
-        <div class="about-stat">
-          <span class="stat-label">Full name</span>
-          <span class="stat-val">Majidov Nusratulloh</span>
-        </div>
-        <div class="about-stat">
-          <span class="stat-label">Location</span>
-          <span class="stat-val">Busan, KR</span>
-        </div>
-        <div class="about-stat">
-          <span class="stat-label">Season</span>
-          <span class="stat-val">Summer 2026</span>
-        </div>
-        <div class="about-stat">
-          <span class="stat-label">Challenges</span>
-          <span class="stat-val">9 active</span>
-        </div>
-        <div class="about-stat">
-          <span class="stat-label">Status</span>
-          <span class="stat-val" style="color:#5DCAA5;">🟢 Ongoing</span>
-        </div>
-      </div>
-      <div class="about-text">
-        <p>Hi! I'm <em>Majidov Nusratulloh</em>, and I created this website to track my Summer 2026 journey.</p>
-        <p>My goal is simple: <em>stay healthy, have fun, explore new places, learn new skills</em>, and avoid spending the entire summer brain-rotting at home.</p>
-        <p>This project isn't for school, research, or any formal experiment — it's a personal challenge focused on <em>self-improvement</em> and creating meaningful memories.</p>
+  <div class="wrap">
+    <p class="s-label">Origin Story</p>
+    <h2 class="s-title">About <em>This Journey</em></h2>
+    <div class="about-grid">
+      <aside class="about-sidebar" aria-label="Quick stats">
+        <div class="sidebar-header">// profile.json</div>
+        <div class="sidebar-row"><span class="sr-key">full_name</span><span class="sr-val">"Majidov N."</span></div>
+        <div class="sidebar-row"><span class="sr-key">location</span><span class="sr-val">"Busan, KR"</span></div>
+        <div class="sidebar-row"><span class="sr-key">season</span><span class="sr-val">"Summer 2026"</span></div>
+        <div class="sidebar-row"><span class="sr-key">challenges</span><span class="sr-val">11 active</span></div>
+        <div class="sidebar-row"><span class="sr-key">status</span><span class="sr-val green">🟢 ongoing</span></div>
+      </aside>
+      <div class="about-body">
+        <p>Hi! I'm <strong>Majidov Nusratulloh</strong>, and I created this website to track my Summer 2026 journey.</p>
+        <p>My goal is simple: <strong>stay healthy, have fun, explore new places, learn new skills</strong>, and avoid spending the entire summer brain-rotting at home.</p>
+        <p>This project isn't for school, research, or any formal experiment — it's a personal challenge focused on <strong>self-improvement</strong> and creating meaningful memories.</p>
         <p>Thanks for visiting. If you're reading this, you're one of my close friends or family members.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CHALLENGES ─────────────────────────────────── -->
+<!-- ── CHALLENGES ────────────────────────────────────── -->
 <section id="challenges">
-  <div class="container">
-    <p class="section-eyebrow">02 — The Quests</p>
-    <h2 class="section-title">Summer Challenges</h2>
-    <div class="challenges-grid" id="challengesGrid" aria-label="Summer challenges">
-    </div>
+  <div class="wrap">
+    <p class="s-label">The Quests</p>
+    <h2 class="s-title">Summer <em>Challenges</em></h2>
+    <div class="ch-grid" id="chGrid" aria-label="Summer challenges"></div>
   </div>
 </section>
 
-<!-- ── DASHBOARD ──────────────────────────────────── -->
+<!-- ── DASHBOARD ─────────────────────────────────────── -->
 <section id="dashboard">
-  <div class="container">
-    <p class="section-eyebrow">03 — Stats &amp; Progress</p>
-    <h2 class="section-title">Progress Dashboard</h2>
+  <div class="wrap">
+    <p class="s-label">Stats &amp; Progress</p>
+    <h2 class="s-title">Progress <em>Dashboard</em></h2>
 
-    <div class="dashboard-top" role="group" aria-label="Summary statistics">
-      <div class="dash-stat-card">
-        <div class="ds-value" id="statStreak">0</div>
-        <div class="ds-label">Day Streak</div>
-      </div>
-      <div class="dash-stat-card">
-        <div class="ds-value" id="statCompleted">0</div>
-        <div class="ds-label">Activities Done</div>
-      </div>
-      <div class="dash-stat-card">
-        <div class="ds-value" id="statPercent">0%</div>
-        <div class="ds-label">Summer Complete</div>
-      </div>
+    <div class="dash-summary">
+      <div class="ds-card"><div class="ds-num" id="dStreak">0</div><div class="ds-lbl">Day Streak</div></div>
+      <div class="ds-card"><div class="ds-num" id="dDone">0</div><div class="ds-lbl">Done</div></div>
+      <div class="ds-card"><div class="ds-num" id="dPct">0%</div><div class="ds-lbl">Complete</div></div>
     </div>
 
-    <div class="dashboard-bars" id="dashBars" aria-label="Detailed progress bars">
-    </div>
+    <div class="dash-bars" id="dashBars" aria-label="Detailed progress"></div>
   </div>
 </section>
 
-</main>
+</div><!-- /page -->
 
-<!-- ── FOOTER ─────────────────────────────────────── -->
 <footer>
-  <div class="footer-icons" aria-hidden="true">
-    <span>🏋️</span><span>📖</span><span>🗺️</span><span>🎮</span><span>🌊</span>
-  </div>
+  <div class="footer-icons" aria-hidden="true">🏋️ 📖 🗺️ 🎮 🌊 ⛰️ 🧠</div>
   <p class="footer-text">Busan Odyssey: Summer 2026 — Every day is a chance to level up.</p>
 </footer>
 
 <script>
-/* ── DATA ─────────────────────────────────────────────────────────
-   Edit this object to update all progress across the page.
-──────────────────────────────────────────────────────────────────*/
-const DATA = {
-  profile: {
-    id: '2417563',
-    name: 'Norman',
-    fullName: 'Majidov Nusratulloh',
-    lifePoints: 0,
-    maxLP: 100,
-    streak: 0,
-    activitiesDone: 0
-  },
-
+/* ═══════════════════════════════════════════════════════
+   CONFIG — edit current values here to update everything
+═══════════════════════════════════════════════════════ */
+const CONFIG = {
+  streak: 0,
   challenges: [
-    {
-      icon: '🏋️',
-      title: 'Iron Tide',
-      sub: '25-Day Gym Challenge',
-      current: 0,
-      total: 25,
-      unit: 'days',
-      status: 'not-started'
-    },
-    {
-      icon: '🇰🇷',
-      title: 'Hangul Sprint',
-      sub: '25-Day Korean Challenge',
-      current: 0,
-      total: 25,
-      unit: 'days',
-      status: 'not-started'
-    },
-    {
-      icon: '🥾',
-      title: 'Three Summits Quest',
-      sub: 'Hike Mountains #1, #2, and #3',
-      current: 0,
-      total: 3,
-      unit: 'summits',
-      status: 'not-started'
-    },
-    {
-      icon: '🌊',
-      title: 'Busan Beach Passport',
-      sub: 'Visit Songdo, Dadaepo, and Haeundae',
-      current: 0,
-      total: 3,
-      unit: 'beaches',
-      status: 'not-started'
-    },
-    {
-      icon: '🏛️',
-      title: "Time Traveler's Passport",
-      sub: 'Explore historical places',
-      current: 0,
-      total: 10,
-      unit: 'places',
-      status: 'not-started'
-    },
-    {
-      icon: '⚽',
-      title: 'Sunday Shootout',
-      sub: 'Football sessions ×3',
-      current: 0,
-      total: 3,
-      unit: 'sessions',
-      status: 'not-started'
-    },
-    {
-      icon: '🚗',
-      title: 'Road to Freedom',
-      sub: 'Get a driving license',
-      current: 0,
-      total: 1,
-      unit: 'license',
-      status: 'in-progress',
-      customLabel: 'In Progress'
-    },
-    {
-      icon: '🧟',
-      title: 'Operation: Zombie Extinction',
-      sub: 'Finish Plants vs. Zombies in one sitting',
-      current: 0,
-      total: 1,
-      unit: 'marathon',
-      status: 'not-started',
-      customLabel: 'Not Started'
-    },
-    {
-      icon: '✨',
-      title: 'Others',
-      sub: 'Unexpected adventures, spontaneous plans, and memorable moments',
-      current: 0,
-      total: 10,
-      unit: 'moments',
-      status: 'not-started'
-    }
-  ],
-
-  dashboard: [
-    { name: 'Gym sessions',           current: 0, total: 25, color: 'blue' },
-    { name: 'Korean study days',      current: 0, total: 25, color: 'blue' },
-    { name: 'Mountains climbed',      current: 0, total: 3,  color: 'sand' },
-    { name: 'Beaches visited',        current: 0, total: 3,  color: 'sand' },
-    { name: 'Historical places',      current: 0, total: 10, color: 'teal' },
-    { name: 'Football sessions',      current: 0, total: 3,  color: 'teal' },
-    { name: 'Driving license',        current: 0, total: 1,  color: 'blue', customLabel: 'In Progress' },
-    { name: 'PvZ marathon',           current: 0, total: 1,  color: 'sand', customLabel: 'Not Started' }
+    { icon:'🏋️', title:'Iron Tide',                sub:'25-Day Gym Challenge',                         current:0, total:25, color:'blue',   unit:'days' },
+    { icon:'🇰🇷', title:'Hangul Sprint',             sub:'25-Day Korean Challenge',                      current:0, total:25, color:'cyan',   unit:'days' },
+    { icon:'🥾', title:'Three Summits Quest',        sub:'Hike Mountains #1, #2, and #3',               current:0, total:3,  color:'amber',  unit:'summits' },
+    { icon:'🌊', title:'Busan Beach Passport',       sub:'Visit Songdo, Dadaepo, and Haeundae',         current:0, total:3,  color:'cyan',   unit:'beaches' },
+    { icon:'🏛️', title:"Time Traveler's Passport",   sub:'Explore historical places',                   current:0, total:10, color:'teal',   unit:'places' },
+    { icon:'⚽', title:'Sunday Shootout',            sub:'Football sessions ×3',                        current:0, total:3,  color:'teal',   unit:'sessions' },
+    { icon:'🚗', title:'Road to Freedom',            sub:'Get a driving license',                       current:0, total:1,  color:'amber',  unit:'license', customLabel:'In Progress' },
+    { icon:'🧟', title:'Operation: Zombie Extinction',sub:'Finish Plants vs. Zombies in one sitting',   current:0, total:1,  color:'rose',   unit:'marathon', customLabel:'Not Started' },
+    { icon:'💼', title:'Self Motivator',             sub:'Build a personal portfolio',                  current:0, total:1,  color:'violet', unit:'portfolio' },
+    { icon:'📚', title:'Sharper Mind',               sub:'Read 3 books this summer',                    current:0, total:3,  color:'violet', unit:'books' },
+    { icon:'✨', title:'Others',                     sub:'Unexpected adventures & memorable moments',   current:0, total:10, color:'blue',   unit:'moments' },
   ]
 };
 
-/* ── RENDER CHALLENGES ──────────────────────────────────── */
-function renderChallenges() {
-  const grid = document.getElementById('challengesGrid');
-  DATA.challenges.forEach(ch => {
-    const pct = ch.total > 0 ? Math.round((ch.current / ch.total) * 100) : 0;
-    const statusClass = `status-${ch.status.replace(' ','-')}`;
-    const label = ch.customLabel
-      ? ch.customLabel
-      : ch.status === 'done' ? 'Complete'
-      : ch.status === 'in-progress' ? 'In Progress'
-      : 'Not Started';
+/* ── State (cloned so we can mutate) ── */
+const state = CONFIG.challenges.map(c => ({ ...c }));
 
-    const card = document.createElement('article');
-    card.className = 'challenge-card';
-    card.innerHTML = `
-      <span class="ch-icon" aria-hidden="true">${ch.icon}</span>
-      <div class="ch-title">${ch.title}</div>
-      <div class="ch-sub">${ch.sub}</div>
-      <div class="ch-progress-track" role="progressbar"
-           aria-valuenow="${ch.current}" aria-valuemin="0" aria-valuemax="${ch.total}"
-           aria-label="${ch.title} progress">
-        <div class="ch-progress-fill" data-width="${pct}%"></div>
-      </div>
-      <div class="ch-progress-label">${ch.current} / ${ch.total} ${ch.unit}</div>
-      <span class="ch-status ${statusClass}">${label}</span>
-    `;
-    grid.appendChild(card);
-  });
+/* ── Helpers ── */
+function pct(cur, tot) { return tot > 0 ? Math.min(100, Math.round(cur / tot * 100)) : 0; }
+function statusClass(c) {
+  const p = pct(c.current, c.total);
+  return p >= 100 ? 'chip-done' : c.current > 0 ? 'chip-ip' : 'chip-ns';
+}
+function statusLabel(c) {
+  if (c.customLabel && c.current === 0) return c.customLabel;
+  const p = pct(c.current, c.total);
+  return p >= 100 ? 'Complete' : c.current > 0 ? 'In Progress' : 'Not Started';
 }
 
-/* ── RENDER DASHBOARD BARS ──────────────────────────────── */
-function renderDashboard() {
-  const wrap = document.getElementById('dashBars');
-  DATA.dashboard.forEach(row => {
-    const pct = row.total > 0 ? Math.round((row.current / row.total) * 100) : 0;
-    const countStr = row.customLabel
-      ? row.customLabel
-      : `${row.current} / ${row.total}`;
+/* ── Recalculate summary stats ── */
+function calcSummary() {
+  const totalItems = state.reduce((a,c) => a + c.total, 0);
+  const doneItems  = state.reduce((a,c) => a + Math.min(c.current, c.total), 0);
+  const sumPct     = totalItems > 0 ? Math.round(doneItems / totalItems * 100) : 0;
+  const activitiesDone = state.filter(c => c.current >= c.total && c.total > 0).length;
 
-    const el = document.createElement('div');
-    el.className = 'db-row';
+  document.getElementById('dStreak').textContent = CONFIG.streak;
+  document.getElementById('dDone').textContent   = activitiesDone;
+  document.getElementById('dPct').textContent    = sumPct + '%';
+
+  // XP bar
+  document.getElementById('xpLabel').textContent = `${doneItems} / ${totalItems} XP`;
+  const xpFill = document.getElementById('xpFill');
+  xpFill.style.width = sumPct + '%';
+
+  // dashboard bars
+  renderDashBars(doneItems, totalItems);
+}
+
+/* ── Render dashboard bars ── */
+const DB_COLORS = { blue:'db-blue', amber:'db-amber', teal:'db-teal', violet:'db-violet', cyan:'db-blue', rose:'db-violet' };
+function renderDashBars(doneTotal, grandTotal) {
+  const wrap = document.getElementById('dashBars');
+  wrap.innerHTML = '';
+  state.forEach(c => {
+    const p   = pct(c.current, c.total);
+    const cl  = DB_COLORS[c.color] || 'db-blue';
+    const lbl = c.customLabel && c.current === 0 ? c.customLabel : `${c.current} / ${c.total}`;
+    const el  = document.createElement('div');
+    el.className = 'db-card';
     el.innerHTML = `
-      <div class="db-header">
-        <span class="db-name">${row.name}</span>
-        <span class="db-count">${countStr}</span>
+      <div class="db-head">
+        <span class="db-name">${c.icon} ${c.title}</span>
+        <span class="db-count">${lbl}</span>
       </div>
-      <div class="db-track" role="progressbar"
-           aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"
-           aria-label="${row.name} progress">
-        <div class="db-fill db-fill-${row.color}" data-width="${pct}%"></div>
-      </div>
-    `;
+      <div class="db-track" role="progressbar" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100" aria-label="${c.title} progress">
+        <div class="db-fill ${cl}" style="width:${p}%"></div>
+      </div>`;
     wrap.appendChild(el);
   });
 }
 
-/* ── RENDER PROFILE STATS ───────────────────────────────── */
-function renderProfile() {
-  const lp = DATA.profile;
+/* ── Render challenge cards ── */
+function renderCards() {
+  const grid = document.getElementById('chGrid');
+  grid.innerHTML = '';
 
-  // summer completion from dashboard totals
-  const totals = DATA.dashboard.reduce((a,r) => a + r.total, 0);
-  const dones  = DATA.dashboard.reduce((a,r) => a + r.current, 0);
-  const pct = totals > 0 ? Math.round((dones / totals) * 100) : 0;
+  state.forEach((c, idx) => {
+    const p   = pct(c.current, c.total);
+    const sc  = statusClass(c);
+    const sl  = statusLabel(c);
 
-  document.getElementById('statStreak').textContent    = lp.streak;
-  document.getElementById('statCompleted').textContent = lp.activitiesDone;
-  document.getElementById('statPercent').textContent   = pct + '%';
-  document.getElementById('lpLabel').textContent       = `${lp.lifePoints} / ${lp.maxLP} XP`;
+    const card = document.createElement('article');
+    card.className = 'ch-card fade-up';
+    card.setAttribute('data-color', c.color);
+    card.style.animationDelay = `${idx * 0.04}s`;
+    card.innerHTML = `
+      <div class="ch-top">
+        <span class="ch-icon" aria-hidden="true">${c.icon}</span>
+        <span class="ch-chip ${sc}">${sl}</span>
+      </div>
+      <div class="ch-title">${c.title}</div>
+      <div class="ch-sub">${c.sub}</div>
+      <div class="bar-track" role="progressbar" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100" aria-label="${c.title} progress">
+        <div class="bar-fill" style="width:${p}%;background:var(--accent-color,var(--c-blue))"></div>
+      </div>
+      <div class="bar-meta">
+        <div class="stepper" aria-label="Adjust progress for ${c.title}">
+          <button class="step-btn" data-idx="${idx}" data-dir="-1" aria-label="Decrease">−</button>
+          <div class="step-val" contenteditable="true" inputmode="numeric" data-idx="${idx}"
+               role="spinbutton" aria-valuenow="${c.current}" aria-valuemin="0" aria-valuemax="${c.total}">${c.current}</div>
+          <button class="step-btn" data-idx="${idx}" data-dir="1" aria-label="Increase">+</button>
+          <span style="font-family:var(--f-mono);font-size:11px;color:var(--text-3)">/ ${c.total} ${c.unit}</span>
+        </div>
+        <span class="bar-pct">${p}%</span>
+      </div>`;
+    grid.appendChild(card);
+
+    // animate bars already in view on first render
+    setTimeout(() => {
+      const fill = card.querySelector('.bar-fill');
+      if (fill) fill.style.width = p + '%';
+    }, 100 + idx * 40);
+  });
+
+  attachCardListeners();
+  observeFadeUps();
 }
 
-/* ── ANIMATE BARS ON SCROLL ─────────────────────────────── */
-function animateBars() {
-  const fills = document.querySelectorAll('[data-width]');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.width = entry.target.dataset.width;
-        observer.unobserve(entry.target);
-      }
+/* ── Card interaction ── */
+function attachCardListeners() {
+  // stepper buttons
+  document.querySelectorAll('.step-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      const dir = parseInt(btn.dataset.dir);
+      state[idx].current = Math.max(0, Math.min(state[idx].total, state[idx].current + dir));
+      refresh();
     });
-  }, { threshold: 0.2 });
-  fills.forEach(el => observer.observe(el));
+  });
+
+  // editable values
+  document.querySelectorAll('.step-val').forEach(el => {
+    el.addEventListener('blur', () => {
+      const idx = parseInt(el.dataset.idx);
+      const val = parseInt(el.textContent.trim()) || 0;
+      state[idx].current = Math.max(0, Math.min(state[idx].total, val));
+      refresh();
+    });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    });
+  });
 }
 
-/* ── THEME TOGGLE ───────────────────────────────────────── */
-document.getElementById('themeToggle').addEventListener('click', () => {
+function refresh() {
+  renderCards();
+  calcSummary();
+}
+
+/* ── Intersection observer for fade-ups ── */
+function observeFadeUps() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+}
+
+/* ── Theme toggle ── */
+document.getElementById('themeBtn').addEventListener('click', () => {
   const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('themeIcon').textContent  = isDark ? '🌙' : '☀️';
-  document.getElementById('themeLabel').textContent = isDark ? 'Dark' : 'Light';
+  const light = html.getAttribute('data-theme') !== 'light';
+  html.setAttribute('data-theme', light ? 'light' : 'dark');
+  document.getElementById('themeIco').textContent  = light ? '🌙' : '☀️';
+  document.getElementById('themeTxt').textContent  = light ? 'Dark' : 'Light';
 });
 
-/* ── INIT ───────────────────────────────────────────────── */
-renderChallenges();
-renderDashboard();
-renderProfile();
-animateBars();
+/* ── Init ── */
+renderCards();
+calcSummary();
+observeFadeUps();
 </script>
 </body>
 </html>
