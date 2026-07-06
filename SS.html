@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swordland — Battle Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-900: #0d2b55;
+    --blue-700: #1a4a8a;
+    --blue-500: #2563c8;
+    --blue-300: #5b9bea;
+    --blue-100: #dbeafe;
+    --blue-50:  #eff6ff;
+    --white:    #ffffff;
+    --text-dark: #0f1f3d;
+    --text-mid:  #2d4a7a;
+    --text-soft: #5472a3;
+    --border:    #c3d9f7;
+    --gold:      #f5c842;
+    --gold-soft: #fef3c7;
+    --red:       #e84a5f;
+    --red-soft:  #ffe4e6;
+    --green:     #10b981;
+    --green-soft:#d1fae5;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+    background: var(--blue-50);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* ── SENSEI NORMAN ── */
+  .sensei {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    animation: float 3.6s ease-in-out infinite;
+    filter: drop-shadow(0 3px 10px rgba(37,99,200,0.22));
+    cursor: default;
+    user-select: none;
+  }
+  .sensei-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-500) 100%);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 0 3px rgba(245,200,66,0.18);
+    transition: transform 0.2s;
+  }
+  .sensei-avatar:hover { transform: scale(1.12) rotate(-5deg); }
+  .sensei-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    text-transform: uppercase;
+    background: var(--blue-900);
+    padding: 2px 6px;
+    border-radius: 99px;
+    border: 1px solid rgba(245,200,66,0.35);
+    white-space: nowrap;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--blue-900);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(13,43,85,0.3);
+  }
+  .nav-logo {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    margin-right: auto;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-tab {
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    transition: all 0.18s;
+    border: none;
+    background: none;
+    text-decoration: none;
+    font-family: 'Lexend', sans-serif;
+  }
+  .nav-tab:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-tab.active { color: var(--white); background: var(--blue-500); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 60%, var(--blue-500) 100%);
+    color: var(--white);
+    padding: 64px 32px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(91,155,234,0.18) 0%, transparent 70%);
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(245,200,66,0.12);
+    border: 1px solid rgba(245,200,66,0.35);
+    padding: 4px 14px;
+    border-radius: 99px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.72);
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.65;
+    position: relative;
+  }
+  .hero-badges {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge-icon { font-size: 18px; }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── WRAPPER ── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue-300), transparent);
+    border-radius: 2px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-soft);
+    font-weight: 500;
+    margin-bottom: 24px;
+    padding-left: 2px;
+  }
+
+  /* ── CARDS ── */
+  .card-grid { display: grid; gap: 16px; margin-bottom: 48px; }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 10px rgba(37,99,200,0.06);
+    transition: box-shadow 0.18s, transform 0.18s;
+  }
+  .card:hover { box-shadow: 0 6px 24px rgba(37,99,200,0.12); transform: translateY(-1px); }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--blue-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin-bottom: 3px;
+  }
+  .card-sub {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-soft);
+  }
+  .card p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-mid);
+    line-height: 1.75;
+  }
+
+  /* ── PRIORITY GRID ── */
+  .priority-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .p-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 16px;
+    box-shadow: 0 2px 8px rgba(37,99,200,0.05);
+    transition: box-shadow 0.18s, transform 0.18s;
+  }
+  .p-card:hover { box-shadow: 0 6px 20px rgba(37,99,200,0.11); transform: translateY(-1px); }
+  .p-card.top   { border-color: rgba(232,74,95,0.45); background: #fff8f8; }
+  .p-card.high  { border-color: rgba(245,200,66,0.5); background: #fffdf0; }
+  .p-card.low   { opacity: 0.6; }
+  .p-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 99px;
+    margin-bottom: 10px;
+  }
+  .p-tag.t-top  { background: var(--red-soft); color: #9f1239; }
+  .p-tag.t-high { background: var(--gold-soft); color: #78350f; }
+  .p-tag.t-mid  { background: var(--blue-100); color: #1e40af; }
+  .p-tag.t-low  { background: #f1f5f9; color: #64748b; }
+  .p-name { font-size: 14px; font-weight: 700; color: var(--blue-900); margin-bottom: 3px; }
+  .p-pts  { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+  .p-pts small { font-size: 11px; font-weight: 500; color: var(--text-soft); }
+  .p-desc { font-size: 13px; font-weight: 500; color: var(--text-mid); line-height: 1.55; }
+
+  /* ── HIGHLIGHT / WARNING BOXES ── */
+  .highlight {
+    background: var(--blue-100);
+    border-left: 4px solid var(--blue-500);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--blue-900);
+    line-height: 1.7;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .highlight-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .warning {
+    background: #fff7ed;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 12px 12px 0;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #78350f;
+    line-height: 1.7;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .relic-tip {
+    background: #fffdf0;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #78350f;
+    line-height: 1.7;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  /* ── MAP SECTION ── */
+  .map-wrap {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(37,99,200,0.06);
+    overflow-x: auto;
+  }
+  .map-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 18px;
+  }
+  .map-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+
+  /* ── TEAM GRID ── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .t-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(37,99,200,0.05);
+  }
+  .t-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .t-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .t-tag {
+    background: var(--blue-50);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 3px 11px;
+    font-size: 12px;
+    color: var(--text-mid);
+    font-weight: 500;
+  }
+  .t-tag.key {
+    background: var(--blue-100);
+    border-color: var(--blue-300);
+    color: var(--blue-700);
+    font-weight: 700;
+  }
+
+  /* ── RULES ── */
+  .rule {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    box-shadow: 0 2px 8px rgba(37,99,200,0.05);
+    transition: box-shadow 0.18s, transform 0.18s;
+  }
+  .rule:hover { box-shadow: 0 6px 20px rgba(37,99,200,0.11); transform: translateY(-1px); }
+  .rule-n {
+    font-size: 28px;
+    font-weight: 700;
+    color: rgba(37,99,200,0.15);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 28px;
+  }
+  .rule h4 { font-size: 15px; font-weight: 700; color: var(--blue-900); margin-bottom: 6px; }
+  .rule p  { font-size: 14px; font-weight: 500; color: var(--text-mid); line-height: 1.7; }
+
+  /* ── FFA GRID ── */
+  .ffa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .ffa-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 18px;
+    box-shadow: 0 2px 8px rgba(37,99,200,0.05);
+    transition: box-shadow 0.18s, transform 0.18s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ffa-card:hover { box-shadow: 0 6px 20px rgba(37,99,200,0.12); transform: translateY(-2px); }
+  .ffa-icon { font-size: 24px; }
+  .ffa-card h4 { font-size: 14px; font-weight: 700; color: var(--blue-900); }
+  .ffa-card p  { font-size: 13px; font-weight: 500; color: var(--text-mid); line-height: 1.65; flex: 1; }
+  .ffa-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 99px;
+    margin-top: 4px;
+    align-self: flex-start;
+  }
+  .tag-critical { background: var(--gold-soft); color: #78350f; }
+  .tag-aggro    { background: var(--red-soft);  color: #9f1239; }
+  .tag-strat    { background: var(--blue-100);  color: #1e40af; }
+  .tag-def      { background: var(--green-soft);color: #065f46; }
+  .tag-util     { background: #f3e8ff; color: #6b21a8; }
+
+  /* ── FINAL REMINDER ── */
+  .final-reminder {
+    background: linear-gradient(135deg, var(--blue-900), var(--blue-700));
+    border-radius: 16px;
+    padding: 28px 32px;
+    color: var(--white);
+    margin-top: 32px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    box-shadow: 0 8px 32px rgba(13,43,85,0.2);
+  }
+  .final-reminder-icon { font-size: 36px; flex-shrink: 0; }
+  .final-reminder h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--gold); }
+  .final-reminder p  { font-size: 14px; font-weight: 500; line-height: 1.7; color: rgba(255,255,255,0.85); }
+  .final-reminder strong { color: var(--white); }
+
+  /* ── QUICK REF TIPS VIEW ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .tip-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    box-shadow: 0 2px 8px rgba(37,99,200,0.05);
+    transition: box-shadow 0.18s, transform 0.18s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tip-card:hover { box-shadow: 0 6px 20px rgba(37,99,200,0.12); transform: translateY(-2px); }
+  .tip-card-top { display: flex; align-items: center; gap: 10px; }
+  .tip-badge {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--blue-900);
+    color: var(--white);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    line-height: 1.1; flex-shrink: 0;
+  }
+  .tip-badge .num { font-size: 16px; line-height: 1; }
+  .tip-badge.gold { background: var(--gold); color: var(--blue-900); }
+  .tip-card-label { font-size: 13px; font-weight: 700; color: var(--blue-700); }
+  .tip-card-label small { display: block; font-size: 11px; font-weight: 500; color: var(--text-soft); margin-top: 2px; }
+  .tip-text {
+    font-size: 13.5px; font-weight: 500; color: var(--text-mid);
+    line-height: 1.7;
+    border-top: 1px solid var(--blue-50);
+    padding-top: 10px;
+  }
+  .tip-icon { font-size: 22px; text-align: center; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .hero { padding: 48px 20px 44px; }
+    .content { padding: 32px 16px 64px; }
+    .team-grid { grid-template-columns: 1fr; }
+    .priority-grid { grid-template-columns: 1fr 1fr; }
+    nav { padding: 0 14px; }
+    .nav-tab { padding: 7px 12px; font-size: 13px; }
+    .sensei { bottom: 12px; left: 12px; }
+    .sensei-avatar { width: 38px; height: 38px; font-size: 18px; }
+    .final-reminder { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── SENSEI NORMAN ── -->
+<div class="sensei" title="Sensei Norman 🥷">
+  <div class="sensei-avatar">🥷</div>
+  <div class="sensei-label">Sensei Norman</div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">Swordland <span>War</span></div>
+  <button class="nav-tab active" onclick="switchView('guide', this)">📖 Guide</button>
+  <button class="nav-tab" onclick="switchView('tips', this)">⚡ Quick Ref</button>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-eyebrow">⚔️ Legion War · Field Manual</div>
+  <h1>Swordland <em>Battle Guide</em></h1>
+  <p class="hero-sub">Hold the Middle. Collect the relics. Win as one legion.</p>
+  <div class="hero-badges">
+    <div class="badge"><span class="badge-icon">🏰</span> Building Priority</div>
+    <div class="badge"><span class="badge-icon">🗺️</span> 4-Team Zones</div>
+    <div class="badge"><span class="badge-icon">💎</span> Relic Drops</div>
+    <div class="badge"><span class="badge-icon">🔥</span> Free-for-All Roles</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     GUIDE VIEW
+══════════════════════════════════════ -->
+<div id="view-guide" class="view active">
+<div class="content">
+
+
+  <!-- ── PART 1: BUILDING PRIORITY ── -->
+  <div class="section-title">🏰 Building Priority</div>
+  <p class="section-desc">Not all buildings are worth the same. Know what to fight for — and what to sacrifice.</p>
+
+  <div class="priority-grid">
+    <div class="p-card top">
+      <div class="p-tag t-top">Highest Priority</div>
+      <div class="p-name">Sword Shrine</div>
+      <div class="p-name" style="font-size:12px;color:var(--text-soft);font-weight:500;margin-top:-2px;margin-bottom:8px;">aka "The Middle"</div>
+      <div class="p-pts">9,000 <small>pts</small></div>
+      <div class="p-desc">The biggest objective on the map. Fight for this above everything else.</div>
+    </div>
+
+    <div class="p-card high">
+      <div class="p-tag t-high">High Priority</div>
+      <div class="p-name">Sanctum ×2</div>
+      <div class="p-name" style="font-size:12px;color:var(--text-soft);font-weight:500;margin-top:-2px;margin-bottom:8px;">NW &amp; SE positions</div>
+      <div class="p-pts">6,000 <small>pts each</small></div>
+      <div class="p-desc">Two on the map. Never let both sit uncontested at the same time.</div>
+    </div>
+
+    <div class="p-card">
+      <div class="p-tag t-mid">Mid Priority</div>
+      <div class="p-name">Reformation</div>
+      <div class="p-pts">+15% <small>Atk &amp; Def</small></div>
+      <div class="p-desc">Buffs your whole legion while held. A real force multiplier during fights.</div>
+    </div>
+
+    <div class="p-card">
+      <div class="p-tag t-mid">Mid Priority</div>
+      <div class="p-name">Mercenary</div>
+      <div class="p-pts">⚠️ Hazard</div>
+      <div class="p-desc">Deals continuous damage to the center. Deny this to protect your Middle hold.</div>
+    </div>
+
+    <div class="p-card">
+      <div class="p-tag t-mid">Mid Priority</div>
+      <div class="p-name">Bell Tower</div>
+      <div class="p-pts">⏱ Capture Speed</div>
+      <div class="p-desc">Reduces time to capture all towers. Speeds up every push your team makes.</div>
+    </div>
+
+    <div class="p-card low">
+      <div class="p-tag t-low">Lowest Priority</div>
+      <div class="p-name">Abbeys ×4 &amp; Stables</div>
+      <div class="p-pts">Sacrificeable</div>
+      <div class="p-desc">Give these up freely to free your forces for the objectives above.</div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div>⚠️</div>
+    <div><strong>Never trade a Middle or Sanctum fight to defend an Abbey.</strong> The point difference isn't close — an Abbey is not worth losing the Middle over.</div>
+  </div>
+
+  <div class="relic-tip">
+    <div>💎</div>
+    <div><strong>Relic Drop — Don't Miss It:</strong> When your team occupies a building, it drops a relic. These relics are a <strong>massive boost</strong> for the team — but only if someone collects them. Always confirm a <strong>Relic Collector is in position</strong> before any assault launches. A building captured without relic collection is half a win.</div>
+  </div>
+
+
+  <!-- ── PART 2: TEAM POSITIONING ── -->
+  <div class="section-title" style="margin-top: 52px;">🗺️ Team Positioning</div>
+  <p class="section-desc">Four teams, four zones. Know yours before the battle starts.</p>
+
+  <div class="map-wrap">
+    <div class="map-label">⬡ Zone Map — 4-Team Layout</div>
+    <svg viewBox="0 0 680 500" xmlns="http://www.w3.org/2000/svg" width="680">
+      <defs>
+        <style>
+          .ml  { font-family:'Lexend',sans-serif; font-size:11px; fill:#2d4a7a; text-anchor:middle; font-weight:500; }
+          .mlb { font-weight:700; fill:#0f1f3d; font-size:11.5px; }
+          .mls { font-size:9.5px; fill:#5472a3; }
+          .tl  { font-family:'Lexend',sans-serif; font-size:14px; font-weight:700; fill:#0d2b55; text-anchor:middle; }
+          .conn{ stroke:#c3d9f7; stroke-width:1.5; fill:none; }
+        </style>
+        <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+
+      <!-- Team zone blobs -->
+      <!-- Team 1 North -->
+      <path d="M210,28 Q340,8 470,52 Q492,128 410,155 Q340,122 275,128 Q200,142 172,108 Q145,68 210,28Z"
+            fill="rgba(37,99,200,0.07)" stroke="rgba(37,99,200,0.25)" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <!-- Team 2 West -->
+      <path d="M28,162 Q95,118 174,140 Q202,194 186,275 Q162,315 98,325 Q28,306 18,244 Q8,192 28,162Z"
+            fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.28)" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <!-- Team 3 East -->
+      <path d="M498,122 Q576,100 648,158 Q660,234 638,306 Q585,334 514,315 Q478,274 494,198 Q472,152 498,122Z"
+            fill="rgba(232,74,95,0.07)" stroke="rgba(232,74,95,0.25)" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <!-- Team 4 South -->
+      <path d="M186,334 Q256,302 338,312 Q416,302 474,344 Q494,396 424,444 Q342,468 262,452 Q172,432 162,382 Q157,352 186,334Z"
+            fill="rgba(245,200,66,0.08)" stroke="rgba(224,168,0,0.28)" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+      <!-- Team labels -->
+      <text class="tl" x="338" y="30">Team 1</text>
+      <text class="tl" x="76"  y="228">Team 2</text>
+      <text class="tl" x="594" y="228">Team 3</text>
+      <text class="tl" x="338" y="468">Team 4</text>
+
+      <!-- Connection lines -->
+      <line class="conn" x1="338" y1="238" x2="252" y2="118"/>
+      <line class="conn" x1="338" y1="238" x2="440" y2="104"/>
+      <line class="conn" x1="338" y1="238" x2="158" y2="220"/>
+      <line class="conn" x1="338" y1="238" x2="518" y2="220"/>
+      <line class="conn" x1="338" y1="238" x2="286" y2="352"/>
+      <line class="conn" x1="338" y1="238" x2="428" y2="356"/>
+      <line class="conn" x1="158" y1="220" x2="92"  y2="138"/>
+      <line class="conn" x1="252" y1="118" x2="92"  y2="138"/>
+      <line class="conn" x1="518" y1="220" x2="575" y2="136"/>
+      <line class="conn" x1="286" y1="352" x2="215" y2="416"/>
+      <line class="conn" x1="428" y1="356" x2="476" y2="420"/>
+      <line class="conn" x1="60"  y1="280" x2="92"  y2="138"/>
+
+      <!-- ★ MIDDLE — Sword Shrine -->
+      <ellipse cx="338" cy="238" rx="66" ry="42"
+               fill="rgba(232,74,95,0.13)" stroke="#e84a5f" stroke-width="2" filter="url(#glow)"/>
+      <text class="ml mlb" x="338" y="234">Sword Shrine</text>
+      <text class="ml mls" x="338" y="248">Middle · 9,000 pts</text>
+
+      <!-- Sanctum NW -->
+      <ellipse cx="158" cy="220" rx="52" ry="31"
+               fill="rgba(37,99,200,0.1)" stroke="#2563c8" stroke-width="1.5"/>
+      <text class="ml mlb" x="158" y="216">Sanctum NW</text>
+      <text class="ml mls" x="158" y="228">Northern West</text>
+
+      <!-- Sanctum SE -->
+      <ellipse cx="575" cy="316" rx="52" ry="31"
+               fill="rgba(37,99,200,0.1)" stroke="#2563c8" stroke-width="1.5"/>
+      <text class="ml mlb" x="575" y="312">Sanctum SE</text>
+      <text class="ml mls" x="575" y="324">Southern East</text>
+
+      <!-- Mercenary -->
+      <rect x="400" y="86" width="90" height="40" rx="9"
+            fill="rgba(245,200,66,0.14)" stroke="#f5c842" stroke-width="1.5"/>
+      <text class="ml mlb" x="445" y="103">Mercenary</text>
+      <text class="ml mls" x="445" y="116">Dmg to center</text>
+
+      <!-- Bell Tower -->
+      <ellipse cx="92" cy="138" rx="44" ry="27"
+               fill="rgba(37,99,200,0.06)" stroke="#5b9bea" stroke-width="1.5"/>
+      <text class="ml mlb" x="92" y="134">Bell Tower</text>
+      <text class="ml mls" x="92" y="146">Capture speed</text>
+
+      <!-- Abbey NE -->
+      <ellipse cx="252" cy="104" rx="46" ry="27"
+               fill="rgba(37,99,200,0.05)" stroke="#c3d9f7" stroke-width="1.5"/>
+      <text class="ml mlb" x="252" y="100">Abbey NE</text>
+      <text class="ml mls" x="252" y="112">Northern East</text>
+
+      <!-- Abbey East -->
+      <ellipse cx="518" cy="220" rx="47" ry="28"
+               fill="rgba(37,99,200,0.05)" stroke="#c3d9f7" stroke-width="1.5"/>
+      <text class="ml mlb" x="518" y="216">Abbey East</text>
+      <text class="ml mls" x="518" y="228">East</text>
+
+      <!-- Reformation -->
+      <rect x="238" y="334" width="100" height="40" rx="9"
+            fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1.5"/>
+      <text class="ml mlb" x="288" y="351">Reformation</text>
+      <text class="ml mls" x="288" y="364">+15% Atk &amp; Def</text>
+
+      <!-- Stables -->
+      <ellipse cx="476" cy="396" rx="46" ry="27"
+               fill="rgba(37,99,200,0.05)" stroke="#c3d9f7" stroke-width="1.5"/>
+      <text class="ml mlb" x="476" y="392">Stables</text>
+      <text class="ml mls" x="476" y="404">South area</text>
+
+      <!-- Abbey SW -->
+      <ellipse cx="210" cy="420" rx="48" ry="28"
+               fill="rgba(37,99,200,0.05)" stroke="#c3d9f7" stroke-width="1.5"/>
+      <text class="ml mlb" x="210" y="416">Abbey SW</text>
+      <text class="ml mls" x="210" y="428">Southern West</text>
+
+      <!-- Abbey W -->
+      <ellipse cx="60" cy="280" rx="42" ry="26"
+               fill="rgba(37,99,200,0.05)" stroke="#c3d9f7" stroke-width="1.5"/>
+      <text class="ml mlb" x="60" y="276">Abbey W</text>
+      <text class="ml mls" x="60" y="288">West</text>
+
+      <!-- Rally dots -->
+      <circle cx="322" cy="230" r="5" fill="#f5c842" opacity="0.9"/>
+      <circle cx="356" cy="230" r="5" fill="#f5c842" opacity="0.9"/>
+      <text style="font-family:'Lexend',sans-serif;font-size:9px;fill:#c9a000;font-weight:600;" text-anchor="middle" x="338" y="218">rally / teleport</text>
+    </svg>
+  </div>
+
+  <div class="team-grid">
+    <div class="t-card">
+      <h4><span class="t-dot" style="background:#2563c8;"></span>Team 1 — North</h4>
+      <div class="t-tags">
+        <span class="t-tag">Bell Tower</span>
+        <span class="t-tag key">Abbey NE</span>
+        <span class="t-tag key">Mercenary</span>
+      </div>
+    </div>
+    <div class="t-card">
+      <h4><span class="t-dot" style="background:#10b981;"></span>Team 2 — West</h4>
+      <div class="t-tags">
+        <span class="t-tag key">Sanctum NW</span>
+        <span class="t-tag">Abbey W</span>
+        <span class="t-tag key">Sword Shrine</span>
+      </div>
+    </div>
+    <div class="t-card">
+      <h4><span class="t-dot" style="background:#e84a5f;"></span>Team 3 — East</h4>
+      <div class="t-tags">
+        <span class="t-tag key">Abbey East</span>
+        <span class="t-tag key">Sanctum SE</span>
+      </div>
+    </div>
+    <div class="t-card">
+      <h4><span class="t-dot" style="background:#f5c842;"></span>Team 4 — South</h4>
+      <div class="t-tags">
+        <span class="t-tag key">Abbey SW</span>
+        <span class="t-tag key">Reformation</span>
+        <span class="t-tag">Stables</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-icon">📍</div>
+    <div><strong>Teleport &amp; Rally Spots:</strong> The gold dots on the Middle are designated rally and teleport positions. There are no individual ranking rewards — no need to burn speedups just to look active. <strong>Play for team victory, not personal MVP.</strong></div>
+  </div>
+
+
+  <!-- ── PART 3: CORE RULES ── -->
+  <div class="section-title" style="margin-top: 52px;">📋 Core Team Rules</div>
+  <p class="section-desc">Three things every player must follow, no exceptions.</p>
+
+  <div class="rule">
+    <div class="rule-n">1</div>
+    <div>
+      <h4>Show Up If You Register</h4>
+      <p>Matchmaking is based on registered players. If you sign up and don't show, the whole team fights short-handed and everyone else has a harder battle. Only register if you can actually participate.</p>
+    </div>
+  </div>
+
+  <div class="rule">
+    <div class="rule-n">2</div>
+    <div>
+      <h4>Don't Go Solo Without Good Reason</h4>
+      <p>If you're zeroed and pulled off the field, your team fights 12 minutes without you. Avoid unnecessary risks — stay with the team and don't pick fights you can't win alone.</p>
+    </div>
+  </div>
+
+  <div class="rule">
+    <div class="rule-n">3</div>
+    <div>
+      <h4>Always Call and Join Rallies</h4>
+      <p>Hero widgets activate on rallies — even if nobody joins, launching one still powers your widgets and makes your attack far stronger than a direct hit. Always rally. Always join rallies.</p>
+    </div>
+  </div>
+
+
+  <!-- ── PART 4: FREE-FOR-ALL ── -->
+  <div class="section-title" style="margin-top: 52px;">🔥 Free-for-All Players</div>
+  <p class="section-desc">Not locked into a zone? Here's how you can still make a real difference on your own terms.</p>
+
+  <div class="ffa-grid">
+
+    <div class="ffa-card">
+      <div class="ffa-icon">💎</div>
+      <h4>Relic Collector</h4>
+      <p>Position near contested buildings before the attack lands. Relics dropped on occupation are a massive team boost — this role directly feeds your legion's power.</p>
+      <span class="ffa-tag tag-critical">Critical Role</span>
+    </div>
+
+    <div class="ffa-card">
+      <div class="ffa-icon">⚔️</div>
+      <h4>Solo Hunter</h4>
+      <p>High battle IQ and strong stats let you break through even against big odds — zero enemy stragglers and remove threats before they reinforce key objectives.</p>
+      <span class="ffa-tag tag-aggro">Aggressive</span>
+    </div>
+
+    <div class="ffa-card">
+      <div class="ffa-icon">🏰</div>
+      <h4>Abbey Flipper</h4>
+      <p>Capture abandoned Abbeys that enemies have left idle. Even low-point buildings accumulate over a long match, and flipping them forces enemies to split focus.</p>
+      <span class="ffa-tag tag-strat">Strategic</span>
+    </div>
+
+    <div class="ffa-card">
+      <div class="ffa-icon">🛡️</div>
+      <h4>Lone Defender</h4>
+      <p>Sit on a Sanctum or Reformation the main force can't spare defenders for. Being the quiet anchor of a captured building is an underrated contribution.</p>
+      <span class="ffa-tag tag-def">Defensive</span>
+    </div>
+
+    <div class="ffa-card">
+      <div class="ffa-icon">🔔</div>
+      <h4>Bell Tower Keeper</h4>
+      <p>Hold the Bell Tower solo. Its passive capture-speed buff gives your whole team an invisible edge during every push on Middle and Sanctums.</p>
+      <span class="ffa-tag tag-util">Utility</span>
+    </div>
+
+    <div class="ffa-card">
+      <div class="ffa-icon">🧹</div>
+      <h4>Mercenary Denial</h4>
+      <p>Camp the enemy Mercenary and recapture it whenever it goes idle. Stopping its constant tick damage to our Middle is a quiet but decisive play.</p>
+      <span class="ffa-tag tag-aggro">Disruptive</span>
+    </div>
+
+    <div class="ffa-card">
+      <div class="ffa-icon">📣</div>
+      <h4>Rally Joiner</h4>
+      <p>Fill rally slots — even if you're not the strongest attacker. Your presence unlocks hero widget buffs for the rally leader and makes every hit harder.</p>
+      <span class="ffa-tag tag-def">Team Support</span>
+    </div>
+
+    <div class="ffa-card">
+      <div class="ffa-icon">🚑</div>
+      <h4>Heal &amp; Return</h4>
+      <p>Don't burn all speedups to stay active. Heal, recover your troops, and come back at full strength. A fresh army in the final minutes wins fights.</p>
+      <span class="ffa-tag tag-strat">Long Game</span>
+    </div>
+
+  </div>
+
+  <div class="final-reminder">
+    <div class="final-reminder-icon">⚔️</div>
+    <div>
+      <h3>Final Reminder</h3>
+      <p>Always confirm a <strong>Relic Collector is in position</strong> before any building assault launches. Call it in the chat if you're filling the role. One missed relic drop after a hard-fought capture can cost the team thousands of points. <strong>Hold the Middle. Win as one.</strong> ✌️</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     QUICK REF VIEW
+══════════════════════════════════════ -->
+<div id="view-tips" class="view">
+<div class="content">
+
+  <div class="section-title">⚡ Quick Reference</div>
+  <p class="section-desc">The essentials at a glance — no fluff, just the key points.</p>
+
+  <div class="tips-grid">
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge gold"><span class="num">🏆</span></div>
+        <div class="tip-card-label">Top Priority<small>Always fight for these</small></div>
+      </div>
+      <div class="tip-icon">🏰</div>
+      <div class="tip-text"><strong>Sword Shrine (9,000 pts)</strong> — fight for this above all else.<br><strong>Sanctum NW &amp; SE (6,000 pts each)</strong> — never let both go uncontested.</div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge"><span class="num">💎</span></div>
+        <div class="tip-card-label">Relic Collector<small>Before every assault</small></div>
+      </div>
+      <div class="tip-icon">💎</div>
+      <div class="tip-text">Confirm a <strong>Relic Collector is standing by</strong> before any building attack. The relic dropped on occupation is a massive team boost — don't leave it on the ground.</div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge"><span class="num">1</span>Team</div>
+        <div class="tip-card-label">Team 1 — North<small>Bell Tower · Abbey NE · Mercenary</small></div>
+      </div>
+      <div class="tip-icon">🔵</div>
+      <div class="tip-text">Hold the Bell Tower for capture speed. Deny Mercenary from enemies to protect the Middle. Abbey NE is your primary capture target.</div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge"><span class="num">2</span>Team</div>
+        <div class="tip-card-label">Team 2 — West<small>Sanctum NW · Abbey W · Shrine</small></div>
+      </div>
+      <div class="tip-icon">🟢</div>
+      <div class="tip-text">Sanctum NW is your key objective. Push toward the Sword Shrine with allied teams. Abbey W is lowest priority — sacrifice it if needed.</div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge"><span class="num">3</span>Team</div>
+        <div class="tip-card-label">Team 3 — East<small>Abbey East · Sanctum SE</small></div>
+      </div>
+      <div class="tip-icon">🔴</div>
+      <div class="tip-text">Sanctum SE is your top priority. Take Abbey East to establish your eastern flank. Push inward to support the Shrine fight when possible.</div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge"><span class="num">4</span>Team</div>
+        <div class="tip-card-label">Team 4 — South<small>Abbey SW · Reformation · Stables</small></div>
+      </div>
+      <div class="tip-icon">🟡</div>
+      <div class="tip-text">Hold Reformation for the +15% Atk &amp; Def buff. Abbey SW and Stables are lowest priority — give them up to push northward if needed.</div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge"><span class="num">📋</span></div>
+        <div class="tip-card-label">3 Core Rules<small>Everyone follows these</small></div>
+      </div>
+      <div class="tip-icon">📋</div>
+      <div class="tip-text">① Show up if you registered. ② Don't go solo without good reason. ③ Always call and join rallies — hero widgets activate even if nobody joins.</div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge gold"><span class="num">🔥</span></div>
+        <div class="tip-card-label">Free-for-All<small>Pick your role</small></div>
+      </div>
+      <div class="tip-icon">🔥</div>
+      <div class="tip-text">Relic Collector · Solo Hunter · Abbey Flipper · Lone Defender · Bell Tower Keeper · Mercenary Denial · Rally Joiner · Heal &amp; Return.</div>
+    </div>
+
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-icon">⚔️</div>
+    <div><strong>Remember:</strong> There are no individual ranking rewards in Swordland. Don't burn your speedups to look like MVP — focus on <strong>team victory</strong>. Hold the Middle, collect the relics, win as one. ✌️</div>
+  </div>
+
+</div>
+</div>
+
+<script>
+  function switchView(name, btn) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
