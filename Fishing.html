@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fishing Event Guide — Eonics Alliance</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-900: #0d2b55;
+    --blue-700: #1a4a8a;
+    --blue-500: #2563c8;
+    --blue-300: #5b9bea;
+    --blue-100: #dbeafe;
+    --blue-50:  #eff6ff;
+    --white:    #ffffff;
+    --text-dark: #0f1f3d;
+    --text-mid:  #2d4a7a;
+    --text-soft: #5472a3;
+    --border:    #c3d9f7;
+    --gold:      #f5c842;
+    --gold-soft: #fef3c7;
+    --red:       #e84a5f;
+    --red-soft:  #ffe4e6;
+    --green:     #10b981;
+    --green-soft:#d1fae5;
+    --orange:    #f59e0b;
+    --orange-soft:#fff7ed;
+    --teal:      #0891b2;
+    --teal-soft: #cffafe;
+    --purple:    #7c3aed;
+    --purple-soft:#ede9fe;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+    background: var(--blue-50);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* ── SENSEI NORMAN ── */
+  .sensei {
+    position: fixed;
+    bottom: 18px; left: 18px;
+    z-index: 1000;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px;
+    animation: float 3.6s ease-in-out infinite;
+    filter: drop-shadow(0 3px 10px rgba(37,99,200,0.22));
+    cursor: default; user-select: none;
+  }
+  .sensei-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d2b55 100%);
+    border: 2.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 3px rgba(245,200,66,0.18), 0 0 16px rgba(100,100,255,0.2);
+    transition: transform 0.2s;
+    overflow: hidden;
+  }
+  .sensei-avatar:hover { transform: scale(1.12) rotate(-5deg); }
+  .sensei-avatar svg { width: 40px; height: 40px; }
+  .sensei-label {
+    font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--gold); text-transform: uppercase;
+    background: var(--blue-900); padding: 2px 6px;
+    border-radius: 99px; border: 1px solid rgba(245,200,66,0.35);
+    white-space: nowrap;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--blue-900);
+    padding: 0 32px;
+    display: flex; align-items: center;
+    height: 60px; gap: 8px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 16px rgba(13,43,85,0.3);
+  }
+  .nav-logo { font-weight: 700; font-size: 17px; color: var(--white); letter-spacing: -0.01em; margin-right: auto; }
+  .nav-logo span { color: var(--gold); }
+  .nav-tab {
+    padding: 8px 20px; border-radius: 8px;
+    font-weight: 500; font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer; transition: all 0.18s;
+    border: none; background: none;
+    text-decoration: none; font-family: 'Lexend', sans-serif;
+  }
+  .nav-tab:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-tab.active { color: var(--white); background: var(--blue-500); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #062040 0%, #0d3d6e 55%, #0e5c8a 100%);
+    color: var(--white); padding: 64px 32px 56px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(8,145,178,0.22) 0%, transparent 70%);
+  }
+  .hero-eyebrow {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); background: rgba(245,200,66,0.12);
+    border: 1px solid rgba(245,200,66,0.35);
+    padding: 4px 14px; border-radius: 99px; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 52px); font-weight: 700;
+    line-height: 1.08; letter-spacing: -0.02em;
+    margin-bottom: 16px; position: relative;
+  }
+  .hero h1 em { font-style: normal; color: #5dd8f0; }
+  .hero-sub {
+    font-size: 15px; font-weight: 500;
+    color: rgba(255,255,255,0.72);
+    max-width: 580px; margin: 0 auto 32px; line-height: 1.65; position: relative;
+  }
+  .hero-badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .badge {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px; padding: 10px 18px;
+    font-size: 13px; font-weight: 500; color: var(--white);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+  .content { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-size: 22px; font-weight: 700; color: var(--blue-900);
+    margin-bottom: 6px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after {
+    content: ''; flex: 1; height: 2px;
+    background: linear-gradient(90deg, var(--blue-300), transparent); border-radius: 2px;
+  }
+  .section-desc { font-size: 14px; color: var(--text-soft); font-weight: 500; margin-bottom: 24px; padding-left: 2px; }
+
+  /* ── MAIN CARD ── */
+  .day-block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(37,99,200,0.06);
+    transition: box-shadow 0.18s, transform 0.18s;
+  }
+  .day-block:hover { box-shadow: 0 6px 24px rgba(37,99,200,0.11); transform: translateY(-1px); }
+
+  .day-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; flex-wrap: wrap; gap: 10px;
+  }
+  .day-header-left { display: flex; align-items: center; gap: 14px; }
+  .day-dot {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--blue-900);
+    border: 3px solid var(--blue-500);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--white); font-weight: 700; font-size: 16px;
+    flex-shrink: 0; line-height: 1;
+  }
+  .day-dot.ocean { background: linear-gradient(135deg,#062040,#0e5c8a); border-color: #5dd8f0; }
+  .day-dot.battle { background: linear-gradient(135deg,#7b1a2e,#c0392b); border-color: #e84a5f; }
+  .day-dot.mermaid { background: linear-gradient(135deg,#4a1070,#7c3aed); border-color: #a78bfa; }
+  .day-title { font-size: 17px; font-weight: 700; color: var(--blue-900); }
+  .day-sub   { font-size: 13px; font-weight: 500; color: var(--text-soft); margin-top: 2px; }
+
+  /* copy btn */
+  .copy-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 8px;
+    background: var(--blue-50); border: 1px solid var(--border);
+    color: var(--text-soft); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s;
+    font-family: 'Lexend', sans-serif; white-space: nowrap;
+  }
+  .copy-btn:hover { background: var(--blue-100); color: var(--blue-700); border-color: var(--blue-300); }
+  .copy-btn.copied { background: var(--green-soft); color: #065f46; border-color: #6ee7b7; }
+  .copy-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── LIST SECTIONS ── */
+  .list-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .list-col { display: flex; flex-direction: column; gap: 6px; }
+  .list-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 6px; margin-bottom: 4px; display: inline-flex; align-items: center; gap: 5px;
+    align-self: flex-start;
+  }
+  .lbl-do     { background: var(--green-soft); color: #065f46; }
+  .lbl-avoid  { background: var(--red-soft);   color: #9f1239; }
+  .lbl-opt    { background: var(--gold-soft);  color: #78350f; }
+  .lbl-tip    { background: var(--teal-soft);  color: #164e63; }
+  .lbl-whale  { background: var(--purple-soft); color: #4c1d95; }
+
+  .list-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 13.5px; font-weight: 500; color: var(--text-mid);
+    line-height: 1.5; padding: 4px 0;
+  }
+  .list-item-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── PREP / TIP BOXES ── */
+  .prep-box {
+    background: var(--blue-50); border: 1px solid var(--blue-100);
+    border-radius: 10px; padding: 14px 16px; margin-top: 4px;
+  }
+  .prep-box-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--blue-500); margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
+  }
+  .prep-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 13px; font-weight: 500; color: var(--text-mid);
+    line-height: 1.55; padding: 3px 0;
+  }
+
+  .warning-box {
+    background: var(--orange-soft); border-left: 4px solid var(--orange);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 12px 0;
+    font-size: 13.5px; font-weight: 500; color: #78350f; line-height: 1.7;
+  }
+  .warning-box strong { color: #92400e; }
+
+  .highlight-box {
+    background: var(--teal-soft); border-left: 4px solid var(--teal);
+    border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 12px 0;
+    font-size: 13.5px; font-weight: 500; color: #164e63; line-height: 1.7;
+  }
+
+  /* ── PRP BOX ── */
+  .prp-banner {
+    background: linear-gradient(135deg, var(--blue-900), #0e5c8a);
+    border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;
+    color: var(--white);
+  }
+  .prp-banner h2 { font-size: 18px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+  .prp-banner p { font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,0.82); line-height: 1.65; margin-bottom: 16px; }
+  .prp-steps { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .prp-step {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px; padding: 14px 22px; text-align: center; flex: 1; min-width: 90px;
+  }
+  .prp-letter { font-size: 28px; font-weight: 700; color: #5dd8f0; line-height: 1; }
+  .prp-word { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .prp-arrow { font-size: 20px; color: rgba(255,255,255,0.4); flex-shrink: 0; }
+
+  /* ── DEPTH BAR ── */
+  .depth-section { margin: 16px 0; }
+  .depth-label-row { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--text-soft); margin-bottom: 6px; }
+  .depth-track { height: 28px; background: var(--blue-50); border: 1px solid var(--border); border-radius: 8px; display: flex; overflow: hidden; }
+  .depth-zone { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .dz-horn  { width: 16%; background: #fef3c7; color: #78350f; border-right: 1px solid var(--border); }
+  .dz-main  { flex: 1; background: #cffafe; color: #164e63; }
+  .dz-dead  { width: 9%; background: var(--red-soft); color: #9f1239; border-left: 1px solid var(--border); }
+
+  /* ── MERMAID GRID ── */
+  .mermaid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .mermaid-card {
+    background: var(--blue-50); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .mermaid-card.rare { background: var(--purple-soft); border-color: #c4b5fd; }
+  .mermaid-name { font-size: 14px; font-weight: 700; color: var(--blue-900); margin-bottom: 4px; }
+  .mermaid-card.rare .mermaid-name { color: var(--purple); }
+  .mermaid-detail { font-size: 12px; font-weight: 500; color: var(--text-soft); line-height: 1.55; }
+
+  /* ── TURRET TABLE ── */
+  .turret-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 12px 0; }
+  .turret-card {
+    background: var(--blue-50); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 10px; text-align: center;
+  }
+  .turret-card .t-num { font-size: 22px; font-weight: 700; color: var(--blue-900); }
+  .turret-card .t-label { font-size: 10px; color: var(--text-soft); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .turret-card .t-buff { font-size: 18px; font-weight: 700; color: var(--blue-500); }
+  .turret-card .t-desc { font-size: 11px; color: var(--text-soft); font-weight: 500; }
+
+  /* ── QUICK REF CARDS ── */
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 16px; margin-bottom: 32px; }
+  .tip-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 22px 20px;
+    box-shadow: 0 2px 8px rgba(37,99,200,0.05);
+    transition: box-shadow 0.18s, transform 0.18s;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .tip-card:hover { box-shadow: 0 6px 20px rgba(37,99,200,0.12); transform: translateY(-2px); }
+  .tip-card-top { display: flex; align-items: center; gap: 10px; }
+  .tip-badge {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--blue-900); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .tip-badge.gold   { background: var(--gold); }
+  .tip-badge.teal   { background: var(--teal); }
+  .tip-badge.purple { background: var(--purple); }
+  .tip-badge.red    { background: var(--red); }
+  .tip-card-label { font-size: 13px; font-weight: 700; color: var(--blue-700); }
+  .tip-card-label small { display: block; font-size: 11px; font-weight: 500; color: var(--text-soft); margin-top: 2px; }
+  .tip-text { font-size: 13.5px; font-weight: 500; color: var(--text-mid); line-height: 1.7; border-top: 1px solid var(--blue-50); padding-top: 10px; }
+
+  /* ── FINAL BANNER ── */
+  .final-reminder {
+    background: linear-gradient(135deg, #062040, #0e5c8a);
+    border-radius: 16px; padding: 28px 32px; color: var(--white);
+    margin-top: 32px; display: flex; gap: 20px; align-items: flex-start;
+    box-shadow: 0 8px 32px rgba(13,43,85,0.2);
+  }
+  .final-reminder-icon { font-size: 36px; flex-shrink: 0; }
+  .final-reminder h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--gold); }
+  .final-reminder p  { font-size: 14px; font-weight: 500; line-height: 1.7; color: rgba(255,255,255,0.85); }
+  .final-reminder strong { color: var(--white); }
+
+  .credit-line { font-size: 12px; font-weight: 500; color: var(--text-soft); margin-top: 20px; text-align: center; line-height: 1.8; }
+  .credit-line a { color: var(--blue-500); text-decoration: none; }
+
+  /* toast */
+  #toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(12px);
+    background: var(--blue-900); color: #fff;
+    padding: 10px 22px; border-radius: 99px;
+    font-size: 13px; font-weight: 600;
+    box-shadow: 0 4px 20px rgba(13,43,85,0.3);
+    opacity: 0; transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none; z-index: 999; white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media(max-width:640px){
+    .list-sections { grid-template-columns: 1fr; }
+    .turret-grid   { grid-template-columns: repeat(2,1fr); }
+    .mermaid-grid  { grid-template-columns: 1fr; }
+    nav { padding: 0 14px; }
+    .nav-tab { padding: 7px 10px; font-size: 12px; }
+    .prp-steps { flex-direction: column; align-items: stretch; }
+    .prp-arrow { transform: rotate(90deg); align-self: center; }
+    .final-reminder { flex-direction: column; gap: 10px; }
+    .sensei { bottom:12px; left:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toast">📋 Copied to clipboard!</div>
+
+<!-- SENSEI NORMAN -->
+<div class="sensei" title="Sensei Norman 🏴‍☠️">
+  <div class="sensei-avatar">
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8,40 Q8,33 14,31 Q17,30 20,30 Q23,30 26,31 Q32,33 32,40Z" fill="#2a3a6a"/>
+      <rect x="17.5" y="27" width="5" height="5" rx="1" fill="#f0c090"/>
+      <ellipse cx="20" cy="20" rx="9" ry="10" fill="#f5d0a0"/>
+      <ellipse cx="20" cy="11.5" rx="9" ry="5" fill="#eeeeee"/>
+      <ellipse cx="20" cy="10" rx="7.5" ry="3.5" fill="#f5f5f5"/>
+      <ellipse cx="11.5" cy="16" rx="2.5" ry="4" fill="#eeeeee"/>
+      <ellipse cx="28.5" cy="16" rx="2.5" ry="4" fill="#eeeeee"/>
+      <ellipse cx="11" cy="20" rx="2" ry="2.5" fill="#f0c090"/>
+      <ellipse cx="29" cy="20" rx="2" ry="2.5" fill="#f0c090"/>
+      <ellipse cx="16.5" cy="20.5" rx="2" ry="2.1" fill="white"/>
+      <ellipse cx="16.5" cy="20.7" rx="1.2" ry="1.3" fill="#4a6fa5"/>
+      <ellipse cx="16.5" cy="20.7" rx="0.6" ry="0.7" fill="#111"/>
+      <circle cx="17" cy="20.2" r="0.4" fill="white"/>
+      <ellipse cx="23.5" cy="20.5" rx="2" ry="2.1" fill="white"/>
+      <ellipse cx="23.5" cy="20.7" rx="1.2" ry="1.3" fill="#4a6fa5"/>
+      <ellipse cx="23.5" cy="20.7" rx="0.6" ry="0.7" fill="#111"/>
+      <circle cx="24" cy="20.2" r="0.4" fill="white"/>
+      <path d="M14.5,17.8 Q16.5,17 18.5,17.8" stroke="#cccccc" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M21.5,17.8 Q23.5,17 25.5,17.8" stroke="#cccccc" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M19.3,24 Q20,25 20.7,24" stroke="#d09060" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+      <path d="M17.5,27 Q20,29 22.5,27" stroke="#b87040" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="sensei-label">Sensei Norman 🏴‍☠️</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Fishing <span>Event</span></div>
+  <button class="nav-tab active" onclick="switchView('guide',this)">🎣 Guide</button>
+  <button class="nav-tab" onclick="switchView('prp',this)">🔁 P-R-P</button>
+  <button class="nav-tab" onclick="switchView('mermaids',this)">🧜 Mermaids</button>
+  <button class="nav-tab" onclick="switchView('quickref',this)">⚡ Quick Ref</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">🎣 Fishing Tournament · Eonics Alliance Guide</div>
+  <h1>Fishing <em>Event</em> — Full Guide</h1>
+  <p class="hero-sub">Maximize your score using the right tools, the P-R-P technique, and community-tested strategies for every type of player.</p>
+  <div class="hero-badges">
+    <div class="badge"><span>🐟</span> F2P Friendly</div>
+    <div class="badge"><span>🔁</span> P-R-P Technique</div>
+    <div class="badge"><span>🧜</span> Mermaid Hunting</div>
+    <div class="badge"><span>🏆</span> Leaderboard Tips</div>
+  </div>
+</div>
+
+
+<!-- ══ GUIDE VIEW ══ -->
+<div id="view-guide" class="view active">
+<div class="content">
+
+  <div class="section-title">🎯 Step-by-Step Flow</div>
+  <p class="section-desc">Follow this order every event. Using items wrong or in the wrong mode wastes your limited attempts.</p>
+
+  <!-- CARD 1 — Before you cast -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot ocean">1</div>
+        <div>
+          <div class="day-title">Before Your First Cast</div>
+          <div class="day-sub">Passes · Mail · Free Items</div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copySection('before',this)">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>
+        Copy for Members
+      </button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Do First</div>
+        <div class="list-item"><span class="list-item-icon">💳</span>Buy your Fishing Pass (Pro or Master) if spending — the score multiplier applies to ALL future catches. Buying late = lost points.</div>
+        <div class="list-item"><span class="list-item-icon">📬</span>Check your in-game mail for free items.</div>
+        <div class="list-item"><span class="list-item-icon">📦</span>Open all event chests — collect your Ocean Prospector Map, Reel, Ocean Scanner and Lantern before casting.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-avoid">❌ Don't</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Cast your first line without checking mail first — you'll waste the boosted first cast.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Buy passes mid-event — every previous catch missed the multiplier.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2 — Ocean Prospector -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot ocean">2</div>
+        <div>
+          <div class="day-title">🗺️ Use Your Ocean Prospector First</div>
+          <div class="day-sub">Your most powerful single cast</div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copySection('prospector',this)">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>
+        Copy for Members
+      </button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ What It Does</div>
+        <div class="list-item"><span class="list-item-icon">⭐</span>Temporarily maxes your Line, Hook and Sinker to Level 10 for that single cast — even if your gear is at Level 1.</div>
+        <div class="list-item"><span class="list-item-icon">💰</span>Gives you a massive points head-start to immediately upgrade your real gear.</div>
+        <div class="list-item"><span class="list-item-icon">📦</span>Only place to find rare chests and rare mermaids — not in regular fishing.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-tip">💡 Key Notes</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Horn of the Tides is WASTED in Ocean Prospector — save it for regular fishing only.</div>
+        <div class="list-item"><span class="list-item-icon">🏆</span>Use Treasure Charts here carefully — this is where Ocean Chests with rare main-game items appear.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3 — Upgrade Gear -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot"><span>⚙️</span></div>
+        <div>
+          <div class="day-title">Upgrade Your Gear — Right Order</div>
+          <div class="day-sub">Hook → Line → Sinker</div>
+        </div>
+      </div>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Priority Order</div>
+        <div class="list-item"><span class="list-item-icon">🪝</span><strong>Hook first</strong> — more fish per cast. More hooks = more points per run.</div>
+        <div class="list-item"><span class="list-item-icon">🧵</span><strong>Line second</strong> — reach deeper depth where rarer, higher-star fish live.</div>
+        <div class="list-item"><span class="list-item-icon">⚙️</span><strong>Sinker last</strong> — sets your starting depth. Least urgent upgrade early.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-tip">💡 Going Deep</div>
+        <div class="list-item"><span class="list-item-icon">↔️</span>While descending, hug the left or right edge of the screen to avoid snagging fish too early.</div>
+        <div class="list-item"><span class="list-item-icon">🎯</span>When you decide to catch — aim for the fish's <strong>head</strong> for best catch rate, especially on rare fish.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4 — Regular Fishing -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot"><span>🎣</span></div>
+        <div>
+          <div class="day-title">Regular Fishing — What to Grab</div>
+          <div class="day-sub">Points · Mermaids · Chests</div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copySection('fishing',this)">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>
+        Copy for Members
+      </button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Always Grab</div>
+        <div class="list-item"><span class="list-item-icon">✨</span><strong>All glowing fish</strong> — sparkling fish are always worth more. Prioritize 2-star and 3-star. Never skip them.</div>
+        <div class="list-item"><span class="list-item-icon">🧜</span><strong>Distressed mermaids</strong> (wrapped in seaweed) — rescue for a 5–10% score multiplier. Always take them.</div>
+        <div class="list-item"><span class="list-item-icon">🎺</span><strong>Horn of the Tides</strong> — use here only to summon specific rare fish or mermaids at target depths.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-avoid">❌ Skip / Leave</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>1-star common fish when 2-star fish are in range — don't fill your hook with junk early.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Healthy (unwrapped) mermaids — they give no benefit, don't waste hook space.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Bad cast? Hit <strong>pause → retreat</strong> and try again. See the P-R-P tab for full technique.</div>
+      </div>
+    </div>
+    <div class="warning-box">
+      <strong>⚠️ Fishing Voucher timing:</strong> Vouchers give a 1.5x bonus to both Fishing Tokens and Points. Use them at the <strong>very end of the event</strong> when your gear is fully maxed — using them early on weak gear is one of the most common mistakes.
+    </div>
+  </div>
+
+  <div class="final-reminder">
+    <div class="final-reminder-icon">🎣</div>
+    <div>
+      <h3>The Golden Rule</h3>
+      <p>Ocean Prospector first for the gear boost. Horn of Tides in regular fishing only — never in Prospector. Grab every glowing fish and distressed mermaid. Use your Fishing Voucher last when gear is maxed. And if a cast goes wrong — P-R-P. <strong>Patience wins the leaderboard.</strong> ✌️</p>
+    </div>
+  </div>
+
+  <div class="credit-line">
+    via <a href="https://www.youtube.com/watch?v=UB8cF_n5EDg" target="_blank">Kingshot Channel</a> · Community experiments · <a href="https://www.kingshotguide.org/guide/fishing-event-kingshot" target="_blank">KingshotGuide.org</a>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ P-R-P VIEW ══ -->
+<div id="view-prp" class="view">
+<div class="content">
+
+  <div class="section-title">🔁 The P-R-P Technique</div>
+  <p class="section-desc">Community-discovered method for resetting bad casts without wasting your attempts or consumables.</p>
+
+  <div class="prp-banner">
+    <h2>Pause → Retreat → Play Again</h2>
+    <p>Originally spotted in YouTube Shorts. Hit pause mid-cast, retreat, and try again — your attempt and all pre-cast consumables are saved. This is the key to efficient mermaid hunting and score maximizing.</p>
+    <div class="prp-steps">
+      <div class="prp-step">
+        <div class="prp-letter">P</div>
+        <div class="prp-word">Pause</div>
+      </div>
+      <div class="prp-arrow">→</div>
+      <div class="prp-step">
+        <div class="prp-letter">R</div>
+        <div class="prp-word">Retreat</div>
+      </div>
+      <div class="prp-arrow">→</div>
+      <div class="prp-step">
+        <div class="prp-letter">P</div>
+        <div class="prp-word">Play Again</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot ocean">✅</div>
+        <div>
+          <div class="day-title">What P-R-P Saves</div>
+          <div class="day-sub">These resources are preserved when you retreat</div>
+        </div>
+      </div>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Saved by P-R-P</div>
+        <div class="list-item"><span class="list-item-icon">🎯</span>Your normal cast attempt</div>
+        <div class="list-item"><span class="list-item-icon">🗺️</span>Your Ocean Prospector charge</div>
+        <div class="list-item"><span class="list-item-icon">🎺</span>Horn of Tides used before starting — and it CARRIES OVER to the next try</div>
+        <div class="list-item"><span class="list-item-icon">🔦</span>Reel, Ocean Scanner and Lantern</div>
+        <div class="list-item"><span class="list-item-icon">📦</span>Treasure item layouts — they refresh every P-R-P, helping you find items you're missing</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-avoid">⚠️ What P-R-P Can't Do</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>You <strong>cannot</strong> change or swap consumables after starting — plan your Horn, Reel, Scanner before your first cast.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>You <strong>must</strong> finish or commit to the current challenge before modifying anything again.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot ocean">🏆</div>
+        <div>
+          <div class="day-title">How to Use P-R-P for Score</div>
+          <div class="day-sub">Maximizing one bait for leaderboard runs</div>
+        </div>
+      </div>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ The Strategy</div>
+        <div class="list-item"><span class="list-item-icon">🎺</span>Use Horn of Tides before casting to summon a rare target fish.</div>
+        <div class="list-item"><span class="list-item-icon">🔁</span>P-R-P until the fish layout shows your rare target in a catchable position.</div>
+        <div class="list-item"><span class="list-item-icon">🎯</span>Commit to the cast only when conditions are perfect.</div>
+        <div class="list-item"><span class="list-item-icon">🎟️</span>Use Fishing Voucher on your final committed cast for 1.5x multiplier.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-whale">🐋 Whale Stack</div>
+        <div class="list-item"><span class="list-item-icon">🥈</span>Silver score booster active</div>
+        <div class="list-item"><span class="list-item-icon">🥇</span>Gold score booster active</div>
+        <div class="list-item"><span class="list-item-icon">🎺</span>Horn at 100m depth (see Mermaids tab)</div>
+        <div class="list-item"><span class="list-item-icon">🔁</span>P-R-P until rare fish layout appears</div>
+        <div class="list-item"><span class="list-item-icon">🎟️</span>Voucher on the commit cast</div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      💡 <strong>Horn carryover trick:</strong> If you activated Horn of Tides before starting and P-R-P, the Horn's summoned fish will still appear on your next attempt — as long as you haven't finished and closed the current fishing session. This lets you P-R-P for the best possible layout without wasting another Horn.
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══ MERMAIDS VIEW ══ -->
+<div id="view-mermaids" class="view">
+<div class="content">
+
+  <div class="section-title">🧜 Mermaid Hunting Guide</div>
+  <p class="section-desc">Personal experiments by Sensei Norman — tested over 3 fishing events. The 100m trick is how Princess Nairo was finally caught.</p>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot mermaid">🧜</div>
+        <div>
+          <div class="day-title">The Depth Theory — Tested</div>
+          <div class="day-sub">What 2 days of P-R-P experiments revealed</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:14px;font-weight:500;color:var(--text-mid);line-height:1.7;margin-bottom:16px;">
+      Summoning a fish using Horn of Tides at a specific depth appears to <strong>suppress mermaid spawns at that same depth</strong>. Mermaids get pushed to appear at other depths instead. This behaviour was observed repeatedly over 2 days of controlled P-R-P testing.
+    </p>
+
+    <div class="depth-section">
+      <div class="depth-label-row"><span>0m (surface)</span><span>550m (max depth — no mermaids ever)</span></div>
+      <div class="depth-track">
+        <div class="depth-zone dz-horn">🎺 Horn at 100m</div>
+        <div class="depth-zone dz-main">✅ 200–500m — mermaids spawn freely here</div>
+        <div class="depth-zone dz-dead">❌ 550m</div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:14px;">
+      🎯 <strong>The 100m trick:</strong> Summon any fish using Horn of Tides at 100m depth only. This suppresses mermaids near 100m and pushes them to spawn at 200–500m — exactly where rare mermaids like Princess Nairo live. Use P-R-P to keep retrying until she appears.
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot mermaid">📖</div>
+        <div>
+          <div class="day-title">Known Mermaids</div>
+          <div class="day-sub">Depth ranges and rarity from community data</div>
+        </div>
+      </div>
+    </div>
+    <div class="mermaid-grid">
+      <div class="mermaid-card">
+        <div class="mermaid-name">🧜 Mermaid Ivy</div>
+        <div class="mermaid-detail">Violet-haired · Unwrapped<br>Depth: ~200m · Most common unwrapped<br>Appears frequently with P-R-P method</div>
+      </div>
+      <div class="mermaid-card">
+        <div class="mermaid-name">🧜 Princess Bernice</div>
+        <div class="mermaid-detail">Pale/flesh-haired · Unwrapped<br>Depth: 350m — but also seen 350–500m<br>Appears beyond listed depth regularly</div>
+      </div>
+      <div class="mermaid-card rare">
+        <div class="mermaid-name">🧜 Princess Nairo ⭐ RAREST</div>
+        <div class="mermaid-detail">Red-haired · Unwrapped<br>Depth: 350m · Autumn, Winter & Summer only<br>Considered rarest mermaid — caught via 100m trick after 2 days of P-R-P</div>
+      </div>
+      <div class="mermaid-card">
+        <div class="mermaid-name">🌿 Distressed Mermaids</div>
+        <div class="mermaid-detail">Wrapped in seaweed · Any depth<br>Give a <strong>5–10% score multiplier</strong> when rescued<br>Always prioritize grabbing these</div>
+      </div>
+    </div>
+    <div class="warning-box" style="margin-top:12px;">
+      <strong>⚠️ Note on depth ranges:</strong> Some mermaids appear outside their listed depth even without the horn trick — except at 550m, where none have ever been observed. Don't be surprised if mermaids pop up between their listed depth and 500m.
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot mermaid">🎯</div>
+        <div>
+          <div class="day-title">Full Mermaid Hunting Strategy</div>
+          <div class="day-sub">How Norman completed the full collection</div>
+        </div>
+      </div>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ The Method</div>
+        <div class="list-item"><span class="list-item-icon">1️⃣</span>Set Horn of Tides to summon any fish at <strong>100m depth only</strong>.</div>
+        <div class="list-item"><span class="list-item-icon">2️⃣</span>Start the cast — if the target mermaid doesn't appear, <strong>P-R-P immediately</strong>.</div>
+        <div class="list-item"><span class="list-item-icon">3️⃣</span>Repeat. The Horn effect carries over with P-R-P so you don't waste one per attempt.</div>
+        <div class="list-item"><span class="list-item-icon">4️⃣</span>When the rare mermaid appears in a good depth position — <strong>commit and go deep</strong>.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-opt">⏳ Patience Required</div>
+        <div class="list-item"><span class="list-item-icon">📅</span>Princess Nairo took 2 full days of P-R-P attempts to appear.</div>
+        <div class="list-item"><span class="list-item-icon">🎲</span>Sometimes no mermaid appears even with the method — RNG is still a factor.</div>
+        <div class="list-item"><span class="list-item-icon">✅</span>It took 3 full fishing events to complete the entire mermaid collection. Don't panic if it takes time.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══ QUICK REF VIEW ══ -->
+<div id="view-quickref" class="view">
+<div class="content">
+  <div class="section-title">⚡ Quick Reference</div>
+  <p class="section-desc">The key rules at a glance. Paste the one you need into alliance chat.</p>
+
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge">🗺️</div>
+        <div class="tip-card-label">Ocean Prospector First<small>Your strongest cast</small></div>
+      </div>
+      <div class="tip-text">Always use your Ocean Prospector Map on your very first cast. It maxes Line, Hook and Sinker to Level 10 temporarily. Use the massive points gain to immediately upgrade your real gear.<br><br>❌ Never use Horn of Tides in Prospector — it's wasted.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge teal">⚙️</div>
+        <div class="tip-card-label">Gear Priority<small>Hook → Line → Sinker</small></div>
+      </div>
+      <div class="tip-text">Upgrade <strong>Hook first</strong> (more fish), <strong>Line second</strong> (more depth), <strong>Sinker last</strong> (starting depth). Hug the screen edge going down to reach max depth before snagging anything.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge">✨</div>
+        <div class="tip-card-label">Grab Glowing Fish<small>Always</small></div>
+      </div>
+      <div class="tip-text">Sparkling/glowing fish are always worth more. Prioritize 2-star and 3-star fish. Never skip a glowing fish on your way up — they are your main source of points in regular fishing.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge purple">🧜</div>
+        <div class="tip-card-label">Distressed Mermaids<small>5–10% score multiplier</small></div>
+      </div>
+      <div class="tip-text">Rescue mermaids wrapped in seaweed — they give a 5–10% score multiplier. Leave healthy unwrapped mermaids alone, they give no benefit. Rare mermaids and chests only appear in Ocean Prospector.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge teal">🔁</div>
+        <div class="tip-card-label">P-R-P Technique<small>Pause → Retreat → Play Again</small></div>
+      </div>
+      <div class="tip-text">Bad cast? Pause (top right) → Retreat. Your attempt and consumables are saved. Horn of Tides effect carries over to next try. Use P-R-P to refresh treasure item layouts or hunt rare mermaids.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge">🎺</div>
+        <div class="tip-card-label">Horn of the Tides<small>Regular fishing only</small></div>
+      </div>
+      <div class="tip-text">Only use in regular fishing — never in Ocean Prospector. For mermaid hunting: summon fish at <strong>100m depth</strong> to push rare mermaids to spawn at 200–500m depth instead.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge gold">🎟️</div>
+        <div class="tip-card-label">Fishing Voucher<small>Use it last</small></div>
+      </div>
+      <div class="tip-text">Vouchers give 1.5x bonus to Fishing Tokens AND Points. Use them at the <strong>very end of the event</strong> when your gear is fully maxed. Using early wastes the multiplier on weak gear.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top">
+        <div class="tip-badge red">🏆</div>
+        <div class="tip-card-label">Whale Leaderboard Stack<small>Full score combo</small></div>
+      </div>
+      <div class="tip-text">Silver booster + Gold booster → Horn at 100m → P-R-P until rare fish layout → commit cast → Fishing Voucher. Always buy your pass on Day 1 — the multiplier applies to all future catches.</div>
+    </div>
+  </div>
+
+  <div class="final-reminder">
+    <div class="final-reminder-icon">🏴‍☠️</div>
+    <div>
+      <h3>Sensei Norman's Final Word</h3>
+      <p>Took me <strong>3 fishing events</strong> to complete the full mermaid collection. My first event I didn't even know what the rewards were 😂 Don't rush, learn the P-R-P method, and use the 100m Horn trick for rare mermaids. Patience always wins. Good luck out there Governors. ✌️</p>
+    </div>
+  </div>
+
+  <div class="credit-line">
+    via <a href="https://www.youtube.com/watch?v=UB8cF_n5EDg" target="_blank">Kingshot Channel</a> · Community experiments · <a href="https://www.kingshotguide.org/guide/fishing-event-kingshot" target="_blank">KingshotGuide.org</a>
+  </div>
+</div>
+</div>
+
+<script>
+const sectionData = {
+  before: `🎣 Fishing Event — Before Your First Cast\n\n✅ Do First:\n• Buy your Fishing Pass (Pro or Master) if spending — the score multiplier applies to ALL future catches. Buying late = lost points\n• Check your in-game mail for free items\n• Open all event chests — collect your Ocean Prospector Map, Reel, Ocean Scanner and Lantern before casting\n\n❌ Don't:\n• Cast without checking mail first — you'll waste the boosted first cast\n• Buy passes mid-event — every previous catch missed the multiplier`,
+
+  prospector: `🗺️ Ocean Prospector — Use This First!\n\nActivating the Ocean Prospector Map temporarily maxes your Line, Hook and Sinker to Level 10 for that single cast — even if your gear is at Level 1.\n\n✅ Benefits:\n• Massive points head-start to upgrade your real gear immediately\n• Only place to find rare chests and rare mermaids\n\n⚠️ Key Rule:\n• Horn of the Tides is WASTED in Ocean Prospector — save it for regular fishing only`,
+
+  fishing: `🎣 Regular Fishing Tips\n\n✅ Always Grab:\n• All glowing/sparkling fish — they're always worth more (prioritize 2-star and 3-star)\n• Distressed mermaids (wrapped in seaweed) — rescue for 5–10% score multiplier\n• Horn of the Tides — use in regular fishing only to summon rare fish at target depths\n\n❌ Skip:\n• 1-star common fish when 2-star fish are in range\n• Healthy (unwrapped) mermaids — no benefit\n\n⚠️ Fishing Voucher = use at the END when gear is fully maxed (1.5x bonus to tokens and points)\n\n🔁 Bad cast? Pause → Retreat → Play Again (P-R-P technique — saves your attempt!)`
+};
+
+function copySection(key, btn) {
+  navigator.clipboard.writeText(sectionData[key]).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+    showToast();
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg> Copy for Members`;
+    }, 2500);
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function switchView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
