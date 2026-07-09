@@ -1,0 +1,684 @@
+cat > /mnt/user-data/outputs/tri-alliance-clash-guide.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tri-Alliance Clash Guide — Eonics</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue-900: #0d2b55; --blue-700: #1a4a8a; --blue-500: #2563c8;
+    --blue-300: #5b9bea; --blue-100: #dbeafe; --blue-50: #eff6ff;
+    --white: #ffffff; --text-dark: #0f1f3d; --text-mid: #2d4a7a; --text-soft: #5472a3;
+    --border: #c3d9f7; --gold: #f5c842; --gold-soft: #fef3c7;
+    --red: #e84a5f; --red-soft: #ffe4e6; --green: #10b981; --green-soft: #d1fae5;
+    --orange: #f59e0b; --orange-soft: #fff7ed; --teal: #0891b2; --teal-soft: #cffafe;
+    --purple: #7c3aed; --purple-soft: #ede9fe;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lexend', sans-serif; font-weight: 400; background: var(--blue-50); color: var(--text-dark); min-height: 100vh; }
+
+  /* SENSEI */
+  .sensei { position: fixed; bottom: 18px; left: 18px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 3px; animation: float 3.6s ease-in-out infinite; filter: drop-shadow(0 3px 10px rgba(37,99,200,0.22)); cursor: default; user-select: none; }
+  .sensei-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg,#0a0a1a,#1a1a3e,#0d2b55); border: 2.5px solid var(--gold); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px rgba(245,200,66,0.18), 0 0 16px rgba(100,100,255,0.2); transition: transform 0.2s; overflow: hidden; }
+  .sensei-avatar:hover { transform: scale(1.12) rotate(-5deg); }
+  .sensei-avatar svg { width: 40px; height: 40px; }
+  .sensei-label { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; color: var(--gold); text-transform: uppercase; background: var(--blue-900); padding: 2px 6px; border-radius: 99px; border: 1px solid rgba(245,200,66,0.35); white-space: nowrap; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+  /* NAV */
+  nav { background: var(--blue-900); padding: 0 32px; display: flex; align-items: center; height: 60px; gap: 8px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(13,43,85,0.3); }
+  .nav-logo { font-weight: 700; font-size: 17px; color: var(--white); letter-spacing: -0.01em; margin-right: auto; }
+  .nav-logo span { color: var(--gold); }
+  .nav-tab { padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.18s; border: none; background: none; font-family: 'Lexend', sans-serif; }
+  .nav-tab:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-tab.active { color: var(--white); background: var(--blue-500); }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg,#1a0535,#2d1060,#1a4a8a); color: var(--white); padding: 64px 32px 56px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 120%, rgba(124,58,237,0.2) 0%, transparent 70%); }
+  .hero-eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); background: rgba(245,200,66,0.12); border: 1px solid rgba(245,200,66,0.35); padding: 4px 14px; border-radius: 99px; margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(26px,5vw,50px); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 16px; position: relative; }
+  .hero h1 em { font-style: normal; color: #c4b5fd; }
+  .hero-sub { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.72); max-width: 560px; margin: 0 auto 32px; line-height: 1.65; position: relative; }
+  .hero-badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 18px; font-size: 13px; font-weight: 500; color: var(--white); display: flex; align-items: center; gap: 8px; }
+
+  /* VIEWS */
+  .view { display: none; }
+  .view.active { display: block; }
+  .content { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 22px; font-weight: 700; color: var(--blue-900); margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+  .section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg,var(--blue-300),transparent); border-radius: 2px; }
+  .section-desc { font-size: 14px; color: var(--text-soft); font-weight: 500; margin-bottom: 24px; }
+
+  /* CARDS */
+  .day-block { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 24px 26px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(37,99,200,0.06); transition: box-shadow 0.18s, transform 0.18s; }
+  .day-block:hover { box-shadow: 0 6px 24px rgba(37,99,200,0.11); transform: translateY(-1px); }
+  .day-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+  .day-header-left { display: flex; align-items: center; gap: 14px; }
+  .day-dot { width: 52px; height: 52px; border-radius: 50%; background: var(--blue-900); border: 3px solid var(--blue-500); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--white); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.2; flex-shrink: 0; }
+  .day-dot .dn { font-size: 18px; line-height: 1; }
+  .day-dot.phase1 { background: linear-gradient(135deg,#065f46,#059669); border-color: #34d399; }
+  .day-dot.phase2 { background: linear-gradient(135deg,#1e3a8a,#2563eb); border-color: #60a5fa; }
+  .day-dot.phase3 { background: linear-gradient(135deg,#78350f,#d97706); border-color: #fcd34d; }
+  .day-dot.phase4 { background: linear-gradient(135deg,#7b1a2e,#c0392b); border-color: #e84a5f; }
+  .day-dot.purple { background: linear-gradient(135deg,#4c1d95,#7c3aed); border-color: #a78bfa; }
+  .day-dot.emoji { font-size: 22px; }
+  .day-title { font-size: 17px; font-weight: 700; color: var(--blue-900); }
+  .day-sub { font-size: 13px; font-weight: 500; color: var(--text-soft); margin-top: 2px; }
+
+  /* COPY BTN */
+  .copy-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; background: var(--blue-50); border: 1px solid var(--border); color: var(--text-soft); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.18s; font-family: 'Lexend', sans-serif; white-space: nowrap; }
+  .copy-btn:hover { background: var(--blue-100); color: var(--blue-700); border-color: var(--blue-300); }
+  .copy-btn.copied { background: var(--green-soft); color: #065f46; border-color: #6ee7b7; }
+  .copy-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* LIST SECTIONS */
+  .list-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .list-col { display: flex; flex-direction: column; gap: 6px; }
+  .list-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; margin-bottom: 4px; display: inline-flex; align-items: center; gap: 5px; align-self: flex-start; }
+  .lbl-do { background: var(--green-soft); color: #065f46; }
+  .lbl-avoid { background: var(--red-soft); color: #9f1239; }
+  .lbl-opt { background: var(--gold-soft); color: #78350f; }
+  .lbl-tip { background: var(--teal-soft); color: #164e63; }
+  .lbl-danger { background: var(--red-soft); color: #9f1239; }
+  .lbl-role { background: var(--purple-soft); color: #4c1d95; }
+  .list-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; font-weight: 500; color: var(--text-mid); line-height: 1.55; padding: 4px 0; }
+  .list-item-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* BOXES */
+  .prep-box { background: var(--blue-50); border: 1px solid var(--blue-100); border-radius: 10px; padding: 14px 16px; margin-top: 10px; }
+  .prep-box-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue-500); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+  .prep-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text-mid); line-height: 1.55; padding: 3px 0; }
+  .warning-box { background: var(--orange-soft); border-left: 4px solid var(--orange); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 12px 0; font-size: 13.5px; font-weight: 500; color: #78350f; line-height: 1.7; }
+  .warning-box strong { color: #92400e; }
+  .highlight-box { background: var(--teal-soft); border-left: 4px solid var(--teal); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 12px 0; font-size: 13.5px; font-weight: 500; color: #164e63; line-height: 1.7; }
+  .highlight-box strong { color: #0e7490; }
+  .danger-box { background: var(--red-soft); border-left: 4px solid var(--red); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 12px 0; font-size: 13.5px; font-weight: 500; color: #9f1239; line-height: 1.7; }
+  .gold-box { background: var(--gold-soft); border-left: 4px solid var(--gold); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 12px 0; font-size: 13.5px; font-weight: 500; color: #78350f; line-height: 1.7; }
+  .gold-box strong { color: #92400e; }
+
+  /* PHASE TIMELINE */
+  .timeline { display: flex; gap: 0; margin: 16px 0 20px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .tl-phase { flex: 1; padding: 14px 10px; text-align: center; }
+  .tl-phase.p1 { background: #ecfdf5; }
+  .tl-phase.p2 { background: #eff6ff; }
+  .tl-phase.p3 { background: #fffbeb; }
+  .tl-phase.p4 { background: #fff1f2; }
+  .tl-time { font-size: 11px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .tl-name { font-size: 12px; font-weight: 700; color: var(--text-dark); }
+  .tl-dur  { font-size: 11px; font-weight: 500; color: var(--text-soft); margin-top: 2px; }
+  .tl-sep { width: 1px; background: var(--border); flex-shrink: 0; }
+
+  /* POINTS TABLE */
+  .points-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  .points-table th { background: var(--blue-900); color: var(--white); padding: 10px 14px; font-weight: 600; text-align: left; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .points-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-mid); font-weight: 500; }
+  .points-table tr:last-child td { border-bottom: none; }
+  .points-table tr:nth-child(even) td { background: var(--blue-50); }
+  .pts-high { color: var(--red); font-weight: 700; }
+  .pts-med  { color: var(--orange); font-weight: 700; }
+  .pts-low  { color: var(--text-soft); font-weight: 600; }
+
+  /* ROLE CARDS */
+  .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .role-card { background: var(--blue-50); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .role-card.main  { background: #fff1f2; border-color: #fecdd3; }
+  .role-card.supp  { background: #ecfdf5; border-color: #a7f3d0; }
+  .role-card.react { background: #fffbeb; border-color: #fde68a; }
+  .role-card.spec  { background: var(--purple-soft); border-color: #c4b5fd; }
+  .role-name { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+  .role-card.main  .role-name { color: #9f1239; }
+  .role-card.supp  .role-name { color: #065f46; }
+  .role-card.react .role-name { color: #78350f; }
+  .role-card.spec  .role-name { color: #4c1d95; }
+  .role-desc { font-size: 12px; font-weight: 500; color: var(--text-mid); line-height: 1.6; }
+
+  /* QUICK REF GRID */
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 16px; margin-bottom: 32px; }
+  .tip-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 22px 22px 20px; box-shadow: 0 2px 8px rgba(37,99,200,0.05); transition: box-shadow 0.18s, transform 0.18s; display: flex; flex-direction: column; gap: 10px; }
+  .tip-card:hover { box-shadow: 0 6px 20px rgba(37,99,200,0.12); transform: translateY(-2px); }
+  .tip-card-top { display: flex; align-items: center; gap: 10px; }
+  .tip-badge { width: 42px; height: 42px; border-radius: 10px; background: var(--blue-900); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .tip-badge.gold   { background: var(--gold); }
+  .tip-badge.red    { background: var(--red); }
+  .tip-badge.purple { background: var(--purple); }
+  .tip-badge.green  { background: var(--green); }
+  .tip-card-label { font-size: 13px; font-weight: 700; color: var(--blue-700); }
+  .tip-card-label small { display: block; font-size: 11px; font-weight: 500; color: var(--text-soft); margin-top: 2px; }
+  .tip-text { font-size: 13.5px; font-weight: 500; color: var(--text-mid); line-height: 1.7; border-top: 1px solid var(--blue-50); padding-top: 10px; }
+
+  /* FINAL BANNER */
+  .final-reminder { background: linear-gradient(135deg,#1a0535,#2d1060,#1a4a8a); border-radius: 16px; padding: 28px 32px; color: var(--white); margin-top: 32px; display: flex; gap: 20px; align-items: flex-start; box-shadow: 0 8px 32px rgba(13,43,85,0.2); }
+  .final-reminder-icon { font-size: 36px; flex-shrink: 0; }
+  .final-reminder h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--gold); }
+  .final-reminder p { font-size: 14px; font-weight: 500; line-height: 1.7; color: rgba(255,255,255,0.85); }
+  .final-reminder strong { color: var(--white); }
+
+  .credit-line { font-size: 12px; font-weight: 500; color: var(--text-soft); margin-top: 20px; text-align: center; line-height: 1.8; }
+  .credit-line a { color: var(--blue-500); text-decoration: none; }
+
+  /* TOAST */
+  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--blue-900); color: #fff; padding: 10px 22px; border-radius: 99px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(13,43,85,0.3); opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media(max-width:640px) {
+    .list-sections,.role-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 10px; }
+    .nav-tab { padding: 6px 9px; font-size: 11px; }
+    .timeline { flex-direction: column; }
+    .tl-sep { width: 100%; height: 1px; }
+    .final-reminder { flex-direction: column; gap: 10px; }
+    .sensei { bottom:12px; left:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toast">📋 Copied to clipboard!</div>
+
+<!-- SENSEI NORMAN -->
+<div class="sensei" title="Sensei Norman 🏴‍☠️">
+  <div class="sensei-avatar">
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8,40 Q8,33 14,31 Q17,30 20,30 Q23,30 26,31 Q32,33 32,40Z" fill="#2a3a6a"/>
+      <rect x="17.5" y="27" width="5" height="5" rx="1" fill="#f0c090"/>
+      <ellipse cx="20" cy="20" rx="9" ry="10" fill="#f5d0a0"/>
+      <ellipse cx="20" cy="11.5" rx="9" ry="5" fill="#eeeeee"/>
+      <ellipse cx="20" cy="10" rx="7.5" ry="3.5" fill="#f5f5f5"/>
+      <ellipse cx="11.5" cy="16" rx="2.5" ry="4" fill="#eeeeee"/>
+      <ellipse cx="28.5" cy="16" rx="2.5" ry="4" fill="#eeeeee"/>
+      <ellipse cx="11" cy="20" rx="2" ry="2.5" fill="#f0c090"/>
+      <ellipse cx="29" cy="20" rx="2" ry="2.5" fill="#f0c090"/>
+      <ellipse cx="16.5" cy="20.5" rx="2" ry="2.1" fill="white"/>
+      <ellipse cx="16.5" cy="20.7" rx="1.2" ry="1.3" fill="#4a6fa5"/>
+      <ellipse cx="16.5" cy="20.7" rx="0.6" ry="0.7" fill="#111"/>
+      <circle cx="17" cy="20.2" r="0.4" fill="white"/>
+      <ellipse cx="23.5" cy="20.5" rx="2" ry="2.1" fill="white"/>
+      <ellipse cx="23.5" cy="20.7" rx="1.2" ry="1.3" fill="#4a6fa5"/>
+      <ellipse cx="23.5" cy="20.7" rx="0.6" ry="0.7" fill="#111"/>
+      <circle cx="24" cy="20.2" r="0.4" fill="white"/>
+      <path d="M14.5,17.8 Q16.5,17 18.5,17.8" stroke="#cccccc" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M21.5,17.8 Q23.5,17 25.5,17.8" stroke="#cccccc" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M19.3,24 Q20,25 20.7,24" stroke="#d09060" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+      <path d="M17.5,27 Q20,29 22.5,27" stroke="#b87040" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="sensei-label">Sensei Norman 🏴‍☠️</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Tri-Alliance <span>Clash</span></div>
+  <button class="nav-tab active" onclick="switchView('guide',this)">📖 Guide</button>
+  <button class="nav-tab" onclick="switchView('phases',this)">⏱️ Phases</button>
+  <button class="nav-tab" onclick="switchView('roles',this)">🎯 Roles</button>
+  <button class="nav-tab" onclick="switchView('quickref',this)">⚡ Quick Ref</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">⚔️ Monthly Event · 3-Alliance · 60-Minute Battle</div>
+  <h1>Tri-Alliance <em>Clash</em></h1>
+  <p class="hero-sub">Points win this event — not kills. The alliance that controls buildings, protects routes, and arrives at the Temple phase together almost always beats the one that spent the hour chasing fights.</p>
+  <div class="hero-badges">
+    <div class="badge"><span>🏰</span> Building Control</div>
+    <div class="badge"><span>⏱️</span> 4 Battle Phases</div>
+    <div class="badge"><span>🛡️</span> Role Discipline</div>
+    <div class="badge"><span>⛩️</span> Temple of Tides</div>
+  </div>
+</div>
+
+
+<!-- ══ GUIDE VIEW ══ -->
+<div id="view-guide" class="view active">
+<div class="content">
+
+  <div class="section-title">📋 Before the Battle</div>
+  <p class="section-desc">Everything that matters most happens before the map even opens. Get this right and the battle is already half won.</p>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase1"><span class="dn">✅</span></div>
+        <div>
+          <div class="day-title">Registration & Week Schedule</div>
+          <div class="day-sub">Monday → Saturday</div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copySection('prereq',this)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>Copy for Members</button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">📅 Weekly Flow</div>
+        <div class="list-item"><span class="list-item-icon">🗳️</span><strong>Mon–Tue:</strong> Voting period</div>
+        <div class="list-item"><span class="list-item-icon">📝</span><strong>Wed–Thu:</strong> Sign-up window</div>
+        <div class="list-item"><span class="list-item-icon">🔀</span><strong>Friday:</strong> Matchmaking</div>
+        <div class="list-item"><span class="list-item-icon">⚔️</span><strong>Saturday:</strong> Battle — chosen time slot</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-avoid">⚠️ Requirements</div>
+        <div class="list-item"><span class="list-item-icon">🏰</span>Town Center Level 16+ to participate</div>
+        <div class="list-item"><span class="list-item-icon">📊</span>Alliance must be Top 20 in kingdom power</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>No 5+ consecutive days of inactivity</div>
+        <div class="list-item"><span class="list-item-icon">👥</span>Min 15 members per legion to qualify for matchmaking</div>
+      </div>
+    </div>
+    <div class="warning-box">
+      <strong>⚠️ Only register members who will actually show up.</strong> Inactive sign-ups hurt matchmaking and leave you short-handed during the battle. R4s especially must be present — they assign Captains to captured buildings, and Captains regenerate energy far faster than normal players.
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase1"><span class="dn">⚔️</span></div>
+        <div>
+          <div class="day-title">Hero & Formation Setup</div>
+          <div class="day-sub">Do this before you enter — not during prep phase</div>
+        </div>
+      </div>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Best Practice</div>
+        <div class="list-item"><span class="list-item-icon">⏳</span><strong>Don't set your formation until just before you start.</strong> Activate your buffs first, then set formations so the buffs are locked in.</div>
+        <div class="list-item"><span class="list-item-icon">⚔️</span>Set one strong <strong>attack formation</strong>, one strong <strong>defence formation</strong>, and fill the third with your next best troops.</div>
+        <div class="list-item"><span class="list-item-icon">🦸</span>Use your best heroes generally. Expedition skills are active — avoid Diana and blue heroes if you have comparable alternatives, but don't sacrifice raw power over it.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-tip">💡 Why It Matters</div>
+        <div class="list-item"><span class="list-item-icon">⚡</span>Things happen fast. You'll need to react without waiting for teammates, so all three formations must be ready before you enter.</div>
+        <div class="list-item"><span class="list-item-icon">🔵</span>Each player can field <strong>3 squads</strong> — 9 heroes total. Don't leave squads half-built.</div>
+        <div class="list-item"><span class="list-item-icon">💎</span>Gems can reduce march time (10s → 5s). Save this for <strong>Temple phase only</strong> — wasteful in regular lane fights.</div>
+      </div>
+    </div>
+    <div class="prep-box">
+      <div class="prep-box-title">📌 Officer Checklist Before Saturday</div>
+      <div class="prep-item"><span>›</span>Name one lead caller and one backup caller.</div>
+      <div class="prep-item"><span>›</span>Assign lane groups and reaction groups before members enter.</div>
+      <div class="prep-item"><span>›</span>Pin the first three route calls in alliance chat.</div>
+      <div class="prep-item"><span>›</span>Mark Garrison priority and Temple regroup timing.</div>
+      <div class="prep-item"><span>›</span>Set up voice chat (Discord) — real-time calls are dramatically faster than typing during Garrison and Temple phases.</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:2rem">🏆 The Only Question That Matters</div>
+  <p class="section-desc">One mindset shift that fixes most bad Tri-Alliance Clash decisions.</p>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot purple"><span class="dn">💡</span></div>
+        <div>
+          <div class="day-title">Stop Asking "Where Can I Fight?"</div>
+          <div class="day-sub">The one officer rule that changes everything</div>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <strong>Ask this instead:</strong> "Which building, lane, or route gives us points later?" That single question fixes most bad TAC decisions. Kills feel productive, but building control and point timing decide most matches.
+    </div>
+    <div class="list-sections" style="margin-top:12px;">
+      <div class="list-col">
+        <div class="list-label lbl-avoid">❌ Losing Habit</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Strongest players wander into random fights — you lose map structure even while the battle report looks active.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Chasing kills instead of securing the access routes to the Temple (A29/B29/C29). Lose those and you can't even reach the Temple in Phase 4.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Entering the Temple phase scattered with no shared timing.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Winning Habit</div>
+        <div class="list-item"><span class="list-item-icon">🏰</span>Every member knows their building, lane, or route assignment before the map opens.</div>
+        <div class="list-item"><span class="list-item-icon">⏱️</span>Energy is managed — save 30–40% for the 20-minute Garrison unlock and the 40-minute Temple rush.</div>
+        <div class="list-item"><span class="list-item-icon">🗣️</span>Caller sends short calls: objective, route, timing. Not a speech — three pieces of info maximum.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-reminder">
+    <div class="final-reminder-icon">⚔️</div>
+    <div>
+      <h3>The Short Answer</h3>
+      <p>Tri-Alliance Clash is won by point control, not looking busy. <strong>A clean plan with imperfect players beats a perfect theory shouted in chat after the map opens.</strong> Write the route plan before the battle starts. Every time. ✌️</p>
+    </div>
+  </div>
+  <div class="credit-line">via <a href="https://www.kingshotguide.org/guide/tri-alliance-clash-kingshot" target="_blank">KingshotGuide.org</a> · <a href="https://kingshotwiki.com/events/tri-alliance-clash/" target="_blank">Kingshot Wiki</a> · Community strategies</div>
+</div>
+</div>
+
+
+<!-- ══ PHASES VIEW ══ -->
+<div id="view-phases" class="view">
+<div class="content">
+
+  <div class="section-title">⏱️ The 4 Battle Phases</div>
+  <p class="section-desc">Every match follows the same fixed 60-minute cycle. Knowing what unlocks when is the foundation of everything.</p>
+
+  <div class="timeline">
+    <div class="tl-phase p1"><div class="tl-time">0:00</div><div class="tl-name">Preparation</div><div class="tl-dur">3 min</div></div>
+    <div class="tl-sep"></div>
+    <div class="tl-phase p2"><div class="tl-time">0:03</div><div class="tl-name">Seize & Conquer</div><div class="tl-dur">17 min</div></div>
+    <div class="tl-sep"></div>
+    <div class="tl-phase p3"><div class="tl-time">0:20</div><div class="tl-name">Garrison Occupation</div><div class="tl-dur">20 min</div></div>
+    <div class="tl-sep"></div>
+    <div class="tl-phase p4"><div class="tl-time">0:40</div><div class="tl-name">Temple Onslaught</div><div class="tl-dur">20 min</div></div>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase1"><span class="dn">0:00</span></div>
+        <div><div class="day-title">Phase 1 — Preparation (3 min)</div><div class="day-sub">No combat · Positioning only</div></div>
+      </div>
+      <button class="copy-btn" onclick="copySection('phase1',this)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>Copy for Members</button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Use This Window</div>
+        <div class="list-item"><span class="list-item-icon">📍</span>Confirm lane assignments — every member should know exactly where they're going before the timer hits zero.</div>
+        <div class="list-item"><span class="list-item-icon">🎙️</span>Caller reads out the first three route objectives in voice.</div>
+        <div class="list-item"><span class="list-item-icon">🏃</span>Position for the Transit Center rush — securing these first gives superior map mobility for the whole match.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-avoid">❌ Don't</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Use this phase for strategy discussion — that should already be done. Prep phase is too short.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Wander without an assignment. If you don't know where to go, ask now — not at 0:05.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase2"><span class="dn">0:03</span></div>
+        <div><div class="day-title">Phase 2 — Seize & Conquer (17 min)</div><div class="day-sub">Outer buildings unlock · Transit Centers · Early pressure</div></div>
+      </div>
+      <button class="copy-btn" onclick="copySection('phase2',this)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>Copy for Members</button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Priority</div>
+        <div class="list-item"><span class="list-item-icon">🚇</span><strong>Transit Centers first.</strong> These grant superior map mobility and are the only route to the Temple in Phase 4. Losing A29/B29/C29 can lock you out of the final fight entirely.</div>
+        <div class="list-item"><span class="list-item-icon">🏰</span>Capture all assigned lane buildings. Establish a points-per-minute lead early.</div>
+        <div class="list-item"><span class="list-item-icon">⚡</span>Steal a few smaller enemy buildings for early score and route pressure.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-opt">⚡ Energy Rule</div>
+        <div class="list-item"><span class="list-item-icon">🔋</span><strong>Save 30–40% energy</strong> for the 20-minute Garrison unlock. Burning out here leaves you weak when it matters most.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Garrisons are shielded in this phase — don't waste marches on them yet.</div>
+        <div class="list-item"><span class="list-item-icon">👨‍✈️</span>Assign Captains to captured buildings when possible — they regenerate energy much faster than regular players.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase3"><span class="dn">0:20</span></div>
+        <div><div class="day-title">Phase 3 — Garrison Occupation (20 min)</div><div class="day-sub">Garrisons unlock · +1800 pts/min each · Mid-game swing point</div></div>
+      </div>
+      <button class="copy-btn" onclick="copySection('phase3',this)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>Copy for Members</button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Priority</div>
+        <div class="list-item"><span class="list-item-icon">🏰</span><strong>Hold your own Garrison above all else.</strong> Garrisons give +1800 points per minute — 3x more than a standard building. Losing yours can flip the score fast.</div>
+        <div class="list-item"><span class="list-item-icon">⚔️</span>If resources allow, raid an enemy Garrison for massive point swings.</div>
+        <div class="list-item"><span class="list-item-icon">🔀</span>Special Forces should disrupt enemy backlines now to weaken their Temple push before Phase 4 begins.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-opt">📌 Prep for Phase 4</div>
+        <div class="list-item"><span class="list-item-icon">⛩️</span>Begin regrouping towards Temple access routes (A29/B29/C29).</div>
+        <div class="list-item"><span class="list-item-icon">🕐</span>Call the Temple regroup timing in alliance chat or voice before 0:35.</div>
+        <div class="list-item"><span class="list-item-icon">❤️</span>Players who need to heal should rotate now — don't enter Phase 4 wounded.</div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      💡 <strong>Bypass rule:</strong> You can bypass a building without capturing it if you have at least 5 squads present. Use this to push through contested routes toward the Temple without getting bogged down.
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase4"><span class="dn">0:40</span></div>
+        <div><div class="day-title">Phase 4 — Temple Onslaught (20 min)</div><div class="day-sub">Temple of Tides · 50,000 pt bonus · Match decider</div></div>
+      </div>
+      <button class="copy-btn" onclick="copySection('phase4',this)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg>Copy for Members</button>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Main Force</div>
+        <div class="list-item"><span class="list-item-icon">⛩️</span><strong>First-capture points are huge.</strong> Time the rush so your strongest marches hit the Temple doors together — not trickling in one at a time.</div>
+        <div class="list-item"><span class="list-item-icon">🏆</span>The alliance holding the Temple at the end gets a <strong>50,000 point bonus</strong> — this single building usually determines the winner.</div>
+        <div class="list-item"><span class="list-item-icon">🔒</span><strong>Final Blow Rule:</strong> For the Temple, the alliance that lands the last hit on the final guard claims full control. Coordinate your timing.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-tip">🧠 The Centre Spam Strategy</div>
+        <div class="list-item"><span class="list-item-icon">💡</span>Near the final minutes, <strong>spam all available marches into the Temple</strong> — each march from a single member (up to 3) takes 10 seconds of control time.</div>
+        <div class="list-item"><span class="list-item-icon">🎯</span>Even without the biggest players, this can win you the <strong>50k final control bonus</strong>. Risky but it has worked repeatedly.</div>
+        <div class="list-item"><span class="list-item-icon">🛡️</span>Defence teams hold access routes (A29/B29/C29). If enemies cut those, your Temple force gets isolated.</div>
+      </div>
+    </div>
+    <div class="danger-box">
+      ⚠️ <strong>Do not enter Phase 4 scattered.</strong> An uncoordinated rush into the Temple is easier to repel than a unified push. Use the shared clock — call the regroup point before 0:38 and move as one.
+    </div>
+  </div>
+
+  <!-- Points Table -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase2"><span class="dn">📊</span></div>
+        <div><div class="day-title">Building Points Reference</div><div class="day-sub">What you're actually fighting over</div></div>
+      </div>
+    </div>
+    <table class="points-table">
+      <thead><tr><th>Building</th><th>Points/min</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>⛩️ Temple of Tides</td><td class="pts-high">+1,800 /min + 50,000 bonus</td><td>Final control bonus determines most matches</td></tr>
+        <tr><td>🏰 Garrison (A24/B24/C24)</td><td class="pts-high">+1,800 /min</td><td>Unlocks at 0:20 — 3x a standard building</td></tr>
+        <tr><td>🚇 Transit Center (A29/B29/C29)</td><td class="pts-med">Medium</td><td>Controls Temple access — lose this, lose Phase 4</td></tr>
+        <tr><td>🏗️ Cluster of Ruins</td><td class="pts-low">+600 /min</td><td>Standard map building — hold as many as possible</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ ROLES VIEW ══ -->
+<div id="view-roles" class="view">
+<div class="content">
+
+  <div class="section-title">🎯 Role Assignments</div>
+  <p class="section-desc">Assign roles before the battle. A smaller player with perfect discipline is more valuable than a strong player with no structure.</p>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot purple"><span class="dn">👥</span></div>
+        <div><div class="day-title">The 4 Core Roles</div><div class="day-sub">Every player must know their role before Saturday</div></div>
+      </div>
+    </div>
+    <div class="role-grid">
+      <div class="role-card main">
+        <div class="role-name">⚔️ Main Players (Lane Holders)</div>
+        <div class="role-desc">Capture the first keypoint in their assigned lane immediately. Hold constant frontline pressure. Do not leave just because another fight looks more exciting. Coordinate with their two Supporters for healing rotation.</div>
+      </div>
+      <div class="role-card supp">
+        <div class="role-name">🛡️ Support Players</div>
+        <div class="role-desc">Position behind the Main Player. Protect lane continuity — your job is to keep the point structure alive while stronger players heal or rotate. Defend against enemy pushes into your territory and recover buildings lost during lane pressure.</div>
+      </div>
+      <div class="role-card react">
+        <div class="role-name">⚡ Reaction Team</div>
+        <div class="role-desc">Move ONLY when the caller sends you. A reaction team that freelances stops being a reaction team. Secure early neutral buildings in the central region. Prevent enemies from gaining early point advantages. Flexible response to wherever the map needs help most.</div>
+      </div>
+      <div class="role-card spec">
+        <div class="role-name">🗡️ Special Forces</div>
+        <div class="role-desc">Breakthrough unit — bypass buildings using the 5-squad rule and disrupt enemy backlines. Ideal in Phase 3 to weaken the enemy Temple push before Phase 4 starts. This is one of the strongest tactical tools in the entire event.</div>
+      </div>
+    </div>
+    <div class="gold-box" style="margin-top:4px;">
+      <strong>🎙️ Callers (R5/R4):</strong> Name one lead caller and one backup before the battle. Keep calls to three pieces of info max — objective, route, timing. Members should hear a direction, not a speech. Short calls in real-time win matches.
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase3"><span class="dn">💡</span></div>
+        <div><div class="day-title">Role Tips by Player Size</div><div class="day-sub">Every player has a useful role regardless of power</div></div>
+      </div>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-role">🏆 Strong Players</div>
+        <div class="list-item"><span class="list-item-icon">⚔️</span>Main lane holders and first Garrison assault.</div>
+        <div class="list-item"><span class="list-item-icon">⛩️</span>Lead the Temple rush in Phase 4.</div>
+        <div class="list-item"><span class="list-item-icon">🎯</span>Special Forces breakthrough if coordination allows.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-tip">🌱 Smaller Players</div>
+        <div class="list-item"><span class="list-item-icon">📞</span>Caller or backup caller — discipline matters more than power here.</div>
+        <div class="list-item"><span class="list-item-icon">🛡️</span>Support lanes and handle timing calls.</div>
+        <div class="list-item"><span class="list-item-icon">🕐</span>Keep route structures stable and buildings ticking over while main players fight.</div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      💡 Players who <strong>stay alive and rotate cleanly</strong> create more value than players who dive until they're forced back to base. Assign support players to stabilize lanes and give main players time to heal without losing the anchor point.
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-header-left">
+        <div class="day-dot phase4"><span class="dn">⚡</span></div>
+        <div><div class="day-title">Energy Management</div><div class="day-sub">The hidden win condition most alliances ignore</div></div>
+      </div>
+    </div>
+    <div class="list-sections">
+      <div class="list-col">
+        <div class="list-label lbl-do">✅ Energy Rules</div>
+        <div class="list-item"><span class="list-item-icon">🔋</span>Save <strong>30–40% energy</strong> going into the 0:20 Garrison phase. Arriving empty means missing the most valuable buildings in the match.</div>
+        <div class="list-item"><span class="list-item-icon">👨‍✈️</span>Assign Captains to key buildings after capturing them — Captains regenerate energy far faster than normal players.</div>
+        <div class="list-item"><span class="list-item-icon">💎</span>Gems can halve march time (10s → 5s). Only worth using in the Temple phase — not regular skirmishes.</div>
+      </div>
+      <div class="list-col">
+        <div class="list-label lbl-avoid">❌ Energy Mistakes</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Burning full energy in Phase 2 chasing kills — arriving at Garrisons with nothing left.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Leaving buildings uncaptained — you lose the energy regen advantage.</div>
+        <div class="list-item"><span class="list-item-icon">🚫</span>Using gems on random lane fights — save them for when it actually changes the match outcome.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══ QUICK REF VIEW ══ -->
+<div id="view-quickref" class="view">
+<div class="content">
+  <div class="section-title">⚡ Quick Reference</div>
+  <p class="section-desc">The key rules at a glance — copy any card straight into alliance chat.</p>
+
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge">📅</div><div class="tip-card-label">Week Schedule<small>Mon → Sat</small></div></div>
+      <div class="tip-text">Mon–Tue: Vote. Wed–Thu: Sign up. Fri: Matchmaking. <strong>Sat: Battle.</strong><br><br>Only register members who will actually show up — inactive sign-ups hurt matchmaking and leave gaps in your formation.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge purple">⏱️</div><div class="tip-card-label">Phase Timings<small>The 3 key moments</small></div></div>
+      <div class="tip-text"><strong>0:20 —</strong> Garrisons unlock (+1800 pts/min). Save 30–40% energy for this.<br><strong>0:40 —</strong> Temple of Tides opens. Full alliance regroup before this.<br><strong>Final min —</strong> Spam marches into Temple for the 50k control bonus.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge red">⛩️</div><div class="tip-card-label">Temple Strategy<small>The match decider</small></div></div>
+      <div class="tip-text">The alliance holding Temple at the end gets <strong>50,000 bonus points</strong> — this one building usually decides the winner.<br><br>Near the end: spam ALL marches in (up to 3 per member = 10 seconds of control each). Risky but it works.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge">🏰</div><div class="tip-card-label">Garrison Priority<small>0:20 mark</small></div></div>
+      <div class="tip-text"><strong>Hold your own Garrison first.</strong> Garrisons give +1,800 pts/min — 3x a standard building. Losing yours can flip the match in minutes.<br><br>If you have surplus strength, raiding an enemy Garrison is the highest-value play in mid-game.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge green">🚇</div><div class="tip-card-label">Transit Centers<small>A29 / B29 / C29</small></div></div>
+      <div class="tip-text">These are the <strong>only route to the Temple</strong> in Phase 4. If enemies take yours, your alliance can't even reach the final fight.<br><br>Secure and defend these in Phase 2. Losing them mid-game is often how matches are decided before Phase 4 starts.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge">⚔️</div><div class="tip-card-label">Hero Setup<small>Do before entering</small></div></div>
+      <div class="tip-text">Don't set formations until just before start — activate your buffs first, then lock formations in.<br><br>Set attack formation, defence formation, then fill the third with your next best. Avoid Diana and blue heroes if comparable alternatives exist (expedition skills are active).</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge gold">🎯</div><div class="tip-card-label">The One Rule<small>Mindset shift</small></div></div>
+      <div class="tip-text">Stop asking <strong>"where can I fight?"</strong><br><br>Ask: <strong>"which building, lane, or route gives us points later?"</strong><br><br>Kills feel productive. Building control decides matches.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-card-top"><div class="tip-badge purple">🔋</div><div class="tip-card-label">Energy Management<small>The hidden win condition</small></div></div>
+      <div class="tip-text">Save <strong>30–40% energy</strong> heading into 0:20 Garrisons. Assign Captains to captured buildings for faster regen.<br><br>Gem march speed boost (10s → 5s) is only worth it at Temple phase — wasteful in regular lane fights.</div>
+    </div>
+  </div>
+
+  <div class="final-reminder">
+    <div class="final-reminder-icon">🏴‍☠️</div>
+    <div>
+      <h3>Sensei Norman's Final Word</h3>
+      <p>The centre spam strategy at the end has worked multiple times — even against bigger alliances. <strong>Don't wait to be invited into the Temple fight. Flood it.</strong> Each of your 3 marches buys 10 seconds of control. Do the math and commit. ✌️</p>
+    </div>
+  </div>
+
+  <div class="credit-line">via <a href="https://www.kingshotguide.org/guide/tri-alliance-clash-kingshot" target="_blank">KingshotGuide.org</a> · <a href="https://kingshotwiki.com/events/tri-alliance-clash/" target="_blank">Kingshot Wiki</a> · Community strategies</div>
+</div>
+</div>
+
+<script>
+const sectionData = {
+  prereq: `⚔️ Tri-Alliance Clash — Requirements & Schedule\n\n📅 Weekly Flow:\n• Mon–Tue: Voting\n• Wed–Thu: Sign-up\n• Fri: Matchmaking\n• Sat: Battle (chosen time slot)\n\n⚠️ Requirements:\n• Town Center Level 16+ to participate\n• Alliance must be Top 20 in kingdom power\n• No 5+ consecutive days of inactivity\n• Min 15 members per legion for matchmaking\n\n⚠️ Only register members who will actually show up. Inactive sign-ups hurt matchmaking. R4s must be present — they assign Captains who regenerate energy much faster than normal players.`,
+
+  phase1: `⏱️ Phase 1 — Preparation (0:00–0:03)\n\n✅ Use this 3 minutes to:\n• Confirm your lane assignment — know exactly where you're going before the timer hits zero\n• Listen to the caller's first 3 route objectives in voice\n• Position for the Transit Center rush\n\n❌ Do NOT:\n• Use this phase for strategy discussion — that should already be done\n• Enter without a clear assignment`,
+
+  phase2: `⚔️ Phase 2 — Seize & Conquer (0:03–0:20)\n\n✅ Priority:\n• Transit Centers first (A29/B29/C29) — only route to Temple in Phase 4\n• Capture all assigned lane buildings\n• Steal a few smaller enemy buildings for early score\n\n⚡ Energy Rule:\n• Save 30–40% energy for 0:20 Garrison unlock\n• Garrisons are shielded this phase — don't waste marches on them\n• Assign Captains to captured buildings for energy regen`,
+
+  phase3: `🏰 Phase 3 — Garrison Occupation (0:20–0:40)\n\n✅ Priority:\n• HOLD YOUR OWN GARRISON — +1800 pts/min (3x standard building)\n• Raid enemy Garrison if resources allow — huge point swing\n• Special Forces: disrupt enemy backlines now to weaken their Temple push\n\n📌 Prep for Phase 4:\n• Start regrouping toward Temple access routes (A29/B29/C29)\n• Call Temple regroup timing before 0:35\n• Players who need healing: rotate NOW`,
+
+  phase4: `⛩️ Phase 4 — Temple Onslaught (0:40–1:00)\n\n✅ Main Force:\n• First-capture points are massive — rush as one, not trickling in\n• Temple = 50,000 bonus points to the alliance holding it at the end\n• Final Blow Rule: land the last hit on the final guard to claim full control\n\n🧠 Centre Spam Strategy:\n• Near final minutes: spam ALL available marches into the Temple\n• Each march per member (up to 3) = 10 seconds of control time\n• Even without the biggest players, this can win you the 50k bonus\n\n🛡️ Defence teams hold A29/B29/C29 — if enemies cut those, your Temple force gets isolated\n\n⚠️ DO NOT enter scattered. Unified push > uncoordinated rush.`
+};
+
+function copySection(key, btn) {
+  navigator.clipboard.writeText(sectionData[key]).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+    showToast();
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><rect x="8" y="8" width="10" height="10" rx="2"/><path d="M4 12H3a2 2 0 01-2-2V3a2 2 0 012-2h7a2 2 0 012 2v1"/></svg> Copy for Members`;
+    }, 2500);
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function switchView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
+HTMLEOF
+echo "Done!"
