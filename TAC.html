@@ -214,9 +214,9 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo">Tri-Alliance <span>Clash</span></div>
-  <button class="nav-tab active" onclick="switchView('guide',this)">📖 Guide</button>
-  <button class="nav-tab" onclick="switchView('phases',this)">⏱️ Phases</button>
+  <button class="nav-tab active" onclick="switchView('phases',this)">⏱️ Phases</button>
   <button class="nav-tab" onclick="switchView('roles',this)">🎯 Roles</button>
+  <button class="nav-tab" onclick="switchView('guide',this)">📖 Guide</button>
   <button class="nav-tab" onclick="switchView('quickref',this)">⚡ Quick Ref</button>
 </nav>
 
@@ -224,7 +224,7 @@
 <div class="hero">
   <div class="hero-eyebrow">⚔️ Monthly Event · 3-Alliance · 60-Minute Battle</div>
   <h1>Tri-Alliance <em>Clash</em></h1>
-  <p class="hero-sub">Points win this event — not kills. The alliance that controls buildings, protects routes, and arrives at the Temple phase together almost always beats the one that spent the hour chasing fights.</p>
+  <p class="hero-sub">Buildings win matches. Kills don't.</p>
   <div class="hero-badges">
     <div class="badge"><span>🏰</span> Building Control</div>
     <div class="badge"><span>⏱️</span> 4 Battle Phases</div>
@@ -235,7 +235,7 @@
 
 
 <!-- ══ GUIDE VIEW ══ -->
-<div id="view-guide" class="view active">
+<div id="view-guide" class="view">
 <div class="content">
 
   <div class="section-title">📋 Before the Battle</div>
@@ -352,7 +352,7 @@
 
 
 <!-- ══ PHASES VIEW ══ -->
-<div id="view-phases" class="view">
+<div id="view-phases" class="view active">
 <div class="content">
 
   <div class="section-title">⏱️ The 4 Battle Phases</div>
