@@ -149,6 +149,571 @@
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   @media(max-width:640px) {
+    /* nav */
+    nav { padding: 0 8px; gap: 4px; height: auto; flex-wrap: wrap; padding: 8px; }
+    .nav-logo { font-size: 14px; width: 100%; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 2px; }
+    .nav-tab { padding: 6px 10px; font-size: 11px; flex: 1; text-align: center; }
+
+    /* hero scoreboard */
+    .scoreboard { gap: 10px; }
+    .team-badge { width: 48px; height: 48px; font-size: 15px; }
+    .team-name { font-size: 13px; }
+    .team-sub { font-size: 10px; }
+    .score-digits { font-size: 34px; gap: 4px; }
+    .score-sep { font-size: 24px; }
+    .team-block { min-width: 90px; }
+    .score-center { min-width: 90px; }
+
+    /* content */
+    .content { padding: 20px 12px 80px; }
+    .section-title { font-size: 16px; }
+
+    /* stat cards */
+    .stat-card { padding: 12px 10px; }
+    .stat-top { gap: 4px; }
+    .stat-name { width: 72px; font-size: 10px; }
+    .stat-input { width: 72px; font-size: 12px; padding: 6px 2px; }
+    .stat-label { font-size: 11px; min-width: 40px; }
+
+    /* market cards */
+    .market-card { padding: 14px 14px; }
+    .market-title { font-size: 13px; flex-direction: column; align-items: flex-start; gap: 4px; }
+    .outcome-bar { width: 50px; }
+    .outcome-name { font-size: 12px; }
+    .outcome-pct { font-size: 13px; width: 38px; }
+
+    /* final banner */
+    .final-banner { flex-direction: column; gap: 10px; padding: 18px 16px; }
+
+    /* sensei — hide on very small screens to save space */
+    .sensei { bottom: 10px; left: 10px; }
+    .sensei-avatar { width: 42px; height: 42px; font-size: 22px; }
+    .sensei-label { font-size: 7px; }
+
+    /* tips grid */
+    .tips-grid { grid-template-columns: 1fr; }
+    .group-title { font-size: 10px; }
+    .group-sub { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toast">✅ Updated!</div>
+
+<!-- SENSEI NORMAN -->
+<div class="sensei" title="Sensei Norman 🧙">
+  <div class="sensei-avatar" style="font-size:28px; background: linear-gradient(135deg,#0a0a1a,#1a1a3e,#0d2b55);">🧙</div>
+  <div class="sensei-label">Sensei Norman 🧙</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">KvK <span class="vs">Matchup</span></div>
+  <button class="nav-tab active" onclick="switchView('individuals',this)">👤 Players</button>
+  <button class="nav-tab" onclick="switchView('alliances',this)">🛡️ Alliances</button>
+  <button class="nav-tab" onclick="switchView('records',this)">📊 Records</button>
+  <button class="nav-tab" onclick="switchView('markets',this)">🎯 Forecast</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">⚔️ KvK 15 · Matchup Report · Live Editable</div>
+    <div class="scoreboard" style="margin-top:8px;">
+      <div class="team-block">
+        <div class="team-badge k230">230</div>
+        <div class="team-name k230">Kingdom 230</div>
+        <div class="team-sub">Thunder Alley · [EON]</div>
+      </div>
+      <div class="score-center">
+        <div class="score-digits">
+          <span class="score-a" id="scoreA">50</span>
+          <span class="score-sep">–</span>
+          <span class="score-b" id="scoreB">50</span>
+        </div>
+        <div class="score-label">Final Forecast</div>
+        <div style="margin-top:10px;">
+          <span class="favored-chip" id="favoredChip" style="background:var(--gold);color:#1a1a1a;padding:5px 16px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:0.08em;">FAVORED: —</span>
+        </div>
+      </div>
+      <div class="team-block">
+        <div class="team-badge k294">294</div>
+        <div class="team-name k294">Kingdom 294</div>
+        <div class="team-sub">Remington99 · [SSS]</div>
+      </div>
+    </div>
+    <div class="tier-center">
+      <span class="tier-pill b">230 · B-TIER</span>
+      <span class="tier-pill s">294 · S-TIER</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PLAYERS VIEW ══ -->
+<div id="view-individuals" class="view active">
+<div class="content">
+
+  <div class="section-title">👤 Individual Stats — Head to Head</div>
+
+
+  <div class="group-title">Power — Top 3</div>
+  <div id="powerRows"></div>
+
+  <div class="group-title">Hero Power — Same Top 3</div>
+  <div id="heroPowerRows"></div>
+
+  <div class="group-title">Pet Power — Same Top 3</div>
+  <div id="petPowerRows"></div>
+
+  <div class="group-title">Mystic Trials — Total Stages</div>
+  <div id="mysticRows"></div>
+
+</div>
+</div>
+
+<!-- ══ ALLIANCES VIEW ══ -->
+<div id="view-alliances" class="view">
+<div class="content">
+
+  <div class="section-title">🛡️ Alliance Power — Top 3</div>
+  <p class="section-desc">Top 3 alliances from each kingdom by total power.</p>
+
+  <div class="group-title">Top 3 Alliance Power — Head to Head</div>
+  <div id="allianceRows"></div>
+
+</div>
+</div>
+
+<!-- ══ RECORDS VIEW ══ -->
+<div id="view-records" class="view">
+<div class="content">
+
+  <div class="section-title">📊 Records & Rankings</div>
+  <p class="section-desc">Historical win rates, external scores, and roster depth. Update as new scouting comes in.</p>
+
+  <div class="group-title">Match Record (last 12 KvKs each)</div>
+  <div id="matchRecordRows"></div>
+
+  <div class="group-title">Historical Outcomes</div>
+  <div class="group-sub">Domination = win both · Comeback = lose prep, win battle · Reversal = win prep, lose battle · Invasion = lose both</div>
+  <div id="outcomeRows"></div>
+
+  <div class="group-title">External Rankings</div>
+  <div id="rankingRows"></div>
+
+  <div class="group-title">Roster Depth</div>
+  <div id="rosterRows"></div>
+
+</div>
+</div>
+
+<!-- ══ FORECAST VIEW ══ -->
+<div id="view-markets" class="view">
+<div class="content">
+
+  <div class="section-title">🎯 Forecast Markets</div>
+  <p class="section-desc">Calculated live from all editable stats. Update any number on the other tabs and come back here to see the forecast shift.</p>
+
+  <div class="market-card">
+    <div class="market-title">Castle (Battle Phase) Winner <span class="market-tag">60% battle record · 40% strength</span></div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--k230)"></div>
+      <div class="outcome-name">Kingdom 230</div>
+      <div class="outcome-bar"><div class="outcome-bar-fill" id="castleFillA" style="background:var(--k230)"></div></div>
+      <div class="outcome-pct" id="castlePctA" style="color:var(--k230)">–</div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--blue-500)"></div>
+      <div class="outcome-name">Kingdom 294</div>
+      <div class="outcome-bar"><div class="outcome-bar-fill" id="castleFillB" style="background:var(--blue-500)"></div></div>
+      <div class="outcome-pct" id="castlePctB" style="color:var(--blue-500)">–</div>
+    </div>
+    <div class="market-desc">60% battle-phase win record, 40% top-player strength (Power, Hero Power, Pet Power, Mystic Trials).</div>
+  </div>
+
+  <div class="market-card">
+    <div class="market-title">Prep Phase Winner <span class="market-tag">60% prep record · 20% atlas · 20% optimizer</span></div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--k230)"></div>
+      <div class="outcome-name">Kingdom 230</div>
+      <div class="outcome-bar"><div class="outcome-bar-fill" id="prepFillA" style="background:var(--k230)"></div></div>
+      <div class="outcome-pct" id="prepPctA" style="color:var(--k230)">–</div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--blue-500)"></div>
+      <div class="outcome-name">Kingdom 294</div>
+      <div class="outcome-bar"><div class="outcome-bar-fill" id="prepFillB" style="background:var(--blue-500)"></div></div>
+      <div class="outcome-pct" id="prepPctB" style="color:var(--blue-500)">–</div>
+    </div>
+    <div class="market-desc">60% prep-phase win record, 20% Atlas score, 20% Optimizer rating.</div>
+  </div>
+
+  <div class="market-card">
+    <div class="market-title">Match Scenario <span class="market-tag">4 outcomes · blended historical rates</span></div>
+    <div class="segbar">
+      <div id="segDom" style="background:var(--green); width:25%"></div>
+      <div id="segCome" style="background:var(--orange); width:25%"></div>
+      <div id="segRev" style="background:var(--purple); width:25%"></div>
+      <div id="segInv" style="background:var(--k230); width:25%"></div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--green)"></div>
+      <div class="outcome-name">Domination <span>— one kingdom wins both phases</span></div>
+      <div class="outcome-pct" id="pctDom" style="color:var(--green)">–</div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--orange)"></div>
+      <div class="outcome-name">Comeback <span>— loses prep, wins battle</span></div>
+      <div class="outcome-pct" id="pctCome" style="color:var(--orange)">–</div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--purple)"></div>
+      <div class="outcome-name">Reversal <span>— wins prep, loses battle</span></div>
+      <div class="outcome-pct" id="pctRev" style="color:var(--purple)">–</div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--k230)"></div>
+      <div class="outcome-name">Invasion <span>— loses both phases</span></div>
+      <div class="outcome-pct" id="pctInv" style="color:var(--k230)">–</div>
+    </div>
+    <div class="market-desc">Blended average of both kingdoms' actual historical outcome rates across their last 12 KvKs each.</div>
+  </div>
+
+  <div class="market-card">
+    <div class="market-title">Final Forecast <span class="market-tag">70% record · 30% strength</span></div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--k230)"></div>
+      <div class="outcome-name">Kingdom 230</div>
+      <div class="outcome-bar"><div class="outcome-bar-fill" id="finalFillA" style="background:var(--k230)"></div></div>
+      <div class="outcome-pct" id="finalPctA" style="color:var(--k230)">–</div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-dot" style="background:var(--blue-500)"></div>
+      <div class="outcome-name">Kingdom 294</div>
+      <div class="outcome-bar"><div class="outcome-bar-fill" id="finalFillB" style="background:var(--blue-500)"></div></div>
+      <div class="outcome-pct" id="finalPctB" style="color:var(--blue-500)">–</div>
+    </div>
+    <div class="market-desc">70% combined prep + battle win record, 30% best-player strength. Mystic Trials weighted 45% inside strength score.</div>
+  </div>
+
+  <div class="final-banner">
+    <div class="final-banner-icon">⚔️</div>
+    <div>
+      <h3>Let's give our best to win this 🙌</h3>
+    </div>
+  </div>
+
+  <div class="footer">
+    Sourced from Kingshot Atlas, Kingshot Optimizer, and in-game leaderboards (Power / Hero Power / Pet Power / Mystic Trials)<br>
+    Every number is editable — update as new scouting arrives and every market recalculates live
+  </div>
+</div>
+</div>
+
+<script>
+/* ── number utils ── */
+function fmt(n) {
+  const s = n < 0 ? '-' : '', a = Math.abs(n);
+  if (a >= 1e9) return s + trim(a/1e9) + 'Bil';
+  if (a >= 1e6) return s + trim(a/1e6) + 'Mil';
+  if (a >= 1e5) return s + trim(a/1e3) + 'K';
+  return String(Math.round(n));
+}
+function trim(n) { return n.toFixed(2).replace(/\.?0+$/, ''); }
+function parse(str) {
+  if (!str) return 0;
+  const s = String(str).trim().replace(/,/g, '');
+  const m = s.match(/^(-?\d+\.?\d*)\s*(bil|b|mil|m|k)?$/i);
+  if (!m) return parseFloat(s) || 0;
+  let n = parseFloat(m[1]) || 0;
+  const sf = (m[2]||'').toLowerCase();
+  if (sf==='bil'||sf==='b') n*=1e9;
+  else if (sf==='mil'||sf==='m') n*=1e6;
+  else if (sf==='k') n*=1e3;
+  return n;
+}
+function share(a, b) { const t = a+b; return t <= 0 ? 0.5 : a/t; }
+
+/* ── build a stat row ── */
+function makeRow(container, label, unit, nameA, a, nameB, b) {
+  const card = document.createElement('div');
+  card.className = 'stat-card';
+  card.innerHTML = `
+    <div class="stat-top">
+      <div class="stat-name" title="${nameA||''}">${nameA||''}</div>
+      <input type="text" inputmode="decimal" class="stat-input k230" value="${fmt(a)}" data-raw="${a}">
+      <div class="stat-label">${label}${unit ? `<span class="stat-unit">${unit}</span>` : ''}</div>
+      <input type="text" inputmode="decimal" class="stat-input k294" value="${fmt(b)}" data-raw="${b}">
+      <div class="stat-name right" title="${nameB||''}">${nameB||''}</div>
+    </div>
+    <div class="bar"><div class="bar-230"></div><div class="bar-mid"></div><div class="bar-294"></div></div>
+  `;
+  container.appendChild(card);
+  const iA = card.querySelector('.k230');
+  const iB = card.querySelector('.k294');
+  const bA = card.querySelector('.bar-230');
+  const bB = card.querySelector('.bar-294');
+  function render() {
+    const va = parseFloat(iA.dataset.raw)||0, vb = parseFloat(iB.dataset.raw)||0;
+    const mx = Math.max(va, vb, 1);
+    bA.style.width = (va/mx*50)+'%';
+    bB.style.width = (vb/mx*50)+'%';
+  }
+  function wire(inp) {
+    inp.addEventListener('focus', () => { inp.value = inp.dataset.raw; inp.select(); });
+    inp.addEventListener('input', () => { inp.dataset.raw = parse(inp.value); render(); recalcAll(); });
+    inp.addEventListener('blur', () => { inp.value = fmt(parseFloat(inp.dataset.raw)||0); });
+  }
+  wire(iA); wire(iB); render();
+  return { getA:()=>parseFloat(iA.dataset.raw)||0, getB:()=>parseFloat(iB.dataset.raw)||0 };
+}
+
+/* ── DATA ── */
+const powerData = [
+  { n1:'Thunder Alley', a:1026068717, n2:'Remington99',  b:787135600 },
+  { n1:'Aladeen',       a:736901890,  n2:'Thröbnärd',    b:722407518 },
+  { n1:'Lord_Ph@nt0m',  a:721923097,  n2:'Brandon',      b:694878687 },
+];
+const heroPowerData = [
+  { n1:'Thunder Alley', a:19722598, n2:'Remington99', b:19722598 },
+  { n1:'Aladeen',       a:19722598, n2:'Thröbnärd',   b:18666348 },
+  { n1:'Lord_Ph@nt0m',  a:18560723, n2:'Gallahad',    b:16516597 },
+];
+const petPowerData = [
+  { n1:'Thunder Alley', a:45362400, n2:'Remington99',  b:50590320 },
+  { n1:'Aladeen',       a:37161720, n2:'Thröbnärd',    b:45360360 },
+  { n1:'Mighty Simeon', a:34786680, n2:'Gallahad',     b:37780800 },
+];
+const mysticData = [
+  { n1:'Thunder Alley', a:3327, n2:'Remington99', b:3355 },
+  { n1:'Aladeen',       a:3000, n2:'Thröbnärd',   b:3054 },
+  { n1:'Mighty Simeon', a:2965, n2:'Gallahad',    b:2924 },
+];
+const allianceData = [
+  { n1:'[EON] ETERNALS',    a:31866396763, n2:'[SSS] FilthyCasuals', b:27821265436 },
+  { n1:'[THE] WarMachine',  a:25387888736, n2:'[VAL] VALHALLA',      b:26264972101 },
+  { n1:'[PNX] Phoenix',     a:23898192743, n2:'[SYN] Syndicate',     b:21597224255 },
+];
+
+/* build rows */
+const refsPower   = powerData.map((p,i)   => makeRow(document.getElementById('powerRows'),    `#${i+1}`, 'power',  p.n1, p.a, p.n2, p.b));
+const refsHero    = heroPowerData.map((p,i)=> makeRow(document.getElementById('heroPowerRows'),`#${i+1}`, 'power',  p.n1, p.a, p.n2, p.b));
+const refsPet     = petPowerData.map((p,i) => makeRow(document.getElementById('petPowerRows'), `#${i+1}`, 'power',  p.n1, p.a, p.n2, p.b));
+const refsMystic  = mysticData.map((p,i)   => makeRow(document.getElementById('mysticRows'),   `#${i+1}`, 'stages', p.n1, p.a, p.n2, p.b));
+allianceData.forEach((p,i)                  => makeRow(document.getElementById('allianceRows'),`#${i+1}`, 'power',  p.n1, p.a, p.n2, p.b));
+
+const recMR = document.getElementById('matchRecordRows');
+const refPrepW   = makeRow(recMR, 'Prep Wins',    'of 12', '', 7,  '', 10);
+const refPrepL   = makeRow(recMR, 'Prep Losses',  'of 12', '', 5,  '', 2);
+const refBattleW = makeRow(recMR, 'Battle Wins',  'of 12', '', 7,  '', 9);
+const refBattleL = makeRow(recMR, 'Battle Losses','of 12', '', 5,  '', 3);
+
+const recOut = document.getElementById('outcomeRows');
+const refDom  = makeRow(recOut, 'Dominations', '#', '', 5, '', 7);
+const refCome = makeRow(recOut, 'Comebacks',   '#', '', 2, '', 2);
+const refRev  = makeRow(recOut, 'Reversals',   '#', '', 2, '', 3);
+const refInv  = makeRow(recOut, 'Invasions',   '#', '', 3, '', 0);
+
+const recRank = document.getElementById('rankingRows');
+const refAtlasScore = makeRow(recRank, 'Atlas Score',     'pts', '', 46.17, '', 65.05);
+const refAtlasRank  = makeRow(recRank, 'Atlas Rank',      '#',   '', 310,   '', 26);
+const refOptRating  = makeRow(recRank, 'Optimizer Rating','pts', '', 1.365, '', 2.600);
+const refOptRank    = makeRow(recRank, 'Optimizer Rank',  '#',   '', 360,   '', 13);
+
+const recRos = document.getElementById('rosterRows');
+const refTG8 = makeRow(recRos, 'TG8 Players', '#', '', 53, '', 43);
+
+/* ── recalc ── */
+function setMarket(prefix, a, b) {
+  const pA = Math.round(a*100), pB = 100-pA;
+  document.getElementById(prefix+'PctA').textContent = pA+'%';
+  document.getElementById(prefix+'PctB').textContent = pB+'%';
+  document.getElementById(prefix+'FillA').style.width = pA+'%';
+  document.getElementById(prefix+'FillB').style.width = pB+'%';
+}
+
+function recalcAll() {
+  const prepA = refPrepW.getA(), prepB = refPrepW.getB();
+  const battleA = refBattleW.getA(), battleB = refBattleW.getB();
+
+  const strA = 0.20*share(refsPower[0].getA(),refsPower[0].getB())
+             + 0.20*share(refsHero[0].getA(),refsHero[0].getB())
+             + 0.15*share(refsPet[0].getA(),refsPet[0].getB())
+             + 0.45*share(refsMystic[0].getA(),refsMystic[0].getB());
+
+  const castleA = 0.6*share(battleA,battleB) + 0.4*strA;
+  setMarket('castle', castleA, 1-castleA);
+
+  const prepMarketA = 0.6*share(prepA,prepB)
+                    + 0.2*share(refAtlasScore.getA(),refAtlasScore.getB())
+                    + 0.2*share(refOptRating.getA(),refOptRating.getB());
+  setMarket('prep', prepMarketA, 1-prepMarketA);
+
+  const tA = refDom.getA()+refCome.getA()+refRev.getA()+refInv.getA()||1;
+  const tB = refDom.getB()+refCome.getB()+refRev.getB()+refInv.getB()||1;
+  const domP  = (refDom.getA()/tA  + refDom.getB()/tB)/2;
+  const comeP = (refCome.getA()/tA + refCome.getB()/tB)/2;
+  const revP  = (refRev.getA()/tA  + refRev.getB()/tB)/2;
+  const invP  = (refInv.getA()/tA  + refInv.getB()/tB)/2;
+  const s4 = domP+comeP+revP+invP||1;
+  document.getElementById('segDom').style.width  = (domP/s4*100)+'%';
+  document.getElementById('segCome').style.width = (comeP/s4*100)+'%';
+  document.getElementById('segRev').style.width  = (revP/s4*100)+'%';
+  document.getElementById('segInv').style.width  = (invP/s4*100)+'%';
+  document.getElementById('pctDom').textContent  = Math.round(domP/s4*100)+'%';
+  document.getElementById('pctCome').textContent = Math.round(comeP/s4*100)+'%';
+  document.getElementById('pctRev').textContent  = Math.round(revP/s4*100)+'%';
+  document.getElementById('pctInv').textContent  = Math.round(invP/s4*100)+'%';
+
+  const finalA = 0.7*share(prepA+battleA, prepB+battleB) + 0.3*strA;
+  setMarket('final', finalA, 1-finalA);
+
+  const pA = Math.round(finalA*100), pB = 100-pA;
+  document.getElementById('scoreA').textContent = pA;
+  document.getElementById('scoreB').textContent = pB;
+  const chip = document.getElementById('favoredChip');
+  if (pA > pB) {
+    chip.textContent = 'FAVORED: KINGDOM 230';
+    chip.style.background = 'var(--k230)';
+    chip.style.color = '#fff';
+  } else if (pB > pA) {
+    chip.textContent = 'FAVORED: KINGDOM 294';
+    chip.style.background = 'var(--blue-500)';
+    chip.style.color = '#fff';
+  } else {
+    chip.textContent = 'TOO CLOSE TO CALL';
+    chip.style.background = 'var(--gold)';
+    chip.style.color = '#1a1a1a';
+  }
+}
+
+function switchView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+recalcAll();
+</script>
+</body>
+</html>  .nav-logo { font-weight: 700; font-size: 17px; color: var(--white); letter-spacing: -0.01em; margin-right: auto; display: flex; align-items: center; gap: 8px; }
+  .nav-logo .vs { color: var(--gold); }
+  .nav-tab { padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.18s; border: none; background: none; font-family: 'Lexend', sans-serif; }
+  .nav-tab:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-tab.active { color: var(--white); background: var(--blue-500); }
+
+  /* ── HERO ── */
+  .hero { background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 50%, var(--blue-700) 100%); color: var(--white); padding: 36px 24px 32px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 120%, rgba(91,155,234,0.15) 0%, transparent 70%); }
+  .hero-eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); background: rgba(245,200,66,0.12); border: 1px solid rgba(245,200,66,0.35); padding: 4px 14px; border-radius: 99px; margin-bottom: 20px; position: relative; }
+
+  /* scoreboard */
+  .scoreboard { display: flex; align-items: center; justify-content: center; gap: 20px; position: relative; flex-wrap: wrap; }
+  .team-block { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 130px; }
+  .team-badge { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; flex-shrink: 0; }
+  .team-badge.k230 { background: rgba(232,74,95,0.15); border: 2.5px solid var(--k230); color: var(--k230); }
+  .team-badge.k294 { background: rgba(37,99,200,0.2); border: 2.5px solid #60a5fa; color: #93c5fd; }
+  .team-name { font-weight: 700; font-size: 15px; }
+  .team-name.k230 { color: var(--k230); }
+  .team-name.k294 { color: #93c5fd; }
+  .team-sub { font-size: 11px; color: rgba(255,255,255,0.5); text-align: center; }
+  .score-center { text-align: center; min-width: 130px; }
+  .score-digits { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 48px; line-height: 1; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .score-a { color: var(--k230); }
+  .score-sep { color: rgba(255,255,255,0.3); font-size: 32px; }
+  .score-b { color: #93c5fd; }
+  .score-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-top: 4px; }
+  .tier-row { display: flex; justify-content: center; gap: 8px; margin-top: 16px; position: relative; }
+  .tier-pill { padding: 4px 12px; border-radius: 99px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; }
+  .tier-pill.b { background: rgba(232,74,95,0.12); color: var(--k230); border: 1px solid rgba(232,74,95,0.35); }
+  .tier-pill.s { background: rgba(37,99,200,0.15); color: #93c5fd; border: 1px solid rgba(144,197,253,0.35); }
+  .favored-chip { display: block; text-align: center; margin-top: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 16px; border-radius: 99px; display: inline-block; position: relative; }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+  .content { max-width: 840px; margin: 0 auto; padding: 36px 20px 80px; }
+
+  /* ── SECTION TITLE ── */
+  .section-title { font-size: 20px; font-weight: 700; color: var(--blue-900); margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+  .section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg,var(--blue-300),transparent); border-radius: 2px; }
+  .section-desc { font-size: 13px; color: var(--text-soft); font-weight: 500; margin-bottom: 20px; }
+  .group-title { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-soft); text-align: center; margin: 28px 0 14px; }
+  .group-title:first-child { margin-top: 4px; }
+  .group-sub { text-align: center; font-size: 11px; color: var(--text-soft); margin-top: -10px; margin-bottom: 14px; line-height: 1.5; }
+
+  /* ── STAT ROW ── */
+  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(37,99,200,0.05); transition: box-shadow 0.18s; }
+  .stat-card:hover { box-shadow: 0 4px 16px rgba(37,99,200,0.1); }
+  .stat-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+  .stat-name { width: 110px; font-size: 12px; color: var(--text-soft); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .stat-name.right { text-align: right; }
+  .stat-input { width: 96px; background: var(--blue-50); border: 1px solid var(--border); border-radius: 8px; color: var(--text-dark); font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; text-align: center; padding: 8px 4px; transition: border-color 0.15s, background 0.15s; }
+  .stat-input:focus { outline: none; border-color: var(--gold); background: var(--gold-soft); }
+  .stat-input.k230 { color: var(--k230); }
+  .stat-input.k294 { color: var(--blue-500); }
+  .stat-label { flex: 1; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-dark); min-width: 60px; line-height: 1.3; }
+  .stat-unit { display: block; font-size: 10px; color: var(--text-soft); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; font-family: 'Lexend', sans-serif; }
+  .bar { height: 8px; background: var(--blue-50); border-radius: 4px; overflow: hidden; display: flex; border: 1px solid var(--border); }
+  .bar-230 { background: var(--k230); transition: width .35s; border-radius: 4px 0 0 4px; }
+  .bar-mid { width: 2px; background: var(--border); flex-shrink: 0; }
+  .bar-294 { background: var(--blue-500); transition: width .35s; margin-left: auto; border-radius: 0 4px 4px 0; }
+
+  /* ── MARKET CARDS ── */
+  .market-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 20px 22px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(37,99,200,0.05); }
+  .market-title { font-size: 15px; font-weight: 700; color: var(--blue-900); margin: 0 0 14px; display: flex; justify-content: space-between; align-items: center; }
+  .market-tag { font-size: 11px; color: var(--text-soft); font-weight: 500; }
+  .segbar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 16px; background: var(--blue-50); border: 1px solid var(--border); }
+  .segbar div { transition: width .35s; }
+  .outcome-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--blue-50); }
+  .outcome-row:last-of-type { border-bottom: none; }
+  .outcome-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .outcome-name { flex: 1; font-size: 13px; color: var(--text-mid); font-weight: 500; }
+  .outcome-name span { color: var(--text-soft); font-size: 12px; }
+  .outcome-bar { position: relative; height: 6px; width: 80px; background: var(--blue-50); border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+  .outcome-bar-fill { height: 100%; border-radius: 3px; transition: width .35s; }
+  .outcome-pct { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; width: 46px; text-align: right; }
+  .market-desc { font-size: 12px; color: var(--text-soft); line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+  /* ── QUICK REF GRID ── */
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 14px; margin-bottom: 24px; }
+  .tip-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; box-shadow: 0 2px 8px rgba(37,99,200,0.05); display: flex; flex-direction: column; gap: 8px; transition: box-shadow 0.18s; }
+  .tip-card:hover { box-shadow: 0 4px 16px rgba(37,99,200,0.1); }
+  .tip-card-top { display: flex; align-items: center; gap: 10px; }
+  .tip-badge { width: 40px; height: 40px; border-radius: 10px; background: var(--blue-900); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .tip-badge.red { background: var(--k230); }
+  .tip-badge.gold { background: #b45309; }
+  .tip-badge.blue { background: var(--blue-500); }
+  .tip-badge.green { background: var(--green); }
+  .tip-card-label { font-size: 13px; font-weight: 700; color: var(--blue-700); }
+  .tip-card-label small { display: block; font-size: 11px; font-weight: 500; color: var(--text-soft); margin-top: 1px; }
+  .tip-text { font-size: 13px; font-weight: 500; color: var(--text-mid); line-height: 1.7; border-top: 1px solid var(--blue-50); padding-top: 8px; }
+
+  .final-banner { background: linear-gradient(135deg, var(--blue-900), var(--blue-700)); border-radius: 16px; padding: 24px 28px; color: var(--white); margin-top: 24px; display: flex; gap: 18px; align-items: flex-start; }
+  .final-banner-icon { font-size: 32px; flex-shrink: 0; }
+  .final-banner h3 { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+  .final-banner p { font-size: 13px; font-weight: 500; line-height: 1.7; color: rgba(255,255,255,0.82); }
+  .final-banner strong { color: var(--white); }
+
+  .footer { text-align: center; color: var(--text-soft); font-size: 11px; margin-top: 20px; font-family: 'Nunito', sans-serif; line-height: 1.8; }
+
+  /* pill labels */
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .pill-230 { background: rgba(232,74,95,0.1); color: var(--k230); border: 1px solid rgba(232,74,95,0.3); }
+  .pill-294 { background: var(--blue-100); color: var(--blue-700); border: 1px solid var(--border); }
+
+  /* hero center wrapper */
+  .hero-inner { max-width: 840px; margin: 0 auto; text-align: center; }
+  .tier-center { display: flex; justify-content: center; gap: 4px; margin-top: 14px; }
+
+  /* toast */
+  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--blue-900); color: #fff; padding: 10px 22px; border-radius: 99px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(13,43,85,0.3); opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media(max-width:640px) {
     nav { padding: 0 12px; }
     .nav-tab { padding: 6px 10px; font-size: 11px; }
     .score-digits { font-size: 36px; }
